@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">코인 검색기</string>
+    <string name="title_home">시세 정보</string>
+    <string name="title_dashboard">급등 코인</string>
+    <string name="title_notifications">설정</string>
+    <string name="title_schedule">코인 일정</string>
+    <string name="socket_open">Socket Open!</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
