@@ -4,8 +4,36 @@
     <string name="title_dashboard">급등 코인</string>
     <string name="title_notifications">설정</string>
     <string name="title_schedule">코인 일정</string>
-    <string name="socket_open">Socket Open!</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string-array name="str_ary_price">
+        <item >0.5</item>
+        <item >1</item>
+        <item >1.5</item>
+        <item >2</item>
+        <item >3</item>
+    </string-array>
+
+    <string-array name="str_ary_price2">
+        <item >Disabled</item>
+        <item >0.5</item>
+        <item >1</item>
+        <item >1.5</item>
+        <item >2</item>
+        <item >3</item>
+    </string-array>
+
+    <string-array name="str_ary_trade">
+        <item >Disabled</item>
+        <item >30</item>
+        <item >50</item>
+        <item >100</item>
+        <item >200</item>
+        <item >300</item>
+    </string-array>
+
+
+
 </resources>

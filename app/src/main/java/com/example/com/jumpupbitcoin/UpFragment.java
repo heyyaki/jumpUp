@@ -96,8 +96,8 @@ public class UpFragment extends Fragment {
             if(!cli.alarm_reg.get(i).isEmpty()) {
                 String[] coin_arr = cli.alarm_reg.get(i).split("-");
                 view.setName(MainActivity.map.get(Integer.parseInt(coin_arr[0])));
-                if(Integer.valueOf(cli.ary_price[Integer.parseInt(coin_arr[0])])>0)
-                    view.setPrice(Integer.valueOf(cli.ary_price[Integer.parseInt(coin_arr[0])]));
+                //if(Integer.valueOf(cli.ary_price[Integer.parseInt(coin_arr[0])])>0)
+                view.setPrice(Integer.parseInt(coin_arr[2]));
                 view.setPer(coin_arr[1]);
                 view.setImage(Integer.parseInt(coin_arr[0]));
             }

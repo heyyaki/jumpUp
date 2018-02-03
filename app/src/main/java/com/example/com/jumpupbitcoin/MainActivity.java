@@ -1,7 +1,9 @@
 package com.example.com.jumpupbitcoin;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
@@ -16,6 +18,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,6 +43,9 @@ public class MainActivity extends AppCompatActivity {
     public static UpFragment upFragment;
     public static CoinSchedule coin_shcedule_fragment;
     Intent intent;
+
+    public static SharedPreferences pref;
+    public static SharedPreferences.Editor editor;
 
     public static HashMap<Integer, String> map = new HashMap<Integer, String>();
 
@@ -100,7 +106,37 @@ public class MainActivity extends AppCompatActivity {
 
         final long FINISH_INTERVAL_TIME = 2000;
 
-        //mTextMessage = (TextView) findViewById(R.id.message);
+        pref = getSharedPreferences("pref", Activity.MODE_PRIVATE);
+
+
+        if(String.valueOf(pref.getAll().get("radio300"))=="true")
+            NetworkFragment.bunbong=1;
+        else if(String.valueOf(pref.getAll().get("radio1"))=="true")
+            NetworkFragment.bunbong=2;
+        else if(String.valueOf(pref.getAll().get("radio3"))=="true")
+            NetworkFragment.bunbong=6;
+        else if(String.valueOf(pref.getAll().get("radio5"))=="true")
+            NetworkFragment.bunbong=10;
+        else if(String.valueOf(pref.getAll().get("radio10"))=="true")
+            NetworkFragment.bunbong=20;
+        else
+            NetworkFragment.bunbong=30;
+
+        Client.price_per = Float.parseFloat((String) pref.getAll().get("edit_txt"));
+        if(pref.getAll().get("edit_txt2").equals("Disabled"))
+            Client.price_per_pre = 0;
+        else
+            Client.price_per_pre = Float.parseFloat((String) pref.getAll().get("edit_txt2"));
+        if(pref.getAll().get("edit_txt3").equals("Disabled"))
+            Client.trade_per = 0;
+        else
+            Client.trade_per = Float.parseFloat((String) pref.getAll().get("edit_txt3"));
+        if(pref.getAll().get("edit_txt4").equals("Disabled"))
+            Client.trade_per_pre = 0;
+        else
+            Client.trade_per_pre = Float.parseFloat((String) pref.getAll().get("edit_txt4"));
+
+
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
@@ -112,6 +148,8 @@ public class MainActivity extends AppCompatActivity {
         mWebView = (WebView)findViewById(R.id.webview);
         mWebView.setWebViewClient(new WebViewClient());
         mWebView.loadUrl("https://www.coinmarketcal.com");
+
+
 
 
         vibrator = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
@@ -131,7 +169,10 @@ public class MainActivity extends AppCompatActivity {
                 pressedTime = 0 ;
             }else {
                 super.onBackPressed();
-                thread_flag=false;
+                Log.d("Thread Interrup", "Thread EXIT");
+
+                Client.thread.interrupt();
+
                 stopService(intent);
                 finish(); // app 종료 시키기
             }
