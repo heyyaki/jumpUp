@@ -22,7 +22,6 @@ import java.util.List;
 
 public class Client extends AsyncTask<Void, Void, Void> {
 
-
     private String start_coin = "";
     private String now_price = "";
     public static int pre_check;    // 전전단계 퍼센티지 계산 유무  - 1 활성, 0 비활성

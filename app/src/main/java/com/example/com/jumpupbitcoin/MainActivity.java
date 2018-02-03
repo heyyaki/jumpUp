@@ -111,18 +111,30 @@ public class MainActivity extends AppCompatActivity {
             NetworkFragment.bunbong = 30;
 
         Client.price_per = Float.parseFloat((String) pref.getAll().get("edit_txt"));
-        if (pref.getAll().get("edit_txt2").equals("Disabled"))
+        if (pref.getAll().get("edit_txt2").toString().equals("Disabled")) {
             Client.price_per_pre = 0;
-        else
+            Client.pre_check = 0;
+        }
+        else {
             Client.price_per_pre = Float.parseFloat((String) pref.getAll().get("edit_txt2"));
-        if (pref.getAll().get("edit_txt3").equals("Disabled"))
+            Client.pre_check = 1;
+        }
+        if (pref.getAll().get("edit_txt3").toString().equals("Disabled")) {
             Client.trade_per = 0;
-        else
+            Client.trade_check = 0;
+        }
+        else {
             Client.trade_per = Float.parseFloat((String) pref.getAll().get("edit_txt3"));
-        if (pref.getAll().get("edit_txt4").equals("Disabled"))
+            Client.trade_check = 1;
+        }
+        if (pref.getAll().get("edit_txt4").toString().equals("Disabled")) {
             Client.trade_per_pre = 0;
-        else
+            Client.pre_trade_check = 0;
+        }
+        else {
             Client.trade_per_pre = Float.parseFloat((String) pref.getAll().get("edit_txt4"));
+            Client.pre_trade_check = 1;
+        }
 
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);

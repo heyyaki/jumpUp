@@ -239,7 +239,7 @@ public class NetworkFragment extends Fragment {
         edit_txt3.setText((String) MainActivity.pref.getAll().get("edit_txt3"));
         edit_txt4.setText((String) MainActivity.pref.getAll().get("edit_txt4"));
 
-
+        Client.price_per = Float.parseFloat(String.valueOf(edit_txt.getText()));
         if (edit_txt2.getText().toString().equals("Disabled")) {
             Client.price_per_pre = 0;
             Client.pre_check = 0;
