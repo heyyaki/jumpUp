@@ -1,4 +1,4 @@
-package com.example.com.jumpupbitcoin;
+package com.example.com.jumpupbitcoin.coinSchedule;
 
 import android.app.Fragment;
 import android.content.Context;
@@ -9,11 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.CompoundButton;
-import android.widget.Switch;
-import android.widget.Toast;
 
-import java.io.IOException;
+import com.example.com.jumpupbitcoin.R;
 
 
 /**
@@ -79,9 +76,9 @@ public class CoinSchedule extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v =  inflater.inflate(R.layout.coin_schedule, container, false);
+        View v = inflater.inflate(R.layout.coin_schedule, container, false);
 
-        mWebView2 = (WebView)v.findViewById(R.id.webview2);
+        mWebView2 = (WebView) v.findViewById(R.id.webview2);
         mWebView2.setWebViewClient(new WebViewClient());
         mWebView2.loadUrl("https://www.coinmarketcal.com");
 

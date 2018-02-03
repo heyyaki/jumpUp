@@ -1,4 +1,4 @@
-package com.example.com.jumpupbitcoin;
+package com.example.com.jumpupbitcoin.jumpCoin;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -6,14 +6,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import com.example.com.jumpupbitcoin.R;
 
 /**
  * Created by COM on 2018-01-24.
  */
 
-public class LogUpView extends LinearLayout{
+public class LogUpView extends LinearLayout {
 
     TextView name_Text;
     TextView price_Text;
@@ -42,19 +41,23 @@ public class LogUpView extends LinearLayout{
         inflater.inflate(R.layout.log_up_coin, this, true);
     }
 
-    public void setName(String name){
+    public void setName(String name) {
         name_Text.setText(name);
     }
 
-    public void setPrice(int price){
-        price_Text.setText(String.format("%,d원",price,3));
+    public void setPrice(int price) {
+        price_Text.setText(String.format("%,d원", price, 3));
     }
 
-    public void setPer(String per) { up_per_Text.setText(per+"%"); }
+    public void setPer(String per) {
+        up_per_Text.setText(per + "%");
+    }
 
-    public void setDate(String time) { date_Text.setText(time); }
+    public void setDate(String time) {
+        date_Text.setText(time);
+    }
 
-    public void setImage(int num){
+    public void setImage(int num) {
         image_coin.setImageResource(images[num]);
     }
 

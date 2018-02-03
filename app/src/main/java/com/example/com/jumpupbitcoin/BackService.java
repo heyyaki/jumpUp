@@ -2,14 +2,8 @@ package com.example.com.jumpupbitcoin;
 
 import android.app.Notification;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.os.IBinder;
-import android.util.Log;
-import android.widget.Toast;
-
-import java.io.IOException;
 
 
 public class BackService extends Service {
@@ -23,12 +17,14 @@ public class BackService extends Service {
         // 데이터를 전달할 필요가 없으면 return null;
         return null;
     }
+
     @Override
     public void onCreate() {
         super.onCreate();
 
         // 서비스에서 가장 먼저 호출됨(최초에 한번만)
     }
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         // 서비스가 호출될 때마다 실행

@@ -8,34 +8,24 @@ import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import android.widget.CompoundButton;
-import android.widget.ImageView;
-import android.widget.RadioButton;
-import android.widget.Switch;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import org.jsoup.Jsoup;
+import com.example.com.jumpupbitcoin.coinSchedule.CoinSchedule;
+import com.example.com.jumpupbitcoin.jumpCoin.UpFragment;
+import com.example.com.jumpupbitcoin.priceInfo.HomeFragment;
+import com.example.com.jumpupbitcoin.setting.NetworkFragment;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 
 
 public class MainActivity extends AppCompatActivity {
 
-    private Client test;
-    public static Context mContext;
-    public static int frag_num=0;
-    public static boolean thread_flag=true;
+    public Context mContext;
+    public static int frag_num = 0;
+    public static boolean thread_flag = true;
 
     private long pressedTime;
 
@@ -49,9 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static HashMap<Integer, String> map = new HashMap<Integer, String>();
 
-    public static Vibrator vibrator;
-
-    private WebView mWebView;
+    public static Vibrator mVibrator;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -65,33 +53,33 @@ public class MainActivity extends AppCompatActivity {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
                     setTitle("현재 시세");
-                    mWebView.destroy();
+//                    mWebView.destroy();
                     homeFragment = new HomeFragment();
                     manager.beginTransaction().replace(R.id.content, homeFragment, homeFragment.getTag()).commitAllowingStateLoss();
-                    frag_num=1;
+                    frag_num = 1;
                     return true;
                 case R.id.navigation_dashboard:
                     setTitle("급등 코인");
-                    mWebView.destroy();
+//                    mWebView.destroy();
                     upFragment = new UpFragment();
                     manager.beginTransaction().replace(R.id.content, upFragment, upFragment.getTag()).commitAllowingStateLoss();
-                    frag_num=2;
+                    frag_num = 2;
                     return true;
 
                 case R.id.navigation_schedule:
                     setTitle("코인 일정");
-                    mWebView.destroy();
+//                    mWebView.destroy();
                     coin_shcedule_fragment = new CoinSchedule();
                     manager.beginTransaction().replace(R.id.content, coin_shcedule_fragment, coin_shcedule_fragment.getTag()).commitAllowingStateLoss();
-                    frag_num=3;
+                    frag_num = 3;
                     return true;
 
                 case R.id.navigation_notifications:
                     setTitle("설정");
-                    mWebView.destroy();
+//                    mWebView.destroy();
                     NetworkFragment networkFragment = new NetworkFragment();
                     manager.beginTransaction().replace(R.id.content, networkFragment, networkFragment.getTag()).commitAllowingStateLoss();
-                    frag_num=4;
+                    frag_num = 4;
                     return true;
             }
             return false;
@@ -109,29 +97,29 @@ public class MainActivity extends AppCompatActivity {
         pref = getSharedPreferences("pref", Activity.MODE_PRIVATE);
 
 
-        if(String.valueOf(pref.getAll().get("radio300"))=="true")
-            NetworkFragment.bunbong=1;
-        else if(String.valueOf(pref.getAll().get("radio1"))=="true")
-            NetworkFragment.bunbong=2;
-        else if(String.valueOf(pref.getAll().get("radio3"))=="true")
-            NetworkFragment.bunbong=6;
-        else if(String.valueOf(pref.getAll().get("radio5"))=="true")
-            NetworkFragment.bunbong=10;
-        else if(String.valueOf(pref.getAll().get("radio10"))=="true")
-            NetworkFragment.bunbong=20;
+        if (String.valueOf(pref.getAll().get("radio300")) == "true")
+            NetworkFragment.bunbong = 1;
+        else if (String.valueOf(pref.getAll().get("radio1")) == "true")
+            NetworkFragment.bunbong = 2;
+        else if (String.valueOf(pref.getAll().get("radio3")) == "true")
+            NetworkFragment.bunbong = 6;
+        else if (String.valueOf(pref.getAll().get("radio5")) == "true")
+            NetworkFragment.bunbong = 10;
+        else if (String.valueOf(pref.getAll().get("radio10")) == "true")
+            NetworkFragment.bunbong = 20;
         else
-            NetworkFragment.bunbong=30;
+            NetworkFragment.bunbong = 30;
 
         Client.price_per = Float.parseFloat((String) pref.getAll().get("edit_txt"));
-        if(pref.getAll().get("edit_txt2").equals("Disabled"))
+        if (pref.getAll().get("edit_txt2").equals("Disabled"))
             Client.price_per_pre = 0;
         else
             Client.price_per_pre = Float.parseFloat((String) pref.getAll().get("edit_txt2"));
-        if(pref.getAll().get("edit_txt3").equals("Disabled"))
+        if (pref.getAll().get("edit_txt3").equals("Disabled"))
             Client.trade_per = 0;
         else
             Client.trade_per = Float.parseFloat((String) pref.getAll().get("edit_txt3"));
-        if(pref.getAll().get("edit_txt4").equals("Disabled"))
+        if (pref.getAll().get("edit_txt4").equals("Disabled"))
             Client.trade_per_pre = 0;
         else
             Client.trade_per_pre = Float.parseFloat((String) pref.getAll().get("edit_txt4"));
@@ -140,34 +128,30 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        intent = new Intent(getApplicationContext(),BackService.class);
+        intent = new Intent(getApplicationContext(), BackService.class);
         startService(intent); // 서비스 시작
 
         addMap();
 
-        mWebView = (WebView)findViewById(R.id.webview);
-        mWebView.setWebViewClient(new WebViewClient());
-        mWebView.loadUrl("https://www.coinmarketcal.com");
+//        mWebView = (WebView) findViewById(R.id.webview);
+//        mWebView.setWebViewClient(new WebViewClient());
+//        mWebView.loadUrl("https://www.coinmarketcal.com");
 
-
-
-
-        vibrator = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
+        mVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
     }
 
     @Override
     public void onBackPressed() {
-        if ( pressedTime == 0 ) {
-            Toast.makeText(MainActivity.this, " 한 번 더 누르면 종료됩니다." , Toast.LENGTH_LONG).show();
+        if (pressedTime == 0) {
+            Toast.makeText(MainActivity.this, " 한 번 더 누르면 종료됩니다.", Toast.LENGTH_LONG).show();
             pressedTime = System.currentTimeMillis();
-        }
-        else {
+        } else {
             int seconds = (int) (System.currentTimeMillis() - pressedTime);
 
-            if ( seconds > 2000 ) {
-                Toast.makeText(MainActivity.this, " 한 번 더 누르면 종료됩니다." , Toast.LENGTH_LONG).show();
-                pressedTime = 0 ;
-            }else {
+            if (seconds > 2000) {
+                Toast.makeText(MainActivity.this, " 한 번 더 누르면 종료됩니다.", Toast.LENGTH_LONG).show();
+                pressedTime = 0;
+            } else {
                 super.onBackPressed();
                 Log.d("Thread Interrup", "Thread EXIT");
 
@@ -179,8 +163,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void addMap()
-    {
+    public void addMap() {
         map.put(0, "비트코인");
         map.put(1, "에이다");
         map.put(2, "리플");

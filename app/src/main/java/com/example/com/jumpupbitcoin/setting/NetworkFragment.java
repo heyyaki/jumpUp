@@ -1,15 +1,14 @@
-package com.example.com.jumpupbitcoin;
+package com.example.com.jumpupbitcoin.setting;
 
+import android.app.Fragment;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -17,7 +16,9 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
 
-import java.io.IOException;
+import com.example.com.jumpupbitcoin.Client;
+import com.example.com.jumpupbitcoin.MainActivity;
+import com.example.com.jumpupbitcoin.R;
 
 
 /**
@@ -98,17 +99,17 @@ public class NetworkFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        final View v =  inflater.inflate(R.layout.fragment_network, container, false);
+        final View v = inflater.inflate(R.layout.fragment_network, container, false);
 
         MainActivity.editor = MainActivity.pref.edit();
 
-        RadioGroup group=(RadioGroup)v.findViewById(R.id.radioGroup1);
-        radio300=(RadioButton)v.findViewById(R.id.radio300);
-        radio1=(RadioButton)v.findViewById(R.id.radio1);
-        radio3=(RadioButton)v.findViewById(R.id.radio3);
-        radio5=(RadioButton)v.findViewById(R.id.radio5);
-        radio10=(RadioButton)v.findViewById(R.id.radio10);
-        radio15=(RadioButton)v.findViewById(R.id.radio15);
+        RadioGroup group = (RadioGroup) v.findViewById(R.id.radioGroup1);
+        radio300 = (RadioButton) v.findViewById(R.id.radio300);
+        radio1 = (RadioButton) v.findViewById(R.id.radio1);
+        radio3 = (RadioButton) v.findViewById(R.id.radio3);
+        radio5 = (RadioButton) v.findViewById(R.id.radio5);
+        radio10 = (RadioButton) v.findViewById(R.id.radio10);
+        radio15 = (RadioButton) v.findViewById(R.id.radio15);
 
         radio300.setChecked(MainActivity.pref.getBoolean("radio300", radio300.isChecked()));
         radio1.setChecked(MainActivity.pref.getBoolean("radio1", radio1.isChecked()));
@@ -118,48 +119,48 @@ public class NetworkFragment extends Fragment {
         radio15.setChecked(MainActivity.pref.getBoolean("radio15", radio15.isChecked()));
 
         group.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-             @Override
-             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                 switch (checkedId) {
-                     case R.id.radio300:
-                         bunbong = 1;
-                         Toast.makeText(getActivity(), "30초를 선택하였습니다.", Toast.LENGTH_SHORT).show();
-                         break;
-                     case R.id.radio1:
-                         bunbong = 2;
-                         Toast.makeText(getActivity(), "1분봉을 선택하였습니다.", Toast.LENGTH_SHORT).show();
-                         break;
-                     case R.id.radio3:
-                         bunbong = 6;
-                         Toast.makeText(getActivity(), "3분봉을 선택하였습니다.", Toast.LENGTH_SHORT).show();
-                         break;
-                     case R.id.radio5:
-                         bunbong = 10;
-                         Toast.makeText(getActivity(), "5분봉을 선택하였습니다.", Toast.LENGTH_SHORT).show();
-                         break;
-                     case R.id.radio10:
-                         bunbong = 20;
-                         Toast.makeText(getActivity(), "10분봉을 선택하였습니다.", Toast.LENGTH_SHORT).show();
-                         break;
-                     case R.id.radio15:
-                         bunbong = 30;
-                         Toast.makeText(getActivity(), "15분봉을 선택하였습니다.", Toast.LENGTH_SHORT).show();
-                         break;
-                 }
-             }
-         });
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.radio300:
+                        bunbong = 1;
+                        Toast.makeText(getActivity(), "30초를 선택하였습니다.", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.radio1:
+                        bunbong = 2;
+                        Toast.makeText(getActivity(), "1분봉을 선택하였습니다.", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.radio3:
+                        bunbong = 6;
+                        Toast.makeText(getActivity(), "3분봉을 선택하였습니다.", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.radio5:
+                        bunbong = 10;
+                        Toast.makeText(getActivity(), "5분봉을 선택하였습니다.", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.radio10:
+                        bunbong = 20;
+                        Toast.makeText(getActivity(), "10분봉을 선택하였습니다.", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.radio15:
+                        bunbong = 30;
+                        Toast.makeText(getActivity(), "15분봉을 선택하였습니다.", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+            }
+        });
 
-        edit_txt = (EditText) v.findViewById(R.id.editText) ;
-        edit_txt2 = (EditText) v.findViewById(R.id.editText2) ;
-        edit_txt3 = (EditText) v.findViewById(R.id.editText3) ;
-        edit_txt4 = (EditText) v.findViewById(R.id.editText4) ;
+        edit_txt = (EditText) v.findViewById(R.id.editText);
+        edit_txt2 = (EditText) v.findViewById(R.id.editText2);
+        edit_txt3 = (EditText) v.findViewById(R.id.editText3);
+        edit_txt4 = (EditText) v.findViewById(R.id.editText4);
 
         Log.d("MainActivity.pref.getAll START!!!!!!", String.valueOf(MainActivity.pref.getAll()));
 
-        Spinner s = (Spinner)v.findViewById(R.id.spinner);
-        Spinner s2 = (Spinner)v.findViewById(R.id.spinner2);
-        Spinner s3 = (Spinner)v.findViewById(R.id.spinner3);
-        Spinner s4 = (Spinner)v.findViewById(R.id.spinner4);
+        Spinner s = (Spinner) v.findViewById(R.id.spinner);
+        Spinner s2 = (Spinner) v.findViewById(R.id.spinner2);
+        Spinner s3 = (Spinner) v.findViewById(R.id.spinner3);
+        Spinner s4 = (Spinner) v.findViewById(R.id.spinner4);
 
 
         s.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -168,21 +169,24 @@ public class NetworkFragment extends Fragment {
                                        int position, long id) {
                 edit_txt.setText(parent.getItemAtPosition(position).toString());
             }
+
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
         });
         s2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int position, long id) {
-                if(spinner_lock_board == 0) {
-                }
-                else{
+                if (spinner_lock_board == 0) {
+                } else {
                     edit_txt2.setText(parent.getItemAtPosition(position).toString());
                 }
             }
+
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
         });
         s3.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -200,14 +204,15 @@ public class NetworkFragment extends Fragment {
                     Client.trade_check=1;
                 }
                 */
-                if(spinner_lock_board == 0) {
-                }
-                else{
+                if (spinner_lock_board == 0) {
+                } else {
                     edit_txt3.setText(parent.getItemAtPosition(position).toString());
                 }
             }
+
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
         });
         s4.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -215,13 +220,14 @@ public class NetworkFragment extends Fragment {
                                        int position, long id) {
                 if (spinner_lock_board == 0) {
                     spinner_lock_board = 1;
-                }
-                else{
+                } else {
                     edit_txt4.setText(parent.getItemAtPosition(position).toString());
                 }
             }
+
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
         });
 
         edit_txt.setText((String) MainActivity.pref.getAll().get("edit_txt"));
@@ -230,28 +236,24 @@ public class NetworkFragment extends Fragment {
         edit_txt4.setText((String) MainActivity.pref.getAll().get("edit_txt4"));
 
 
-
-        if(edit_txt2.getText().toString().equals("Disabled")){
+        if (edit_txt2.getText().toString().equals("Disabled")) {
             Client.price_per_pre = 0;
-            Client.pre_check=0;
-        }
-        else{
+            Client.pre_check = 0;
+        } else {
             Client.price_per_pre = Float.parseFloat(String.valueOf(edit_txt2.getText()));
-            Client.pre_check=1;
+            Client.pre_check = 1;
         }
-        if(edit_txt3.getText().toString().equals("Disabled")){
+        if (edit_txt3.getText().toString().equals("Disabled")) {
             Client.trade_per = 0;
-            Client.trade_check=0;
-        }
-        else{
+            Client.trade_check = 0;
+        } else {
             Client.trade_per = Float.parseFloat(String.valueOf(edit_txt3.getText()));
             Client.trade_check = 1;
         }
-        if(edit_txt4.getText().toString().equals("Disabled")){
+        if (edit_txt4.getText().toString().equals("Disabled")) {
             Client.trade_per_pre = 0;
             Client.pre_trade_check = 0;
-        }
-        else{
+        } else {
             Client.trade_per_pre = Float.parseFloat(String.valueOf(edit_txt4.getText()));
             Client.pre_trade_check = 1;
         }
