@@ -13,18 +13,8 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import com.example.com.jumpupbitcoin.Client;
-import com.example.com.jumpupbitcoin.MainActivity;
 import com.example.com.jumpupbitcoin.R;
 
-
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link UpFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link UpFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class UpFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -96,8 +86,7 @@ public class UpFragment extends Fragment {
             UpListView view = new UpListView(getContext());
             if (!cli.alarm_reg.get(i).isEmpty()) {
                 String[] coin_arr = cli.alarm_reg.get(i).split("-");
-                view.setName(MainActivity.map.get(Integer.parseInt(coin_arr[0])));
-                //if(Integer.valueOf(cli.ary_price[Integer.parseInt(coin_arr[0])])>0)
+//                view.setName(MainActivity.map.get(Integer.parseInt(coin_arr[0])));
                 view.setPrice(Integer.parseInt(coin_arr[2]));
                 view.setPer(coin_arr[1]);
                 view.setImage(Integer.parseInt(coin_arr[0]));
@@ -129,7 +118,7 @@ public class UpFragment extends Fragment {
             if (!cli.log_list.get(i).isEmpty()) {
                 a = --a - i;
                 String[] coin_arr = cli.log_list.get(a).split("-");
-                view.setName(MainActivity.map.get(Integer.parseInt(coin_arr[0])));
+//                view.setName(MainActivity.map.get(Integer.parseInt(coin_arr[0])));
                 view.setPrice(Integer.valueOf(coin_arr[2]));
                 view.setPer(coin_arr[1]);
                 view.setDate(coin_arr[3]);

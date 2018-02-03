@@ -5,8 +5,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
-import com.example.com.jumpupbitcoin.setting.NetworkFragment;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -32,6 +30,8 @@ public class Client extends AsyncTask<Void, Void, Void> {
     public static float price_per_pre;
     public static float trade_per;
     public static float trade_per_pre;
+
+    public static int bunbong;
 
     public static String[] ary_price = {};
     public static List<String> alarm_reg = new ArrayList<String>();
@@ -98,7 +98,7 @@ public class Client extends AsyncTask<Void, Void, Void> {
             }
 
             private void up_catch(Document doc2) {
-                int switch_minite = NetworkFragment.bunbong;
+                int switch_minite = bunbong;
                 int num_get_price = 1;
 
                 String str_switch_minite = "";
@@ -382,7 +382,7 @@ public class Client extends AsyncTask<Void, Void, Void> {
             long[] pattern = {100, 300, 100, 500, 100, 500};
             MainActivity.mVibrator.vibrate(pattern, -1);
             alarm_reg.add(i + "-" + ary_up_per.get(i) + "-" + temp_now_price[i]);
-            duple_check_map.put(i, NetworkFragment.bunbong);   // 분봉으로 값 넣기
+            duple_check_map.put(i, bunbong);   // 분봉으로 값 넣기
         } else {
             int a = duple_check_map.get(i);
             duple_check_map.put(i, --a);
