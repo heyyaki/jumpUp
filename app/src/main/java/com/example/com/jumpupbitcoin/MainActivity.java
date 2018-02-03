@@ -82,14 +82,18 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         final Context context = getApplicationContext();
-        Client.bunbong = SharedPreferencesManager.getBunBong(getApplicationContext());
+        Client.bunbong = SharedPreferencesManager.getBunBong(context);
         Client.price_per = SharedPreferencesManager.getPricePer(context);
         Client.price_per_pre = SharedPreferencesManager.getPricePerPre(context);
         Client.trade_per = SharedPreferencesManager.getTradePer(context);
         Client.trade_per_pre = SharedPreferencesManager.getTradePerPre(context);
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        BottomNavigationViewHelper.disableShiftMode(navigation);
+
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        navigation.setSelectedItemId(R.id.navigation_home);
+
 
         intent = new Intent(context, BackService.class);
         startService(intent); // 서비스 시작
