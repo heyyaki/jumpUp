@@ -94,7 +94,6 @@ public class MainActivity extends AppCompatActivity {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         navigation.setSelectedItemId(R.id.navigation_home);
 
-
         intent = new Intent(context, BackService.class);
         startService(intent); // 서비스 시작
 

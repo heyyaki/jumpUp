@@ -50,8 +50,8 @@ public class CoinListView extends LinearLayout {
 
     public void setPer(String per) {
         if (Float.parseFloat(per) < 0) {
-            price_Text.setTextColor(Color.parseColor("#0000FF"));
-            per_Text.setTextColor(Color.parseColor("#0000FF"));
+            price_Text.setTextColor(getContext().getColor(R.color.red));
+            per_Text.setTextColor(getContext().getColor(R.color.blue));
         }
         per_Text.setText(per + "%");
     }

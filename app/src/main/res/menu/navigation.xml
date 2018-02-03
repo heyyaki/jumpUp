@@ -3,25 +3,21 @@
 
     <item
         android:id="@+id/navigation_home"
-        android:enabled="true"
         android:icon="@drawable/ic_format_list_24dp"
         android:title="@string/title_home" />
 
     <item
         android:id="@+id/navigation_dashboard"
-        android:enabled="true"
         android:icon="@drawable/ic_alarm_24dp"
         android:title="@string/title_dashboard" />
 
     <item
         android:id="@+id/navigation_schedule"
-        android:enabled="true"
         android:icon="@drawable/ic_schedule_24dp"
         android:title="코인 일정" />
 
     <item
         android:id="@+id/navigation_notifications"
-        android:enabled="true"
         android:icon="@drawable/ic_build_black_24dp"
         android:title="@string/title_notifications" />
 
