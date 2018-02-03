@@ -166,7 +166,11 @@ public class NetworkFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int position, long id) {
-                edit_txt.setText(parent.getItemAtPosition(position).toString());
+                if(spinner_lock_board == 0) {
+                }
+                else{
+                    edit_txt.setText(parent.getItemAtPosition(position).toString());
+                }
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {}
