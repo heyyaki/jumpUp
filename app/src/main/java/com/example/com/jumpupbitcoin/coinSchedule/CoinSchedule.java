@@ -51,7 +51,7 @@ public class CoinSchedule extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment NetworkFragment.
+     * @return A new instance of fragment SettingFragment.
      */
     // TODO: Rename and change types and number of parameters
     public static CoinSchedule newInstance(String param1, String param2) {
