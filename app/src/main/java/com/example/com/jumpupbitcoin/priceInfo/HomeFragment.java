@@ -145,10 +145,18 @@ public class HomeFragment extends Fragment {
         */
     }
 
-    public void refresh() {
-        //FragmentTransaction ft = getFragmentManager().beginTransaction();
+    public void refresh(ArrayList<String> priceList, ArrayList<String> perList) {
+        Log.d("MY_LOG", "priceList : " + priceList.get(0));
+//        mPerList.clear();
+        mPerList.addAll(perList);
+
+//        mPriceList.clear();
+        mPriceList.addAll(priceList);
+
+        Adapter.notifyDataSetChanged();
+//        FragmentTransaction ft = getFragmentManager().beginTransaction();
         //ft.detach(this).attach(this).commit();
-        getFragmentManager().beginTransaction().detach(this).attach(this).commitAllowingStateLoss();
+//        getFragmentManager().beginTransaction().detach(this).attach(this).commitAllowingStateLoss();
     }
 
     private void addMap() {

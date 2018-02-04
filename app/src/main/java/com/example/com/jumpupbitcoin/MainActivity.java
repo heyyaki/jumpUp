@@ -20,6 +20,7 @@ import com.example.com.jumpupbitcoin.setting.SettingFragment;
 import org.jsoup.nodes.Document;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -39,9 +40,21 @@ public class MainActivity extends AppCompatActivity {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
                     setTitle("현재 시세");
-                    HomeFragment homeFragment = HomeFragment.newInstance((ArrayList<String>) mCalPrice.getPrice(), (ArrayList<String>)mCalPrice.getPer());
+
+                    final HomeFragment homeFragment = HomeFragment.newInstance((ArrayList<String>) mCalPrice.getPrice(), (ArrayList<String>)mCalPrice.getPer());
                     manager.beginTransaction().replace(R.id.content, homeFragment, homeFragment.getTag()).commitAllowingStateLoss();
                     frag_num = 1;
+
+                    mCalPrice.setOnChangedDataLister(new CalPrice.onChangeData() {
+                        @Override
+                        public void onDataChanged(List<String> priceList, List<String> perList) {
+                            Log.d("MY_LOG", "refresh");
+                            if(!homeFragment.isDetached()){
+                                homeFragment.refresh((ArrayList<String>) priceList, (ArrayList<String>) perList);
+                            }
+                        }
+                    });
+
                     return true;
                 case R.id.navigation_dashboard:
                     setTitle("급등 코인");

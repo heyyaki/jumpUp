@@ -51,7 +51,7 @@ public class CrawlringPrice implements Runnable {
             for (Element e : start_price) {
                 //Log.d("start_price", e.text());
                 // TODO 현재 퍼센트 분석모듈
-                Message msg = Message.obtain(mHandler, 0);
+                Message msg = Message.obtain(mHandler, 1);
                 msg.obj = e.text();
                 mHandler.sendMessage(msg);
             }
