@@ -11,9 +11,9 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 
-import com.example.com.jumpupbitcoin.Client;
 import com.example.com.jumpupbitcoin.R;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class HomeFragment extends Fragment {
@@ -31,19 +31,21 @@ public class HomeFragment extends Fragment {
 
     myAdapter Adapter;
     String[] LIST_MENU;
-    Client cli = new Client();
     ListView listview;
+
+    private ArrayList<String> mPriceList;
+    private ArrayList<String> mPerList;
 
     public HomeFragment() {
         // Required empty public constructor
 
     }
 
-    public static HomeFragment newInstance(String param1, String param2) {
+    public static HomeFragment newInstance(ArrayList<String> priceList, ArrayList<String> perList) {
         HomeFragment fragment = new HomeFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putStringArrayList(ARG_PARAM1, priceList);
+        args.putStringArrayList(ARG_PARAM2, perList);
         fragment.setArguments(args);
         return fragment;
     }
@@ -52,8 +54,8 @@ public class HomeFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            mPriceList = getArguments().getStringArrayList(ARG_PARAM1);
+            mPerList = getArguments().getStringArrayList(ARG_PARAM2);
         }
 
         addMap();
@@ -62,12 +64,12 @@ public class HomeFragment extends Fragment {
     class myAdapter extends BaseAdapter {
         @Override
         public int getCount() {
-            return cli.ary_price.length;
+            return mPriceList.size();
         }
 
         @Override
         public Object getItem(int i) {
-            return cli.ary_price[i];
+            return mPriceList.get(i);
         }
 
         @Override
@@ -79,9 +81,9 @@ public class HomeFragment extends Fragment {
         public View getView(int i, View convertView, ViewGroup parent) {
             CoinListView view = new CoinListView(getContext());
             view.setName(map.get(i));
-            view.setPrice(Integer.valueOf(cli.ary_price[i]));
-            view.setPer(cli.ary_start_per.get(i));
-            view.setImage(i);
+            view.setPrice(Integer.valueOf(mPriceList.get(i)));
+//            view.setPer(mPerList.get(i));
+//            view.setImage(i);
             return view;
         }
     }

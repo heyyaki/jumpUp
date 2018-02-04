@@ -1,8 +1,9 @@
 package com.example.com.jumpupbitcoin;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -16,18 +17,15 @@ import com.example.com.jumpupbitcoin.jumpCoin.UpFragment;
 import com.example.com.jumpupbitcoin.priceInfo.HomeFragment;
 import com.example.com.jumpupbitcoin.setting.SettingFragment;
 
+import org.jsoup.nodes.Document;
+
+import java.util.ArrayList;
+
 
 public class MainActivity extends AppCompatActivity {
 
     public static int frag_num = 0;
-    public static boolean thread_flag = true;
-
     private long pressedTime;
-
-    public static HomeFragment homeFragment;
-    public static UpFragment upFragment;
-    public static CoinSchedule coin_shcedule_fragment;
-    Intent intent;
 
     public static Vibrator mVibrator;
 
@@ -41,20 +39,20 @@ public class MainActivity extends AppCompatActivity {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
                     setTitle("현재 시세");
-                    homeFragment = new HomeFragment();
+                    HomeFragment homeFragment = HomeFragment.newInstance((ArrayList<String>) mCalPrice.getPrice(), (ArrayList<String>)mCalPrice.getPer());
                     manager.beginTransaction().replace(R.id.content, homeFragment, homeFragment.getTag()).commitAllowingStateLoss();
                     frag_num = 1;
                     return true;
                 case R.id.navigation_dashboard:
                     setTitle("급등 코인");
-                    upFragment = new UpFragment();
+                    UpFragment upFragment = UpFragment.newInstance(((ArrayList<String>) mCalJump.getAlarmReg()), (ArrayList<String>) mCalJump.getLogList());
                     manager.beginTransaction().replace(R.id.content, upFragment, upFragment.getTag()).commitAllowingStateLoss();
                     frag_num = 2;
                     return true;
 
                 case R.id.navigation_schedule:
                     setTitle("코인 일정");
-                    coin_shcedule_fragment = new CoinSchedule();
+                    CoinSchedule coin_shcedule_fragment = new CoinSchedule();
                     manager.beginTransaction().replace(R.id.content, coin_shcedule_fragment, coin_shcedule_fragment.getTag()).commitAllowingStateLoss();
                     frag_num = 3;
                     return true;
@@ -66,6 +64,12 @@ public class MainActivity extends AppCompatActivity {
                     final float pricePerPre = SharedPreferencesManager.getPricePerPre(getApplicationContext());
                     final float tradePer = SharedPreferencesManager.getTradePer(getApplicationContext());
                     final float tradePerPre = SharedPreferencesManager.getTradePerPre(getApplicationContext());
+
+                    mCalJump.setBunBong(bunbong);
+                    mCalJump.setPricePer(pricePer);
+                    mCalJump.setPricePerPer(pricePerPre);
+                    mCalJump.setTradePer(tradePer);
+                    mCalJump.setTradePerPre(tradePerPre);
 
                     SettingFragment networkFragment = SettingFragment.newInstance(bunbong, pricePer, pricePerPre, tradePer, tradePerPre);
                     manager.beginTransaction().replace(R.id.content, networkFragment, networkFragment.getTag()).commitAllowingStateLoss();
@@ -81,24 +85,70 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final Context context = getApplicationContext();
-        Client.bunbong = SharedPreferencesManager.getBunBong(context);
-        Client.price_per = SharedPreferencesManager.getPricePer(context);
-        Client.price_per_pre = SharedPreferencesManager.getPricePerPre(context);
-        Client.trade_per = SharedPreferencesManager.getTradePer(context);
-        Client.trade_per_pre = SharedPreferencesManager.getTradePerPre(context);
-
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         BottomNavigationViewHelper.disableShiftMode(navigation);
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         navigation.setSelectedItemId(R.id.navigation_home);
 
-        intent = new Intent(context, BackService.class);
-        startService(intent); // 서비스 시작
-
         mVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+
+        final int bunbong = SharedPreferencesManager.getBunBong(getApplicationContext());
+        final float pricePer = SharedPreferencesManager.getPricePer(getApplicationContext());
+        final float pricePerPre = SharedPreferencesManager.getPricePerPre(getApplicationContext());
+        final float tradePer = SharedPreferencesManager.getTradePer(getApplicationContext());
+        final float tradePerPre = SharedPreferencesManager.getTradePerPre(getApplicationContext());
+
+        mCalJump.setBunBong(bunbong);
+        mCalJump.setPricePer(pricePer);
+        mCalJump.setPricePerPer(pricePerPre);
+        mCalJump.setTradePer(tradePer);
+        mCalJump.setTradePerPre(tradePerPre);
+
+        mJumpThread = new Thread(new CrawlringJump(mJumpHandler));
+        mJumpThread.start();
+
+        mPriceThread = new Thread(new CrawlringPrice(mPriceHandler));
+        mPriceThread.start();
     }
+
+    private Thread mJumpThread;
+    private Thread mPriceThread;
+
+    final private Handler mJumpHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == 0) {
+                // 데이터 초기화 요청
+                mCalJump.clearData();
+            } else if (msg.what == 1) {
+                // 급등계산 모듈
+                Document document = (Document) msg.obj;
+
+                // TODO 분봉 넣어야댐
+                mCalJump.upCatch(document);
+            }
+        }
+    };
+
+    private CalJump mCalJump = new CalJump();
+    private CalPrice mCalPrice = new CalPrice();
+    final private Handler mPriceHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == 0) {
+                // 현재가격 분석모듈
+                String now_price = (String) msg.obj;
+                mCalPrice.Calc(now_price);
+            } else if (msg.what == 1) {
+                String start_coin = (String) msg.obj;
+                mCalPrice.per_Calc(start_coin);
+            }
+        }
+    };
+
 
     @Override
     public void onBackPressed() {
@@ -115,9 +165,10 @@ public class MainActivity extends AppCompatActivity {
                 super.onBackPressed();
                 Log.d("Thread Interrup", "Thread EXIT");
 
-                Client.thread.interrupt();
+                mJumpThread.interrupt();
+                mPriceThread.interrupt();
+//                Client.thread.interrupt();
 
-                stopService(intent);
                 finish(); // app 종료 시키기
             }
         }
