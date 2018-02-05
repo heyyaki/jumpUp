@@ -11,21 +11,11 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 
-import com.example.com.jumpupbitcoin.Client;
-import com.example.com.jumpupbitcoin.MainActivity;
 import com.example.com.jumpupbitcoin.R;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
-
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link HomeFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link HomeFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class HomeFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -37,33 +27,25 @@ public class HomeFragment extends Fragment {
     private String mParam2;
     private HashMap<Integer, String> map = new HashMap<>();
 
-
     private OnFragmentInteractionListener mListener;
 
     myAdapter Adapter;
     String[] LIST_MENU;
-    Client cli = new Client();
     ListView listview;
+
+    private ArrayList<String> mPriceList;
+    private ArrayList<String> mPerList;
 
     public HomeFragment() {
         // Required empty public constructor
 
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment HomeFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static HomeFragment newInstance(String param1, String param2) {
+    public static HomeFragment newInstance(ArrayList<String> priceList, ArrayList<String> perList) {
         HomeFragment fragment = new HomeFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putStringArrayList(ARG_PARAM1, priceList);
+        args.putStringArrayList(ARG_PARAM2, perList);
         fragment.setArguments(args);
         return fragment;
     }
@@ -72,8 +54,8 @@ public class HomeFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            mPriceList = getArguments().getStringArrayList(ARG_PARAM1);
+            mPerList = getArguments().getStringArrayList(ARG_PARAM2);
         }
 
         addMap();
@@ -82,12 +64,12 @@ public class HomeFragment extends Fragment {
     class myAdapter extends BaseAdapter {
         @Override
         public int getCount() {
-            return cli.ary_price.length;
+            return mPriceList.size();
         }
 
         @Override
         public Object getItem(int i) {
-            return cli.ary_price[i];
+            return mPriceList.get(i);
         }
 
         @Override
@@ -99,9 +81,9 @@ public class HomeFragment extends Fragment {
         public View getView(int i, View convertView, ViewGroup parent) {
             CoinListView view = new CoinListView(getContext());
             view.setName(map.get(i));
-            view.setPrice(Integer.valueOf(cli.ary_price[i]));
-            view.setPer(cli.ary_start_per.get(i));
-            view.setImage(i);
+            view.setPrice(Integer.valueOf(mPriceList.get(i)));
+//            view.setPer(mPerList.get(i));
+//            view.setImage(i);
             return view;
         }
     }
@@ -114,6 +96,8 @@ public class HomeFragment extends Fragment {
         Adapter = new myAdapter();
         View v = inflater.inflate(R.layout.fragment_home, container, false);
         listview = (ListView) v.findViewById(R.id.price_list);
+        final View header = inflater.inflate(R.layout.price_list_header, null, false);
+        listview.addHeaderView(header);
         listview.setAdapter(Adapter);
 
         return v;
@@ -143,16 +127,6 @@ public class HomeFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
@@ -171,10 +145,18 @@ public class HomeFragment extends Fragment {
         */
     }
 
-    public void refresh() {
-        //FragmentTransaction ft = getFragmentManager().beginTransaction();
+    public void refresh(ArrayList<String> priceList, ArrayList<String> perList) {
+        Log.d("MY_LOG", "priceList : " + priceList.get(0));
+//        mPerList.clear();
+        mPerList.addAll(perList);
+
+//        mPriceList.clear();
+        mPriceList.addAll(priceList);
+
+        Adapter.notifyDataSetChanged();
+//        FragmentTransaction ft = getFragmentManager().beginTransaction();
         //ft.detach(this).attach(this).commit();
-        getFragmentManager().beginTransaction().detach(this).attach(this).commitAllowingStateLoss();
+//        getFragmentManager().beginTransaction().detach(this).attach(this).commitAllowingStateLoss();
     }
 
     private void addMap() {

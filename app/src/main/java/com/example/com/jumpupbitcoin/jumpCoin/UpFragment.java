@@ -15,43 +15,33 @@ import android.widget.ListView;
 import com.example.com.jumpupbitcoin.Client;
 import com.example.com.jumpupbitcoin.R;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class UpFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
     private OnFragmentInteractionListener mListener;
 
     UpFragment.myAdapter Adapter;
     UpFragment.myAdapter2 Adapter2;
 
-    Client cli = new Client();
     ListView listview;
     ListView listview2;
+    private ArrayList<String> mAlarmReg;
+    private ArrayList<String> mLogList;
 
     public UpFragment() {
         // Required empty public constructor
     }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment UpFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static UpFragment newInstance(String param1, String param2) {
+    public static UpFragment newInstance(ArrayList<String> alarmReg, ArrayList<String> logList) {
         UpFragment fragment = new UpFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putStringArrayList(ARG_PARAM1, alarmReg);
+        args.putStringArrayList(ARG_PARAM2, logList);
         fragment.setArguments(args);
         return fragment;
     }
@@ -60,20 +50,20 @@ public class UpFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            mAlarmReg = getArguments().getStringArrayList(ARG_PARAM1);
+            mLogList = getArguments().getStringArrayList(ARG_PARAM2);
         }
     }
 
     class myAdapter extends BaseAdapter {
         @Override
         public int getCount() {
-            return cli.alarm_reg.size();
+            return mAlarmReg.size();
         }
 
         @Override
         public Object getItem(int i) {
-            return cli.alarm_reg.get(i);
+            return mAlarmReg.get(i);
         }
 
         @Override
@@ -84,8 +74,8 @@ public class UpFragment extends Fragment {
         @Override
         public View getView(int i, View convertView, ViewGroup parent) {
             UpListView view = new UpListView(getContext());
-            if (!cli.alarm_reg.get(i).isEmpty()) {
-                String[] coin_arr = cli.alarm_reg.get(i).split("-");
+            if (!mAlarmReg.get(i).isEmpty()) {
+                String[] coin_arr = mAlarmReg.get(i).split("-");
 //                view.setName(MainActivity.map.get(Integer.parseInt(coin_arr[0])));
                 view.setPrice(Integer.parseInt(coin_arr[2]));
                 view.setPer(coin_arr[1]);
@@ -98,12 +88,12 @@ public class UpFragment extends Fragment {
     class myAdapter2 extends BaseAdapter {
         @Override
         public int getCount() {
-            return cli.log_list.size();
+            return mLogList.size();
         }
 
         @Override
         public Object getItem(int i) {
-            return cli.log_list.get(i);
+            return mLogList.get(i);
         }
 
         @Override
@@ -114,10 +104,10 @@ public class UpFragment extends Fragment {
         @Override
         public View getView(int i, View convertView, ViewGroup parent) {
             LogUpView view = new LogUpView(getContext());
-            int a = cli.log_list.size();
-            if (!cli.log_list.get(i).isEmpty()) {
+            int a = mLogList.size();
+            if (!mLogList.get(i).isEmpty()) {
                 a = --a - i;
-                String[] coin_arr = cli.log_list.get(a).split("-");
+                String[] coin_arr = mLogList.get(a).split("-");
 //                view.setName(MainActivity.map.get(Integer.parseInt(coin_arr[0])));
                 view.setPrice(Integer.valueOf(coin_arr[2]));
                 view.setPer(coin_arr[1]);
@@ -146,7 +136,7 @@ public class UpFragment extends Fragment {
         btn_log_del.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cli.log_list.clear();
+                mLogList.clear();
                 refresh();
             }
         });
