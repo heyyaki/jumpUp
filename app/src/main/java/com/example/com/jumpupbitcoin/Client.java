@@ -190,7 +190,7 @@ public class Client extends AsyncTask<Void, Void, Void> {
                 @Override
                 public void run() {
                     //HomeFragment homeFragment = new HomeFragment();
-                    MainActivity.homeFragment.refresh();
+                    //MainActivity.homeFragment.refresh();
                 }
             }, 0);
         }
@@ -352,7 +352,7 @@ public class Client extends AsyncTask<Void, Void, Void> {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            Log.d("Exception E............!", String.valueOf(e));
+            Log.d("Exception E", String.valueOf(e));
         }
 
         for (int i = 0; i < alarm_reg.size(); i++) {
@@ -369,7 +369,7 @@ public class Client extends AsyncTask<Void, Void, Void> {
                 @Override
                 public void run() {
                     //HomeFragment homeFragment = new HomeFragment();
-                    MainActivity.upFragment.refresh();
+                    //MainActivity.upFragment.refresh();
                 }
             }, 0);
         }

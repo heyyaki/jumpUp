@@ -82,8 +82,8 @@ public class HomeFragment extends Fragment {
             CoinListView view = new CoinListView(getContext());
             view.setName(map.get(i));
             view.setPrice(Integer.valueOf(mPriceList.get(i)));
-//            view.setPer(mPerList.get(i));
-//            view.setImage(i);
+            view.setPer(mPerList.get(i));
+            view.setImage(i);
             return view;
         }
     }
@@ -146,7 +146,6 @@ public class HomeFragment extends Fragment {
     }
 
     public void refresh(ArrayList<String> priceList, ArrayList<String> perList) {
-        Log.d("MY_LOG", "priceList : " + priceList.get(0));
 //        mPerList.clear();
         mPerList.addAll(perList);
 

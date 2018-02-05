@@ -24,29 +24,29 @@ public class CrawlringJump implements Runnable {
 
     @Override
     public void run() {
-        while (true) {
-            try {
-                Thread.sleep(SLEEP_TIME);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        try {
+            while (true) {
+                    // TODO 데이터 초기화 요청
+                    Message msg = Message.obtain(mHandler, 0);
+                    mHandler.sendMessage(msg);
+
+                    Document doc2 = null;
+                    try {
+                        doc2 = Jsoup.connect(url_up_coin).get();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    // TODO 급등계산 모듈
+                    Message msg2 = Message.obtain(mHandler, 1, doc2);
+                    msg2.obj = doc2;
+
+                    mHandler.sendMessage(msg2);
+                    Thread.sleep(SLEEP_TIME);
+                }
             }
-
-            // TODO 데이터 초기화 요청
-            Message msg = Message.obtain(mHandler, 0);
-            mHandler.sendMessage(msg);
-
-            Document doc2 = null;
-            try {
-                doc2 = Jsoup.connect(url_up_coin).get();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            // TODO 급등계산 모듈
-            Message msg2 = Message.obtain(mHandler, 1, doc2);
-            msg2.obj = doc2;
-
-            mHandler.sendMessage(msg2);
+        catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 }
