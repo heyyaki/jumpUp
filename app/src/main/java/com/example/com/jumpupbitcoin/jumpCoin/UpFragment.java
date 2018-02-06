@@ -27,8 +27,8 @@ public class UpFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    UpFragment.myAdapter Adapter;
-    UpFragment.myAdapter2 Adapter2;
+    myAdapter Adapter;
+    myAdapter2 Adapter2;
 
     ListView listview;
     ListView listview2;
@@ -141,7 +141,6 @@ public class UpFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 mLogList.clear();
-                refresh();
             }
         });
 
@@ -186,11 +185,15 @@ public class UpFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    public void refresh() {
-        //FragmentTransaction ft = getFragmentManager().beginTransaction();
-        //ft.detach(this).attach(this).commit();
-        //getFragmentManager().beginTransaction().detach(this).attach(this).commit();
-        getFragmentManager().beginTransaction().detach(this).attach(this).commitAllowingStateLoss();
+    public void refresh(ArrayList<String> alarmReg, ArrayList<String> logList) {
+        //mAlarmReg.addAll(alarmReg);
+        //mLogList.addAll(logList);
+
+        mAlarmReg=alarmReg;
+        mLogList=logList;
+
+        Adapter.notifyDataSetChanged();
+        Adapter2.notifyDataSetChanged();
     }
 
     private void addMap() {

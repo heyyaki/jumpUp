@@ -137,7 +137,6 @@ public class HomeFragment extends Fragment {
     public void onResume() {
         Log.w(this.getClass().getSimpleName(), "onResume()");
         super.onResume();
-
         /*
         if(MainActivity.first_conn==false) {
             getFragmentManager().beginTransaction().detach(this).attach(this).commit();
@@ -147,15 +146,14 @@ public class HomeFragment extends Fragment {
 
     public void refresh(ArrayList<String> priceList, ArrayList<String> perList) {
 //        mPerList.clear();
-        mPerList.addAll(perList);
+//        mPerList.addAll(perList);
+        mPerList=perList;
 
 //        mPriceList.clear();
-        mPriceList.addAll(priceList);
+//        mPriceList.addAll(priceList);
+        mPriceList=priceList;
 
         Adapter.notifyDataSetChanged();
-//        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        //ft.detach(this).attach(this).commit();
-//        getFragmentManager().beginTransaction().detach(this).attach(this).commitAllowingStateLoss();
     }
 
     private void addMap() {

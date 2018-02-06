@@ -23,10 +23,13 @@ public class CalJump {
     private SettingData mSettingData = new SettingData();
     private float tradePer;
     private float tradePerPre;
+    private Map<Integer, Integer> duple_check_map = new HashMap<>();
 
     public void upCatch(Document doc2) {
         int switch_minite = mSettingData.bunbong;
         int num_get_price = 1;
+
+        mJumpData.alarm_reg.clear();
 
         String str_switch_minite = "";
         String str_switch_minite1 = "";
@@ -98,14 +101,14 @@ public class CalJump {
                 DecimalFormat form = new DecimalFormat("#.##");
                 if (ary_up_per.size() < 36) {
                     ary_up_per.add(form.format((Float.parseFloat(temp_now_price[i]) / Float.parseFloat(temp_price[i])) * 100 - 100));
-                    ary_up_per_pre.add(form.format((Float.parseFloat(temp_now_price[i]) / Float.parseFloat(temp_price[i])) * 100 - 100));
+                    ary_up_per_pre.add(form.format((Float.parseFloat(temp_price[i]) / Float.parseFloat(temp_price_pre[i])) * 100 - 100));
                     ary_up_trade_per.add(form.format((Float.parseFloat(temp_now_trade[i]) / Float.parseFloat(temp_trade[i])) * 100 - 100));
-                    ary_up_trade_per_pre.add(form.format((Float.parseFloat(temp_now_trade[i]) / Float.parseFloat(temp_trade[i])) * 100 - 100));
+                    ary_up_trade_per_pre.add(form.format((Float.parseFloat(temp_trade[i]) / Float.parseFloat(temp_trade_pre[i])) * 100 - 100));
                 } else {
                     ary_up_per.set(i, form.format((Float.parseFloat(temp_now_price[i]) / Float.parseFloat(temp_price[i])) * 100 - 100));
-                    ary_up_per_pre.set(i, form.format((Float.parseFloat(temp_now_price[i]) / Float.parseFloat(temp_price[i])) * 100 - 100));
+                    ary_up_per_pre.set(i, form.format((Float.parseFloat(temp_price[i]) / Float.parseFloat(temp_price_pre[i])) * 100 - 100));
                     ary_up_trade_per.set(i, form.format((Float.parseFloat(temp_now_trade[i]) / Float.parseFloat(temp_trade[i])) * 100 - 100));
-                    ary_up_trade_per_pre.add(i, form.format((Float.parseFloat(temp_now_trade[i]) / Float.parseFloat(temp_trade[i])) * 100 - 100));
+                    ary_up_trade_per_pre.add(i, form.format((Float.parseFloat(temp_trade[i]) / Float.parseFloat(temp_trade_pre[i])) * 100 - 100));
                 }
 
                 if (mSettingData.pre_check == 0 && mSettingData.trade_check == 0 && mSettingData.pre_trade_check == 0){
@@ -152,11 +155,13 @@ public class CalJump {
 
             for (int i = 0; i < mJumpData.alarm_reg.size(); i++) {
                 String time = new SimpleDateFormat("MM/dd HH:mm:ss").format(new Date(System.currentTimeMillis()));
-                String[] coin_arr = mJumpData.alarm_reg.get(i).split("-");
-//            if (mJumpData.ary_price.length != 0) {
+//                String[] coin_arr = mJumpData.alarm_reg.get(i).split("-");
+//               if (mJumpData.alarm_reg.size() != 0) {
                 mJumpData.log_list.add(mJumpData.alarm_reg.get(i) + "-" + time);
-//            }
+//                }
             }
+
+            mChangeData.onDataChanged(mJumpData.alarm_reg, mJumpData.log_list);
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -165,7 +170,6 @@ public class CalJump {
     }
 
     private void duple_check_method(int i, List<String> ary_up_per, String[] temp_now_price) {
-        Map<Integer, Integer> duple_check_map = new HashMap<>();
         if (!duple_check_map.containsKey(i)) {
             long[] pattern = {100, 300, 100, 500, 100, 500};
             MainActivity.mVibrator.vibrate(pattern, -1);
@@ -192,9 +196,7 @@ public class CalJump {
         return mJumpData.log_list;
     }
 
-    public void setBunBong(int bunBong) {
-        mSettingData.bunbong = bunBong;
-    }
+    public void setBunBong(int bunBong) { mSettingData.bunbong = bunBong; }
 
     public void setPricePer(float pricePer) {
         mSettingData.price_per= pricePer;
@@ -210,5 +212,14 @@ public class CalJump {
 
     public void setTradePerPre(float tradePerPre) {
         mSettingData.trade_per_pre = tradePerPre;
+    }
+
+    private onChangeData mChangeData;
+    public void setOnChangedDataLister(onChangeData changeData){
+        mChangeData = changeData;
+    }
+
+    interface onChangeData {
+        void onDataChanged(List<String> alarmReg,  List<String> logList);
     }
 }

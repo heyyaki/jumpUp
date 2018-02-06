@@ -57,9 +57,19 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 case R.id.navigation_dashboard:
                     setTitle("급등 코인");
-                    UpFragment upFragment = UpFragment.newInstance(((ArrayList<String>) mCalJump.getAlarmReg()), (ArrayList<String>) mCalJump.getLogList());
+                    final UpFragment upFragment = UpFragment.newInstance(((ArrayList<String>) mCalJump.getAlarmReg()), (ArrayList<String>) mCalJump.getLogList());
                     manager.beginTransaction().replace(R.id.content, upFragment, upFragment.getTag()).commitAllowingStateLoss();
                     frag_num = 2;
+
+                    mCalJump.setOnChangedDataLister(new CalJump.onChangeData() {
+                        @Override
+                        public void onDataChanged(List<String> alarmReg, List<String> logList) {
+                            if(!upFragment.isDetached()){
+                                upFragment.refresh((ArrayList<String>) alarmReg, (ArrayList<String>) logList);
+                            }
+                        }
+                    });
+
                     return true;
 
                 case R.id.navigation_schedule:

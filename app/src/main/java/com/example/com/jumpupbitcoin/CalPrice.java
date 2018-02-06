@@ -46,7 +46,7 @@ public class CalPrice {
             }
         }
 
-        Log.d("MY_LOG", "onDataChanged1");
+
         mChangeData.onDataChanged(mPriceData.ary_price, mPriceData.ary_start_per);
     }
 
