@@ -98,7 +98,7 @@ public class CalJump {
 
         try {
             for (int i = 0; i < temp_now_price.length; i++) {
-                DecimalFormat form = new DecimalFormat("#.##");
+                DecimalFormat form = new DecimalFormat("#.00");
                 if (ary_up_per.size() < 36) {
                     ary_up_per.add(form.format((Float.parseFloat(temp_now_price[i]) / Float.parseFloat(temp_price[i])) * 100 - 100));
                     ary_up_per_pre.add(form.format((Float.parseFloat(temp_price[i]) / Float.parseFloat(temp_price_pre[i])) * 100 - 100));

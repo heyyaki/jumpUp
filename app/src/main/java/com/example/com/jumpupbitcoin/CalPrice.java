@@ -38,7 +38,7 @@ public class CalPrice {
         mPriceData.ary_start_per.clear();
         String[] temp_start_price = recv_str.split(",");
         for (int i = 0; i < temp_start_price.length; i++) {
-            DecimalFormat form = new DecimalFormat("#.##");
+            DecimalFormat form = new DecimalFormat("#.00");
             if (mPriceData.ary_start_per.size() < 36)
                 mPriceData.ary_start_per.add(form.format((Float.parseFloat(mPriceData.ary_price.get(i)) / Float.parseFloat(temp_start_price[i])) * 100 - 100));
             else {
