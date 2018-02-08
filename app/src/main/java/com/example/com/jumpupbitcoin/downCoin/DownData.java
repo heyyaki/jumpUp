@@ -1,4 +1,4 @@
-package com.example.com.jumpupbitcoin.jumpCoin;
+package com.example.com.jumpupbitcoin.downCoin;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,7 +8,7 @@ import java.util.List;
  * Created by JY on 2018-02-04.
  */
 
-public class JumpData {
+public class DownData {
 
     public List<String> alarm_reg = new ArrayList<String>();
     public List<String> log_list = new ArrayList<String>();
@@ -24,5 +24,4 @@ public class JumpData {
     public void clearData() {
         alarm_reg.clear();
     }
-
 }

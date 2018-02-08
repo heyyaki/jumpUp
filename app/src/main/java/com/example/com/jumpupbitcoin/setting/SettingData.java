@@ -12,4 +12,9 @@ public class SettingData {
     public float price_per_pre;
     public float trade_per;
     public float trade_per_pre;
+
+    public float down_price_per;
+    public float down_price_per_pre;
+    public float down_trade_per;
+    public float down_trade_per_pre;
 }

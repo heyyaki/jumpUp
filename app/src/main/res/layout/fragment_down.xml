@@ -1,0 +1,61 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.com.jumpupbitcoin.jumpCoin.UpFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/realDownText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.9"
+            android:text="실시간 급락 코인"
+            android:gravity="center"
+            android:textColor="#eeeeee"
+            android:background="#222222" />
+
+        <ListView
+            android:id="@+id/downlist"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.6">
+        </ListView>
+
+        <TextView
+            android:id="@+id/logDownText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.9"
+            android:text="급락 코인 로그"
+            android:gravity="center"
+            android:textColor="#eeeeee"
+            android:background="#222222"/>
+
+        <ListView
+            android:id="@+id/logDownList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5">
+
+        </ListView>
+
+        <Button
+            android:id="@+id/btn_log_down_delete"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.82"
+            android:text="로그 삭제"
+            android:gravity="top|center"
+            android:textColor="#111111"
+            android:background="#eeeeee" />
+
+    </LinearLayout>
+
+</FrameLayout>

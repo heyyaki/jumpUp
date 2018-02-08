@@ -19,7 +19,7 @@
             </intent-filter>
         </activity>
         <receiver android:name=".BroadcastD"></receiver>
-
+        <service android:name="BackService"></service>
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />

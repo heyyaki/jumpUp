@@ -13,6 +13,10 @@ public class SharedPreferencesManager {
     private static final String PRICE_PER_PRE = "pricePerPre";
     private static final String TRADE_PER = "tradePer";
     private static final String TRADE_PER_PRE = "tradePerPre";
+    private static final String DOWN_PRICE_PER = "downPricePer";
+    private static final String DOWN_PRICE_PER_PRE = "downPricePerPre";
+    private static final String DOWN_TRADE_PER = "downTradePer";
+    private static final String DOWN_TRADE_PER_PRE = "downTradePerPre";
 
     private SharedPreferencesManager() {
     }
@@ -71,6 +75,46 @@ public class SharedPreferencesManager {
         editor.apply();
     }
 
+    // 급락 설정값
+    public static float getDownPricePer(Context context) {
+        return getSharedPreferences(context).getFloat(DOWN_PRICE_PER, 0f);
+    }
+
+    public static void setDownPricePer(Context context, float downPricePer) {
+        final SharedPreferences.Editor editor = getSharedPreferences(context).edit();
+        editor.putFloat(DOWN_PRICE_PER, downPricePer);
+        editor.apply();
+    }
+
+    public static float getDownPricePerPre(Context context) {
+        return getSharedPreferences(context).getFloat(DOWN_PRICE_PER_PRE, 0f);
+    }
+
+    public static void setDownPricePerPre(Context context, float downPricePerPre) {
+        final SharedPreferences.Editor editor = getSharedPreferences(context).edit();
+        editor.putFloat(DOWN_PRICE_PER_PRE, downPricePerPre);
+        editor.apply();
+    }
+
+    public static float getDownTradePer(Context context) {
+        return getSharedPreferences(context).getFloat(DOWN_TRADE_PER, 0f);
+    }
+
+    public static void setDownTradePer(Context context, float downTradePer) {
+        final SharedPreferences.Editor editor = getSharedPreferences(context).edit();
+        editor.putFloat(DOWN_TRADE_PER, downTradePer);
+        editor.apply();
+    }
+
+    public static float getDownTradePerPre(Context context) {
+        return getSharedPreferences(context).getFloat(DOWN_TRADE_PER_PRE, 0f);
+    }
+
+    public static void setDownTradePerPre(Context context, float downTradePerPre) {
+        final SharedPreferences.Editor editor = getSharedPreferences(context).edit();
+        editor.putFloat(DOWN_TRADE_PER_PRE, downTradePerPre);
+        editor.apply();
+    }
 
     // other getters/setters
 }

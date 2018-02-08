@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,10 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
     private static final String ARG_PRICE_PER_PRE = "argument_pricePerPre";
     private static final String ARG_TRADE_PER = "argument_tradePer";
     private static final String ARG_TRADE_PER_PRE = "argument_tradePerPre";
+    private static final String ARG_DOWN_PRICE_PER = "argument_down_pricePer";
+    private static final String ARG_DOWN_PRICE_PER_PRE = "argument_down_pricePerPre";
+    private static final String ARG_DOWN_TRADE_PER = "argument_down_tradePer";
+    private static final String ARG_DOWN_TRADE_PER_PRE = "argument_down_tradePerPre";
 
     private static final int DISABLED_VALUE = -1;
 
@@ -44,8 +49,10 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
 
 
     private float mPricePer, mPricePerPre, mTradePer, mTradePerPre;
+    private float mDownPricePer, mDownPricePerPre, mDownTradePer, mDownTradePerPre;
 
     private EditText mEditTxt, mEditTxt2, mEditTxt3, mEditTxt4;
+    private EditText mEditTxt11, mEditTxt12, mEditTxt13, mEditTxt14;
 
     private OnFragmentInteractionListener mListener;
 
@@ -70,7 +77,7 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
         // Required empty public constructor
     }
 
-    public static SettingFragment newInstance(int bunbong, float pricePer, float pricePerPre, float tradePer, float tradePerPre) {
+    public static SettingFragment newInstance(int bunbong, float pricePer, float pricePerPre, float tradePer, float tradePerPre, float downPricePer, float downPricePerPre, float downTradePer, float downTradePerPre) {
         SettingFragment fragment = new SettingFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_BUNBONG, bunbong);
@@ -78,6 +85,10 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
         args.putFloat(ARG_PRICE_PER_PRE, pricePerPre);
         args.putFloat(ARG_TRADE_PER, tradePer);
         args.putFloat(ARG_TRADE_PER_PRE, tradePerPre);
+        args.putFloat(ARG_DOWN_PRICE_PER, downPricePer);
+        args.putFloat(ARG_DOWN_PRICE_PER_PRE, downPricePerPre);
+        args.putFloat(ARG_DOWN_TRADE_PER, downTradePer);
+        args.putFloat(ARG_DOWN_TRADE_PER_PRE, downTradePerPre);
         fragment.setArguments(args);
 
         return fragment;
@@ -92,6 +103,10 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
             mPricePerPre = getArguments().getFloat(ARG_PRICE_PER_PRE);
             mTradePer = getArguments().getFloat(ARG_TRADE_PER);
             mTradePerPre = getArguments().getFloat(ARG_TRADE_PER_PRE);
+            mDownPricePer = getArguments().getFloat(ARG_DOWN_PRICE_PER);
+            mDownPricePerPre = getArguments().getFloat(ARG_DOWN_PRICE_PER_PRE);
+            mDownTradePer = getArguments().getFloat(ARG_DOWN_TRADE_PER);
+            mDownTradePerPre = getArguments().getFloat(ARG_DOWN_TRADE_PER_PRE);
         }
     }
 
@@ -112,6 +127,7 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
         }
 
         Spinner mSpinner, mSpinner2, mSpinner3, mSpinner4;
+
         mSpinner = (Spinner) v.findViewById(R.id.spinner);
         mSpinner.setSelection(0, false);
 
@@ -129,6 +145,25 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
         mSpinner3.setOnItemSelectedListener(this);
         mSpinner4.setOnItemSelectedListener(this);
 
+        Spinner mSpinner11, mSpinner12, mSpinner13, mSpinner14;
+
+        mSpinner11 = (Spinner) v.findViewById(R.id.spinner11);
+        mSpinner11.setSelection(0, false);
+
+        mSpinner12 = (Spinner) v.findViewById(R.id.spinner12);
+        mSpinner12.setSelection(0, false);
+
+        mSpinner13 = (Spinner) v.findViewById(R.id.spinner13);
+        mSpinner13.setSelection(0, false);
+
+        mSpinner14 = (Spinner) v.findViewById(R.id.spinner14);
+        mSpinner14.setSelection(0, false);
+
+        mSpinner11.setOnItemSelectedListener(this);
+        mSpinner12.setOnItemSelectedListener(this);
+        mSpinner13.setOnItemSelectedListener(this);
+        mSpinner14.setOnItemSelectedListener(this);
+
         // 등락률
         mEditTxt = (EditText) v.findViewById(R.id.editText);
         mEditTxt.setText(String.valueOf(mPricePer));
@@ -145,6 +180,23 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
         mEditTxt4 = (EditText) v.findViewById(R.id.editText4);
         mEditTxt4.setText(mTradePerPre == DISABLED_VALUE ? "Disable" : String.valueOf(mTradePerPre));
         mEditTxt4.addTextChangedListener(mTextWacher);
+
+        // 등락률
+        mEditTxt11 = (EditText) v.findViewById(R.id.editText11);
+        mEditTxt11.setText(String.valueOf(mDownPricePer));
+        mEditTxt11.addTextChangedListener(mTextWacher);
+
+        mEditTxt12 = (EditText) v.findViewById(R.id.editText12);
+        mEditTxt12.setText(mDownPricePerPre == DISABLED_VALUE ? "Disable" : String.valueOf(mDownPricePerPre));
+        mEditTxt12.addTextChangedListener(mTextWacher);
+
+        mEditTxt13 = (EditText) v.findViewById(R.id.editText13);
+        mEditTxt13.setText(mDownTradePer == DISABLED_VALUE ? "Disable" : String.valueOf(mDownTradePer));
+        mEditTxt13.addTextChangedListener(mTextWacher);
+
+        mEditTxt14 = (EditText) v.findViewById(R.id.editText14);
+        mEditTxt14.setText(mDownTradePerPre == DISABLED_VALUE ? "Disable" : String.valueOf(mDownTradePerPre));
+        mEditTxt14.addTextChangedListener(mTextWacher);
 
         return v;
     }
@@ -199,6 +251,7 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
 
         radioGroup.findViewById(checkedId);
         SharedPreferencesManager.setBunBong(getContext().getApplicationContext(), mBunBong);
+
     }
 
     @Override
@@ -229,6 +282,22 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
             case R.id.spinner4:
                 mEditTxt4.setText(text);
                 SharedPreferencesManager.setTradePerPre(getContext().getApplicationContext(), value);
+                break;
+            case R.id.spinner11:
+                mEditTxt11.setText(text);
+                SharedPreferencesManager.setDownPricePer(getContext().getApplicationContext(), value);
+                break;
+            case R.id.spinner12:
+                mEditTxt12.setText(text);
+                SharedPreferencesManager.setDownPricePerPre(getContext().getApplicationContext(), value);
+                break;
+            case R.id.spinner13:
+                mEditTxt13.setText(text);
+                SharedPreferencesManager.setDownTradePer(getContext().getApplicationContext(), value);
+                break;
+            case R.id.spinner14:
+                mEditTxt14.setText(text);
+                SharedPreferencesManager.setDownTradePerPre(getContext().getApplicationContext(), value);
                 break;
             default:
                 return;

@@ -17,25 +17,26 @@
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:layout_weight="0.5"
+            android:background="#DDDDDD"
+            android:text="급등 검색식을 설정해주세요"
             android:textAlignment="center"
-            android:text="가격과 거래량을 설정해주세요"
-            android:textSize="18dp"/>
+            android:textSize="18dp" />
 
         <TextView
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
+            android:background="@color/colorPrimaryDark"
             android:text="분봉 설정"
             android:textAlignment="center"
-            android:background="@color/colorPrimary"
-            android:textColor="#FFFFFF"/>
+            android:textColor="#FFFFFF" />
 
         <RadioGroup
             android:id="@+id/radioGroup1"
-            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
             <RadioButton
                 android:id="@+id/radio300"
@@ -50,24 +51,28 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="1" />
+
             <RadioButton
                 android:id="@+id/radio3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="3" />
+
             <RadioButton
                 android:id="@+id/radio5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="5" />
+
             <RadioButton
                 android:id="@+id/radio10"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="10" />
+
             <RadioButton
                 android:id="@+id/radio15"
                 android:layout_width="match_parent"
@@ -82,9 +87,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
-            android:background="@color/colorPrimary"
+            android:background="@color/colorPrimaryDark"
             android:textAlignment="center"
-            android:text="가격 등락률"
+            android:text="가격 급락률"
             android:textColor="#FFFFFF"/>
 
         <LinearLayout
@@ -98,7 +103,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.4"
-                android:text="1봉전 종가대비 현재 가격 등락률" />
+                android:text="1봉전 종가대비 현재 가격 급락률" />
 
             <EditText
                 android:id="@+id/editText"
@@ -135,7 +140,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.4"
-                android:text="2봉전 종가대비 1봉전 가격 등락률" />
+                android:text="2봉전 종가대비 1봉전 가격 급락률" />
 
             <EditText
                 android:id="@+id/editText2"
@@ -166,7 +171,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
-            android:background="@color/colorPrimary"
+            android:background="@color/colorPrimaryDark"
             android:textAlignment="center"
             android:text="거래량 등락률"
             android:textColor="#FFFFFF"/>
@@ -243,6 +248,186 @@
                 android:layout_weight="0.9"
                 android:foreground="@drawable/s_way1"
                 android:entries="@array/str_ary_trade"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/textView13"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_weight="0.5"
+            android:text="급락 검색식을 설정해주세요"
+            android:textAlignment="center"
+            android:background="#DDDDDD"
+            android:textSize="18dp" />
+
+        <TextView
+            android:id="@+id/textView14"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:background="@color/colorPrimaryDark"
+            android:textAlignment="center"
+            android:text="가격 등락률"
+            android:textColor="#FFFFFF"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView15"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.4"
+                android:text="1봉전 종가대비 현재 가격 등락률" />
+
+            <EditText
+                android:id="@+id/editText11"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.75"
+                android:inputType="numberDecimal"
+                android:text="1" />
+
+            <TextView
+                android:id="@+id/textView16"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.93"
+                android:text="%" />
+
+            <Spinner
+                android:id="@+id/spinner11"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.9"
+                android:foreground="@drawable/s_way1"
+                android:entries="@array/str_ary_price" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView17"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.4"
+                android:text="2봉전 종가대비 1봉전 가격 등락률" />
+
+            <EditText
+                android:id="@+id/editText12"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.75"
+                android:inputType="numberDecimal"
+                android:text="1" />
+
+            <TextView
+                android:id="@+id/textView18"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.93"
+                android:text="%" />
+
+            <Spinner
+                android:id="@+id/spinner12"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.9"
+                android:foreground="@drawable/s_way1"
+                android:entries="@array/str_ary_price2" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/textView19"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:background="@color/colorPrimaryDark"
+            android:textAlignment="center"
+            android:text="거래량 등락률"
+            android:textColor="#FFFFFF"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView20"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.4"
+                android:text="1봉전 종가대비 현재 거래 등락률" />
+
+            <EditText
+                android:id="@+id/editText13"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.75"
+                android:inputType="numberDecimal"
+                android:text="100" />
+
+            <TextView
+                android:id="@+id/textView21"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.93"
+                android:text="%" />
+
+            <Spinner
+                android:id="@+id/spinner13"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.9"
+                android:foreground="@drawable/s_way1"
+                android:entries="@array/str_ary_trade" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView22"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.4"
+                android:text="2봉전 종가대비 1봉전 거래 등락률" />
+
+            <EditText
+                android:id="@+id/editText14"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.75"
+                android:inputType="numberDecimal"
+                android:text="50" />
+
+            <TextView
+                android:id="@+id/textView23"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.93"
+                android:text="%" />
+
+            <Spinner
+                android:id="@+id/spinner14"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.9"
+                android:foreground="@drawable/s_way1"
+                android:entries="@array/str_ary_trade"/>
+
         </LinearLayout>
 
     </LinearLayout>

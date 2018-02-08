@@ -1,7 +1,6 @@
-package com.example.com.jumpupbitcoin.priceInfo;
+package com.example.com.jumpupbitcoin.downCoin;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -13,22 +12,24 @@ import com.example.com.jumpupbitcoin.R;
  * Created by COM on 2018-01-24.
  */
 
-public class CoinListView extends LinearLayout {
+public class LogDownView extends LinearLayout {
 
     TextView name_Text;
     TextView price_Text;
-    TextView per_Text;
+    TextView down_per_Text;
+    TextView date_Text;
     ImageView image_coin;
     Integer[] images;
 
-    public CoinListView(Context context) {
+    public LogDownView(Context context) {
         super(context);
         inflation_init(context);
 
-        name_Text = (TextView) findViewById(R.id.name_coin_txt);
-        price_Text = (TextView) findViewById(R.id.price_coin_txt);
-        per_Text = (TextView) findViewById(R.id.start_per_txt);
-        image_coin = (ImageView) findViewById(R.id.image_coin1);
+        name_Text = (TextView) findViewById(R.id.name_coin_down_txt2);
+        price_Text = (TextView) findViewById(R.id.price_coin_down_txt2);
+        down_per_Text = (TextView) findViewById(R.id.up_per_down_txt2);
+        date_Text = (TextView) findViewById(R.id.date_coin_down_txt2);
+        image_coin = (ImageView) findViewById(R.id.image_coin_down2);
         images = new Integer[]{R.drawable.btc, R.drawable.ada, R.drawable.xrp, R.drawable.snt, R.drawable.qtum, R.drawable.eth, R.drawable.mer, R.drawable.neo, R.drawable.sbd, R.drawable.steem,
                 R.drawable.xlm, R.drawable.emc, R.drawable.btg, R.drawable.ardr, R.drawable.xem, R.drawable.tix, R.drawable.powr, R.drawable.bcc, R.drawable.kmd, R.drawable.strat,
                 R.drawable.etc, R.drawable.omg, R.drawable.grs, R.drawable.storj, R.drawable.rep, R.drawable.waves, R.drawable.ark, R.drawable.xmr, R.drawable.ltc, R.drawable.lsk,
@@ -37,7 +38,7 @@ public class CoinListView extends LinearLayout {
 
     private void inflation_init(Context context) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
-        inflater.inflate(R.layout.list_price, this, true);
+        inflater.inflate(R.layout.log_down_coin, this, true);
     }
 
     public void setName(String name) {
@@ -49,11 +50,13 @@ public class CoinListView extends LinearLayout {
     }
 
     public void setPer(String per) {
-        if (Float.parseFloat(per) < 0) {
-            price_Text.setTextColor(getContext().getColor(R.color.blue));
-            per_Text.setTextColor(getContext().getColor(R.color.blue));
-        }
-        per_Text.setText(per + "%");
+        price_Text.setTextColor(getContext().getColor(R.color.blue));
+        down_per_Text.setTextColor(getContext().getColor(R.color.blue));
+        down_per_Text.setText(per + "%");
+    }
+
+    public void setDate(String time) {
+        date_Text.setText(time);
     }
 
     public void setImage(int num) {

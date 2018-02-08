@@ -2,6 +2,7 @@ package com.example.com.jumpupbitcoin;
 
 import android.util.Log;
 
+import com.example.com.jumpupbitcoin.downCoin.DownData;
 import com.example.com.jumpupbitcoin.jumpCoin.JumpData;
 import com.example.com.jumpupbitcoin.setting.SettingData;
 
@@ -17,19 +18,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CalJump {
+public class CalDown {
 
-    private JumpData mJumpData = new JumpData();
+    private DownData mDownData = new DownData();
     private SettingData mSettingData = new SettingData();
     private float tradePer;
     private float tradePerPre;
     private Map<Integer, Integer> duple_check_map = new HashMap<>();
 
-    public void upCatch(Document doc2) {
+    public void downCatch(Document doc2) {
         int switch_minite = mSettingData.bunbong;
         int num_get_price = 1;
 
-        mJumpData.alarm_reg.clear();
+        mDownData.alarm_reg.clear();
 
         String str_switch_minite = "";
         String str_switch_minite1 = "";
@@ -59,12 +60,12 @@ public class CalJump {
             num_get_price = switch_minite + num_get_price;
         }
 
-        Log.d("str_Swtich_minite", str_switch_minite);
+        //Log.d("CalDown str_Swtich_minite", str_switch_minite);
         //Log.d("str_switch_trade", str_switch_trade);
-        up_per_Calc(str_switch_minite, str_switch_trade);
+        down_per_Calc(str_switch_minite, str_switch_trade);
     }
 
-    private void up_per_Calc(String str_switch_minite, String str_switch_trade) {
+    private void down_per_Calc(String str_switch_minite, String str_switch_trade) {
 
         String[] temp_arr_trade;
         String[] temp_now_trade;
@@ -110,58 +111,59 @@ public class CalJump {
                     ary_up_trade_per.set(i, form.format((Float.parseFloat(temp_now_trade[i]) / Float.parseFloat(temp_trade[i])) * 100 - 100));
                     ary_up_trade_per_pre.add(i, form.format((Float.parseFloat(temp_trade[i]) / Float.parseFloat(temp_trade_pre[i])) * 100 - 100));
                 }
-
-                if (mSettingData.price_per_pre == -1 && mSettingData.trade_per == -1 && mSettingData.trade_per_pre == -1){
-                    if (Float.parseFloat(ary_up_per.get(i)) > mSettingData.price_per) {
+            // price_per = -1일때로 처리하기!
+                if (mSettingData.down_price_per_pre == -1 && mSettingData.down_trade_per == -1 && mSettingData.down_trade_per_pre == -1){
+                    if (Float.parseFloat(ary_up_per.get(i)) < -mSettingData.down_price_per) {
                         duple_check_method(i, ary_up_per, temp_now_price);
                     }
                 }
-                else if (mSettingData.price_per_pre == -1 && mSettingData.trade_per == -1 && mSettingData.trade_per_pre != -1){
-                    if (Float.parseFloat(ary_up_per.get(i)) > mSettingData.price_per && Float.parseFloat(ary_up_trade_per_pre.get(i)) > mSettingData.trade_per_pre) {
+                else if (mSettingData.down_price_per_pre == -1 && mSettingData.down_trade_per == -1 && mSettingData.down_trade_per_pre != -1){
+                    if (Float.parseFloat(ary_up_per.get(i)) < -mSettingData.down_price_per && Float.parseFloat(ary_up_trade_per_pre.get(i)) > mSettingData.down_trade_per_pre) {
                         duple_check_method(i, ary_up_per, temp_now_price);
                     }
                 }
-                else if (mSettingData.price_per_pre == -1 && mSettingData.trade_per != -1 && mSettingData.trade_per_pre == -1){
-                    if (Float.parseFloat(ary_up_per.get(i)) > mSettingData.price_per && Float.parseFloat(ary_up_trade_per.get(i)) > mSettingData.trade_per) {
+                else if (mSettingData.down_price_per_pre == -1 && mSettingData.down_trade_per != -1 && mSettingData.down_trade_per_pre == -1){
+                    if (Float.parseFloat(ary_up_per.get(i)) < -mSettingData.down_price_per && Float.parseFloat(ary_up_trade_per.get(i)) > mSettingData.down_trade_per) {
                         duple_check_method(i, ary_up_per, temp_now_price);
                     }
                 }
-                else if (mSettingData.price_per_pre == -1 && mSettingData.trade_per != -1 && mSettingData.trade_per_pre != -1){
-                    if (Float.parseFloat(ary_up_per.get(i)) > mSettingData.price_per && Float.parseFloat(ary_up_trade_per.get(i)) > mSettingData.trade_per && Float.parseFloat(ary_up_trade_per_pre.get(i)) > mSettingData.trade_per_pre) {
+                else if (mSettingData.down_price_per_pre == -1 && mSettingData.down_trade_per != -1 && mSettingData.down_trade_per_pre != -1){
+                    if (Float.parseFloat(ary_up_per.get(i)) < -mSettingData.down_price_per && Float.parseFloat(ary_up_trade_per.get(i)) > mSettingData.down_trade_per && Float.parseFloat(ary_up_trade_per_pre.get(i)) > mSettingData.down_trade_per_pre) {
                         duple_check_method(i, ary_up_per, temp_now_price);
                     }
                 }
-                else if (mSettingData.price_per_pre != -1 && mSettingData.trade_per == -1 && mSettingData.trade_per_pre == -1){
-                    if (Float.parseFloat(ary_up_per.get(i)) > mSettingData.price_per && Float.parseFloat(ary_up_per_pre.get(i)) > mSettingData.price_per_pre) {
+                else if (mSettingData.down_price_per_pre != -1 && mSettingData.down_trade_per == -1 && mSettingData.down_trade_per_pre == -1){
+                    if (Float.parseFloat(ary_up_per.get(i)) < -mSettingData.down_price_per && Float.parseFloat(ary_up_per_pre.get(i)) < -mSettingData.down_price_per_pre) {
                         duple_check_method(i, ary_up_per, temp_now_price);
                     }
                 }
-                else if (mSettingData.price_per_pre != -1 && mSettingData.trade_per == -1 && mSettingData.trade_per_pre != -1){
-                    if (Float.parseFloat(ary_up_per.get(i)) > mSettingData.price_per && Float.parseFloat(ary_up_per_pre.get(i)) > mSettingData.price_per_pre && Float.parseFloat(ary_up_trade_per_pre.get(i)) > mSettingData.trade_per_pre) {
+                else if (mSettingData.down_price_per_pre != -1 && mSettingData.down_trade_per == -1 && mSettingData.down_trade_per_pre != -1){
+                    if (Float.parseFloat(ary_up_per.get(i)) < -mSettingData.down_price_per && Float.parseFloat(ary_up_per_pre.get(i)) < -mSettingData.down_price_per_pre && Float.parseFloat(ary_up_trade_per_pre.get(i)) > mSettingData.down_trade_per_pre) {
                         duple_check_method(i, ary_up_per, temp_now_price);
                     }
                 }
-                else if (mSettingData.price_per_pre != -1 && mSettingData.trade_per != -1 && mSettingData.trade_per_pre == -1){
-                    if (Float.parseFloat(ary_up_per.get(i)) > mSettingData.price_per && Float.parseFloat(ary_up_per_pre.get(i)) > mSettingData.price_per_pre  && Float.parseFloat(ary_up_trade_per.get(i)) > mSettingData.trade_per) {
+                else if (mSettingData.down_price_per_pre != -1 && mSettingData.down_trade_per != -1 && mSettingData.down_trade_per_pre == -1){
+                    if (Float.parseFloat(ary_up_per.get(i)) < -mSettingData.down_price_per && Float.parseFloat(ary_up_per_pre.get(i)) < -mSettingData.down_price_per_pre  && Float.parseFloat(ary_up_trade_per.get(i)) > mSettingData.down_trade_per) {
                         duple_check_method(i, ary_up_per, temp_now_price);
                     }
                 }
-                else if (mSettingData.price_per_pre != -1 && mSettingData.trade_per != -1 && mSettingData.trade_per_pre != -1){
-                    if (Float.parseFloat(ary_up_per.get(i)) > mSettingData.price_per && Float.parseFloat(ary_up_per_pre.get(i)) > mSettingData.price_per_pre  && Float.parseFloat(ary_up_trade_per.get(i)) > mSettingData.trade_per && Float.parseFloat(ary_up_trade_per_pre.get(i)) > mSettingData.trade_per_pre) {
+                else if (mSettingData.down_price_per_pre != -1 && mSettingData.down_trade_per != -1 && mSettingData.down_trade_per_pre != -1){
+                    if (Float.parseFloat(ary_up_per.get(i)) < -mSettingData.down_price_per && Float.parseFloat(ary_up_per_pre.get(i)) < -mSettingData.down_price_per_pre  && Float.parseFloat(ary_up_trade_per.get(i)) > mSettingData.down_trade_per && Float.parseFloat(ary_up_trade_per_pre.get(i)) > mSettingData.down_trade_per_pre) {
                         duple_check_method(i, ary_up_per, temp_now_price);
                     }
                 }
             }
 
-            for (int i = 0; i < mJumpData.alarm_reg.size(); i++) {
+            for (int i = 0; i < mDownData.alarm_reg.size(); i++) {
                 String time = new SimpleDateFormat("MM/dd HH:mm:ss").format(new Date(System.currentTimeMillis()));
-//                String[] coin_arr = mJumpData.alarm_reg.get(i).split("-");
-//               if (mJumpData.alarm_reg.size() != 0) {
-                mJumpData.log_list.add(mJumpData.alarm_reg.get(i) + "-" + time);
+//                String[] coin_arr = mDownData.alarm_reg.get(i).split("-");
+//               if (mDownData.alarm_reg.size() != 0) {
+                mDownData.log_list.add(mDownData.alarm_reg.get(i) + "_" + time);
 //                }
+                Log.d("mDownData.log_list",mDownData.log_list.toString());
             }
 
-            mChangeData.onDataChanged(mJumpData.alarm_reg, mJumpData.log_list);
+            mChangeData.onDataChanged(mDownData.alarm_reg, mDownData.log_list);
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -169,11 +171,12 @@ public class CalJump {
         }
     }
 
-    private void duple_check_method(int i, List<String> ary_up_per, String[] temp_now_price) {
+    private void duple_check_method(int i, List<String> ary_down_per, String[] temp_now_price) {
         if (!duple_check_map.containsKey(i)) {
             long[] pattern = {100, 300, 100, 500, 100, 500};
             MainActivity.mVibrator.vibrate(pattern, -1);
-            mJumpData.alarm_reg.add(i + "-" + ary_up_per.get(i) + "-" + temp_now_price[i]);
+            Log.d("Down duple_check_method", String.valueOf(duple_check_map));
+            mDownData.alarm_reg.add(i + "_" + ary_down_per.get(i) + "_" + temp_now_price[i]);
             duple_check_map.put(i, mSettingData.bunbong);   // 분봉으로 값 넣기
         } else {
             int a = duple_check_map.get(i);
@@ -185,33 +188,31 @@ public class CalJump {
     }
 
     public void clearData() {
-        mJumpData.clearData();
+        mDownData.clearData();
     }
 
     public List<String> getAlarmReg() {
-        return mJumpData.alarm_reg;
+        return mDownData.alarm_reg;
     }
 
     public List<String> getLogList() {
-        return mJumpData.log_list;
+        return mDownData.log_list;
     }
 
     public void setBunBong(int bunBong) { mSettingData.bunbong = bunBong; }
 
-    public void setPricePer(float pricePer) {
-        mSettingData.price_per= pricePer;
+    public void setDownPricePer(float downPricePer) { mSettingData.down_price_per= downPricePer; }
+
+    public void setDownPricePerPer(float downPricePerPer) {
+        mSettingData.down_price_per_pre= downPricePerPer;
     }
 
-    public void setPricePerPer(float pricePerPer) {
-        mSettingData.price_per_pre= pricePerPer;
+    public void setDownTradePer(float downTradePer) {
+        mSettingData.down_trade_per = downTradePer;
     }
 
-    public void setTradePer(float tradePer) {
-        mSettingData.trade_per = tradePer;
-    }
-
-    public void setTradePerPre(float tradePerPre) {
-        mSettingData.trade_per_pre = tradePerPre;
+    public void setDownTradePerPre(float downTradePerPre) {
+        mSettingData.down_trade_per_pre = downTradePerPre;
     }
 
     private onChangeData mChangeData;
@@ -220,6 +221,6 @@ public class CalJump {
     }
 
     interface onChangeData {
-        void onDataChanged(List<String> alarmReg,  List<String> logList);
+        void onDataChanged(List<String> alarmReg, List<String> logList);
     }
 }

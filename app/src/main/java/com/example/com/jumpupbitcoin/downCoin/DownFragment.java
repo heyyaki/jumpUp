@@ -1,4 +1,4 @@
-package com.example.com.jumpupbitcoin.jumpCoin;
+package com.example.com.jumpupbitcoin.downCoin;
 
 import android.app.Fragment;
 import android.content.Context;
@@ -11,16 +11,13 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
 
-import com.example.com.jumpupbitcoin.Client;
 import com.example.com.jumpupbitcoin.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
-public class UpFragment extends Fragment {
+public class DownFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -38,11 +35,11 @@ public class UpFragment extends Fragment {
 
     private HashMap<Integer, String> map = new HashMap<>();
 
-    public UpFragment() {
+    public DownFragment() {
         // Required empty public constructor
     }
-    public static UpFragment newInstance(ArrayList<String> alarmReg, ArrayList<String> logList) {
-        UpFragment fragment = new UpFragment();
+    public static DownFragment newInstance(ArrayList<String> alarmReg, ArrayList<String> logList) {
+        DownFragment fragment = new DownFragment();
         Bundle args = new Bundle();
         args.putStringArrayList(ARG_PARAM1, alarmReg);
         args.putStringArrayList(ARG_PARAM2, logList);
@@ -78,9 +75,9 @@ public class UpFragment extends Fragment {
 
         @Override
         public View getView(int i, View convertView, ViewGroup parent) {
-            UpListView view = new UpListView(getContext());
+            DownListView view = new DownListView(getContext());
             if (!mAlarmReg.get(i).isEmpty()) {
-                String[] coin_arr = mAlarmReg.get(i).split("-");
+                String[] coin_arr = mAlarmReg.get(i).split("_");
                 view.setName(map.get(Integer.parseInt(coin_arr[0])));
                 view.setPrice(Integer.parseInt(coin_arr[2]));
                 view.setPer(coin_arr[1]);
@@ -108,11 +105,11 @@ public class UpFragment extends Fragment {
 
         @Override
         public View getView(int i, View convertView, ViewGroup parent) {
-            LogUpView view = new LogUpView(getContext());
+            LogDownView view = new LogDownView(getContext());
             int a = mLogList.size();
             if (!mLogList.get(i).isEmpty()) {
                 a = --a - i;
-                String[] coin_arr = mLogList.get(a).split("-");
+                String[] coin_arr = mLogList.get(a).split("_");
                 view.setName(map.get(Integer.parseInt(coin_arr[0])));
                 view.setPrice(Integer.valueOf(coin_arr[2]));
                 view.setPer(coin_arr[1]);
@@ -128,16 +125,16 @@ public class UpFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         Log.w(this.getClass().getSimpleName(), "onCreateView()");
-        Adapter = new UpFragment.myAdapter();
-        Adapter2 = new UpFragment.myAdapter2();
-        View v = inflater.inflate(R.layout.fragment_up, container, false);
-        listview = (ListView) v.findViewById(R.id.uplist);
+        Adapter = new DownFragment.myAdapter();
+        Adapter2 = new DownFragment.myAdapter2();
+        View v = inflater.inflate(R.layout.fragment_down, container, false);
+        listview = (ListView) v.findViewById(R.id.downlist);
         listview.setAdapter(Adapter);
 
-        listview2 = (ListView) v.findViewById(R.id.logList);
+        listview2 = (ListView) v.findViewById(R.id.logDownList);
         listview2.setAdapter(Adapter2);
 
-        Button btn_log_del = (Button) v.findViewById(R.id.btn_log_delete);
+        Button btn_log_del = (Button) v.findViewById(R.id.btn_log_down_delete);
         btn_log_del.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

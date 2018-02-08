@@ -8,8 +8,13 @@
 
     <item
         android:id="@+id/navigation_dashboard"
-        android:icon="@drawable/ic_alarm_24dp"
+        android:icon="@drawable/ic_trending_up_black_24dp"
         android:title="@string/title_dashboard" />
+
+    <item
+        android:id="@+id/navigation_dashboard_down"
+        android:icon="@drawable/ic_trending_down_black_24dp"
+        android:title="급락 코인" />
 
     <item
         android:id="@+id/navigation_schedule"
