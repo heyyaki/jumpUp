@@ -12,7 +12,7 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 
 public class CrawlringPrice implements Runnable {
-    final String url = "http://122.40.239.103:8080/crawlring/index.html";
+    final String url = "http://13.125.173.93:8080/crawlring/index.html";
     private final int SLEEP_TIME = 5 * 1000;
 
     private Handler mHandler;

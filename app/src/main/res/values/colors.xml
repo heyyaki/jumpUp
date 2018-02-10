@@ -6,4 +6,8 @@
     <color name="textColor">#252525</color>
     <color name="red">#df0000</color>
     <color name="blue">#3636f0</color>
+    <color name="green">#FF00DD5C</color>
+    <color name="weakblack">#777777</color>
+    <color name="black">#222222</color>
+
 </resources>

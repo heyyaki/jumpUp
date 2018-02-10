@@ -1,16 +1,18 @@
         package com.example.com.jumpupbitcoin;
 
+        import android.animation.ArgbEvaluator;
+        import android.animation.ValueAnimator;
         import android.content.Context;
         import android.content.Intent;
+        import android.os.Build;
         import android.os.Bundle;
-        import android.os.Handler;
-        import android.os.Message;
         import android.os.Vibrator;
         import android.support.annotation.NonNull;
+        import android.support.annotation.RequiresApi;
         import android.support.design.widget.BottomNavigationView;
         import android.support.v7.app.AppCompatActivity;
-        import android.util.Log;
         import android.view.MenuItem;
+        import android.widget.TextView;
         import android.widget.Toast;
 
         import com.example.com.jumpupbitcoin.coinSchedule.CoinSchedule;
@@ -18,8 +20,6 @@
         import com.example.com.jumpupbitcoin.jumpCoin.UpFragment;
         import com.example.com.jumpupbitcoin.priceInfo.HomeFragment;
         import com.example.com.jumpupbitcoin.setting.SettingFragment;
-
-        import org.jsoup.nodes.Document;
 
         import java.util.ArrayList;
         import java.util.List;
@@ -45,15 +45,29 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.navigation_home:
                     setTitle("현재 시세");
 
-                    final HomeFragment homeFragment = HomeFragment.newInstance((ArrayList<String>) mCalPrice.getPrice(), (ArrayList<String>)mCalPrice.getPer());
+                    final HomeFragment homeFragment = HomeFragment.newInstance((ArrayList<String>) BackService.mCalPrice.getPrice(), (ArrayList<String>)BackService.mCalPrice.getPer());
                     manager.beginTransaction().replace(R.id.content, homeFragment, homeFragment.getTag()).commitAllowingStateLoss();
                     frag_num = 1;
                     pre_Setting();
 
-                    mCalPrice.setOnChangedDataLister(new CalPrice.onChangeData() {
+                    BackService.mCalPrice.setOnChangedDataLister(new CalPrice.onChangeData() {
                         @Override
                         public void onDataChanged(List<String> priceList, List<String> perList) {
-                            if(!homeFragment.isDetached()){
+                            if(homeFragment.isVisible()){
+                                final TextView test_clock = (TextView) findViewById(R.id.textClock);
+                                int colorFrom = getResources().getColor(R.color.weakblack);
+                                int colorTo = getResources().getColor(R.color.black);
+                                final ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
+                                colorAnimation.setDuration(1000); //You can manage the time of the blink with this parameter
+                                colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                                    @Override
+                                    public void onAnimationUpdate(ValueAnimator animator) {
+                                        test_clock.setBackgroundColor((int)animator.getAnimatedValue());
+                                    }
+                                });
+
+                                colorAnimation.start();
+
                                 homeFragment.refresh((ArrayList<String>) priceList, (ArrayList<String>) perList);
                             }
                         }
@@ -62,12 +76,12 @@ public class MainActivity extends AppCompatActivity {
 
                 case R.id.navigation_dashboard:
                     setTitle("급등 코인");
-                    final UpFragment upFragment = UpFragment.newInstance(((ArrayList<String>) mCalJump.getAlarmReg()), (ArrayList<String>) mCalJump.getLogList());
+                    final UpFragment upFragment = UpFragment.newInstance(((ArrayList<String>) BackService.mCalJump.getAlarmReg()), (ArrayList<String>) BackService.mCalJump.getLogList());
                     manager.beginTransaction().replace(R.id.content, upFragment, upFragment.getTag()).commitAllowingStateLoss();
                     frag_num = 2;
                     pre_Setting();
 
-                    mCalJump.setOnChangedDataLister(new CalJump.onChangeData() {
+                    BackService.mCalJump.setOnChangedDataLister(new CalJump.onChangeData() {
                         @Override
                         public void onDataChanged(List<String> alarmReg, List<String> logList) {
                             if(!upFragment.isDetached()){
@@ -79,11 +93,11 @@ public class MainActivity extends AppCompatActivity {
 
                 case R.id.navigation_dashboard_down:
                     setTitle("급락 코인");
-                    final DownFragment downFragment = DownFragment.newInstance(((ArrayList<String>) mCalDown.getAlarmReg()), (ArrayList<String>) mCalDown.getLogList());
+                    final DownFragment downFragment = DownFragment.newInstance(((ArrayList<String>) BackService.mCalDown.getAlarmReg()), (ArrayList<String>) BackService.mCalDown.getLogList());
                     manager.beginTransaction().replace(R.id.content, downFragment, downFragment.getTag()).commitAllowingStateLoss();
                     frag_num = 3;
 
-                    mCalDown.setOnChangedDataLister(new CalDown.onChangeData() {
+                    BackService.mCalDown.setOnChangedDataLister(new CalDown.onChangeData() {
                         @Override
                         public void onDataChanged(List<String> alarmReg, List<String> logList) {
                             if(!downFragment.isDetached()){
@@ -113,18 +127,6 @@ public class MainActivity extends AppCompatActivity {
                     final float downTradePer = SharedPreferencesManager.getDownTradePer(getApplicationContext());
                     final float downTradePerPre = SharedPreferencesManager.getDownTradePerPre(getApplicationContext());
 
-                    mCalJump.setBunBong(bunbong);
-                    mCalJump.setPricePer(pricePer);
-                    mCalJump.setPricePerPer(pricePerPre);
-                    mCalJump.setTradePer(tradePer);
-                    mCalJump.setTradePerPre(tradePerPre);
-
-                    mCalDown.setBunBong(bunbong);
-                    mCalDown.setDownPricePer(downPricePer);
-                    mCalDown.setDownPricePerPer(downPricePerPre);
-                    mCalDown.setDownTradePer(downTradePer);
-                    mCalDown.setDownTradePerPre(downTradePerPre);
-
                     SettingFragment networkFragment = SettingFragment.newInstance(bunbong, pricePer, pricePerPre, tradePer, tradePerPre, downPricePer, downPricePerPre, downTradePer, downTradePerPre);
                     manager.beginTransaction().replace(R.id.content, networkFragment, networkFragment.getTag()).commitAllowingStateLoss();
                     frag_num = 5;
@@ -134,6 +136,7 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -147,60 +150,10 @@ public class MainActivity extends AppCompatActivity {
 
         mVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
-        pre_Setting();
+        intent = new Intent(getApplicationContext(),BackService.class);
+        startService(intent);
 
-//        intent = new Intent(getApplicationContext(),BackService.class);
-//        startService(intent);
-
-
-        mJumpThread = new Thread(new CrawlringJump(mJumpHandler));
-        mJumpThread.start();
-
-        mPriceThread = new Thread(new CrawlringPrice(mPriceHandler));
-        mPriceThread.start();
     }
-
-    private Thread mJumpThread;
-    private Thread mPriceThread;
-
-    final private Handler mJumpHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            if (msg.what == 0) {
-                // 데이터 초기화 요청
-                mCalJump.clearData();
-                mCalDown.clearData();
-            } else if (msg.what == 1) {
-                // 급등계산 모듈
-                Document document = (Document) msg.obj;
-
-                // TODO 분봉 넣어야댐
-                mCalJump.upCatch(document);
-                mCalDown.downCatch(document);
-            }
-        }
-    };
-
-
-    final private Handler mPriceHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            if (msg.what == 0) {
-                // 현재가격 분석모듈
-                String now_price = (String) msg.obj;
-                mCalPrice.Calc(now_price);
-            } else if (msg.what == 1) {
-                String start_coin = (String) msg.obj;
-                mCalPrice.per_Calc(start_coin);
-            }
-        }
-    };
-
-    private CalJump mCalJump = new CalJump();
-    private CalDown mCalDown = new CalDown();
-    private CalPrice mCalPrice = new CalPrice();
 
     private void pre_Setting(){
         final int bunbong = SharedPreferencesManager.getBunBong(getApplicationContext());
@@ -214,17 +167,17 @@ public class MainActivity extends AppCompatActivity {
         final float downTradePer = SharedPreferencesManager.getDownTradePer(getApplicationContext());
         final float downTradePerPre = SharedPreferencesManager.getDownTradePerPre(getApplicationContext());
 
-        mCalJump.setBunBong(bunbong);
-        mCalJump.setPricePer(pricePer);
-        mCalJump.setPricePerPer(pricePerPre);
-        mCalJump.setTradePer(tradePer);
-        mCalJump.setTradePerPre(tradePerPre);
+        BackService.mCalJump.setBunBong(bunbong);
+        BackService.mCalJump.setPricePer(pricePer);
+        BackService.mCalJump.setPricePerPer(pricePerPre);
+        BackService.mCalJump.setTradePer(tradePer);
+        BackService.mCalJump.setTradePerPre(tradePerPre);
 
-        mCalDown.setBunBong(bunbong);
-        mCalDown.setDownPricePer(downPricePer);
-        mCalDown.setDownPricePerPer(downPricePerPre);
-        mCalDown.setDownTradePer(downTradePer);
-        mCalDown.setDownTradePerPre(downTradePerPre);
+        BackService.mCalDown.setBunBong(bunbong);
+        BackService.mCalDown.setDownPricePer(downPricePer);
+        BackService.mCalDown.setDownPricePerPer(downPricePerPre);
+        BackService.mCalDown.setDownTradePer(downTradePer);
+        BackService.mCalDown.setDownTradePerPre(downTradePerPre);
     }
 
     @Override
@@ -241,13 +194,15 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 super.onBackPressed();
 
-//                stopService(intent);
-
-                mJumpThread.interrupt();
-                mPriceThread.interrupt();
+                stopService(intent);
 
                 finish(); // app 종료 시키기
             }
         }
+    }
+
+    protected void onDestroy() {
+        super.onDestroy();
+        stopService(intent);
     }
 }

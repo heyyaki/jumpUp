@@ -31,7 +31,7 @@
         android:layout_toStartOf="@+id/start_per_txt"
         android:gravity="center_vertical|end"
         android:textColor="@color/red"
-        android:textSize="16dp" />
+        android:textSize="16dp"/>
 
     <TextView
         android:id="@+id/start_per_txt"

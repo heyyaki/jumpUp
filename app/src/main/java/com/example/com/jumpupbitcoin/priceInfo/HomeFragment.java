@@ -8,8 +8,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.com.jumpupbitcoin.R;
 
@@ -96,7 +99,7 @@ public class HomeFragment extends Fragment {
         Adapter = new myAdapter();
         View v = inflater.inflate(R.layout.fragment_home, container, false);
         listview = (ListView) v.findViewById(R.id.price_list);
-        final View header = inflater.inflate(R.layout.price_list_header, null, false);
+        View header = inflater.inflate(R.layout.price_list_header, null, false);
         listview.addHeaderView(header);
         listview.setAdapter(Adapter);
 

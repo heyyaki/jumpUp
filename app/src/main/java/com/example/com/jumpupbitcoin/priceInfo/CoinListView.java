@@ -2,7 +2,11 @@ package com.example.com.jumpupbitcoin.priceInfo;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -54,6 +58,7 @@ public class CoinListView extends LinearLayout {
             per_Text.setTextColor(getContext().getColor(R.color.blue));
         }
         per_Text.setText(per + "%");
+
     }
 
     public void setImage(int num) {
