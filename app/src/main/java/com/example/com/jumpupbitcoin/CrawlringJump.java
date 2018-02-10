@@ -13,8 +13,8 @@ import java.io.IOException;
 
 public class CrawlringJump implements Runnable {
 
-    //private final String url_up_coin = "http://13.125.173.93:8080/crawlring/coin_up.html";
-    private final String url_up_coin = "http://122.40.239.103:8080/crawlring/up_coin.html";
+    private final String url_up_coin = "http://13.125.173.93:8080/crawlring/coin_up.html";
+    //private final String url_up_coin = "http://122.40.239.103:8080/crawlring/up_coin.html";
     private final int SLEEP_TIME = 30 * 1000;
 
     private Handler mHandler;
