@@ -1,28 +1,28 @@
-        package com.example.com.jumpupbitcoin;
+package com.example.com.jumpupbitcoin;
 
-        import android.animation.ArgbEvaluator;
-        import android.animation.ValueAnimator;
-        import android.content.Context;
-        import android.content.Intent;
-        import android.os.Build;
-        import android.os.Bundle;
-        import android.os.Vibrator;
-        import android.support.annotation.NonNull;
-        import android.support.annotation.RequiresApi;
-        import android.support.design.widget.BottomNavigationView;
-        import android.support.v7.app.AppCompatActivity;
-        import android.view.MenuItem;
-        import android.widget.TextView;
-        import android.widget.Toast;
+import android.animation.ArgbEvaluator;
+import android.animation.ValueAnimator;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.Vibrator;
+import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
+import android.support.design.widget.BottomNavigationView;
+import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
+import android.widget.TextView;
+import android.widget.Toast;
 
-        import com.example.com.jumpupbitcoin.coinSchedule.CoinSchedule;
-        import com.example.com.jumpupbitcoin.downCoin.DownFragment;
-        import com.example.com.jumpupbitcoin.jumpCoin.UpFragment;
-        import com.example.com.jumpupbitcoin.priceInfo.HomeFragment;
-        import com.example.com.jumpupbitcoin.setting.SettingFragment;
+import com.example.com.jumpupbitcoin.coinSchedule.CoinSchedule;
+import com.example.com.jumpupbitcoin.downCoin.DownFragment;
+import com.example.com.jumpupbitcoin.jumpCoin.UpFragment;
+import com.example.com.jumpupbitcoin.priceInfo.HomeFragment;
+import com.example.com.jumpupbitcoin.setting.SettingFragment;
 
-        import java.util.ArrayList;
-        import java.util.List;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.navigation_home:
                     setTitle("현재 시세");
 
-                    final HomeFragment homeFragment = HomeFragment.newInstance((ArrayList<String>) BackService.mCalPrice.getPrice(), (ArrayList<String>)BackService.mCalPrice.getPer());
+                    final HomeFragment homeFragment = HomeFragment.newInstance((ArrayList<String>) BackService.mCalPrice.getPrice(), (ArrayList<String>) BackService.mCalPrice.getPer());
                     manager.beginTransaction().replace(R.id.content, homeFragment, homeFragment.getTag()).commitAllowingStateLoss();
                     frag_num = 1;
                     pre_Setting();
@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
                     BackService.mCalPrice.setOnChangedDataLister(new CalPrice.onChangeData() {
                         @Override
                         public void onDataChanged(List<String> priceList, List<String> perList) {
-                            if(homeFragment.isVisible()){
+                            if (homeFragment.isVisible()) {
                                 final TextView test_clock = (TextView) findViewById(R.id.textClock);
                                 int colorFrom = getResources().getColor(R.color.weakblack);
                                 int colorTo = getResources().getColor(R.color.black);
@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
                                 colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                                     @Override
                                     public void onAnimationUpdate(ValueAnimator animator) {
-                                        test_clock.setBackgroundColor((int)animator.getAnimatedValue());
+                                        test_clock.setBackgroundColor((int) animator.getAnimatedValue());
                                     }
                                 });
 
@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
                     BackService.mCalJump.setOnChangedDataLister(new CalJump.onChangeData() {
                         @Override
                         public void onDataChanged(List<String> alarmReg, List<String> logList) {
-                            if(!upFragment.isDetached()){
+                            if (!upFragment.isDetached()) {
                                 upFragment.refresh((ArrayList<String>) alarmReg, (ArrayList<String>) logList);
                             }
                         }
@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
                     BackService.mCalDown.setOnChangedDataLister(new CalDown.onChangeData() {
                         @Override
                         public void onDataChanged(List<String> alarmReg, List<String> logList) {
-                            if(!downFragment.isDetached()){
+                            if (!downFragment.isDetached()) {
                                 downFragment.refresh((ArrayList<String>) alarmReg, (ArrayList<String>) logList);
                             }
                         }
@@ -150,12 +150,12 @@ public class MainActivity extends AppCompatActivity {
 
         mVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
-        intent = new Intent(getApplicationContext(),BackService.class);
+        intent = new Intent(getApplicationContext(), BackService.class);
         startService(intent);
 
     }
 
-    private void pre_Setting(){
+    private void pre_Setting() {
         final int bunbong = SharedPreferencesManager.getBunBong(getApplicationContext());
         final float pricePer = SharedPreferencesManager.getPricePer(getApplicationContext());
         final float pricePerPre = SharedPreferencesManager.getPricePerPre(getApplicationContext());
