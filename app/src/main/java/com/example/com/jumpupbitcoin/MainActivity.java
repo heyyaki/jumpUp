@@ -1,42 +1,40 @@
-        package com.example.com.jumpupbitcoin;
+package com.example.com.jumpupbitcoin;
 
-        import android.animation.ArgbEvaluator;
-        import android.animation.ValueAnimator;
-        import android.content.Context;
-        import android.content.Intent;
-        import android.os.Build;
-        import android.os.Bundle;
-        import android.os.Vibrator;
-        import android.support.annotation.NonNull;
-        import android.support.annotation.RequiresApi;
-        import android.support.design.widget.BottomNavigationView;
-        import android.support.v7.app.AppCompatActivity;
-        import android.util.Log;
-        import android.view.MenuItem;
-        import android.widget.TextView;
-        import android.widget.Toast;
+import android.animation.ArgbEvaluator;
+import android.animation.ValueAnimator;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.Vibrator;
+import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
+import android.support.design.widget.BottomNavigationView;
+import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
+import android.widget.TextView;
+import android.widget.Toast;
 
-        import com.example.com.jumpupbitcoin.coinSchedule.CoinSchedule;
-        import com.example.com.jumpupbitcoin.downCoin.DownFragment;
-        import com.example.com.jumpupbitcoin.jumpCoin.UpFragment;
-        import com.example.com.jumpupbitcoin.priceInfo.HomeFragment;
-        import com.example.com.jumpupbitcoin.setting.SettingFragment;
+import com.example.com.jumpupbitcoin.coinSchedule.CoinSchedule;
+import com.example.com.jumpupbitcoin.downCoin.DownFragment;
+import com.example.com.jumpupbitcoin.jumpCoin.UpFragment;
+import com.example.com.jumpupbitcoin.priceInfo.HomeFragment;
+import com.example.com.jumpupbitcoin.setting.SettingFragment;
 
-        import com.google.android.gms.ads.AdRequest;
-        import com.google.android.gms.ads.InterstitialAd;
-        import com.google.android.gms.ads.MobileAds;
+import java.util.ArrayList;
+import java.util.List;
 
-        import java.util.ArrayList;
-        import java.util.List;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 
-public class MainActivity extends AppCompatActivity {
+
+public class MainActivity extends AppCompatActivity implements SettingFragment.OnSettingFragment {
 
     public static int frag_num = 0;
     private long pressedTime;
 
     Intent intent;
-
-    private InterstitialAd mInterstitialAd;
 
     public static Vibrator mVibrator;
 
@@ -52,15 +50,15 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.navigation_home:
                     setTitle("현재 시세");
 
-                    final HomeFragment homeFragment = HomeFragment.newInstance((ArrayList<String>) BackService.mCalPrice.getPrice(), (ArrayList<String>)BackService.mCalPrice.getPer());
+                    final HomeFragment homeFragment = HomeFragment.newInstance((ArrayList<String>) BackService.mCalPrice.getPrice(), (ArrayList<String>) BackService.mCalPrice.getPer());
                     manager.beginTransaction().replace(R.id.content, homeFragment, homeFragment.getTag()).commitAllowingStateLoss();
                     frag_num = 1;
-                    pre_Setting();
+//                    pre_Setting();
 
                     BackService.mCalPrice.setOnChangedDataLister(new CalPrice.onChangeData() {
                         @Override
                         public void onDataChanged(List<String> priceList, List<String> perList) {
-                            if(homeFragment.isVisible()){
+                            if (homeFragment.isVisible()) {
                                 final TextView test_clock = (TextView) findViewById(R.id.textClock);
                                 int colorFrom = getResources().getColor(R.color.weakblack);
                                 int colorTo = getResources().getColor(R.color.black);
@@ -69,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
                                 colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                                     @Override
                                     public void onAnimationUpdate(ValueAnimator animator) {
-                                        test_clock.setBackgroundColor((int)animator.getAnimatedValue());
+                                        test_clock.setBackgroundColor((int) animator.getAnimatedValue());
                                     }
                                 });
 
@@ -86,12 +84,12 @@ public class MainActivity extends AppCompatActivity {
                     final UpFragment upFragment = UpFragment.newInstance(((ArrayList<String>) BackService.mCalJump.getAlarmReg()), (ArrayList<String>) BackService.mCalJump.getLogList());
                     manager.beginTransaction().replace(R.id.content, upFragment, upFragment.getTag()).commitAllowingStateLoss();
                     frag_num = 2;
-                    pre_Setting();
+//                    pre_Setting();
 
                     BackService.mCalJump.setOnChangedDataLister(new CalJump.onChangeData() {
                         @Override
                         public void onDataChanged(List<String> alarmReg, List<String> logList) {
-                            if(!upFragment.isDetached()){
+                            if (!upFragment.isDetached()) {
                                 upFragment.refresh((ArrayList<String>) alarmReg, (ArrayList<String>) logList);
                             }
                         }
@@ -107,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
                     BackService.mCalDown.setOnChangedDataLister(new CalDown.onChangeData() {
                         @Override
                         public void onDataChanged(List<String> alarmReg, List<String> logList) {
-                            if(!downFragment.isDetached()){
+                            if (!downFragment.isDetached()) {
                                 downFragment.refresh((ArrayList<String>) alarmReg, (ArrayList<String>) logList);
                             }
                         }
@@ -123,18 +121,19 @@ public class MainActivity extends AppCompatActivity {
 
                 case R.id.navigation_notifications:
                     setTitle("설정");
-                    final int bunbong = SharedPreferencesManager.getBunBong(getApplicationContext());
+                    final int upCandle = SharedPreferencesManager.getUpCandle(getApplicationContext());
                     final float pricePer = SharedPreferencesManager.getPricePer(getApplicationContext());
                     final float pricePerPre = SharedPreferencesManager.getPricePerPre(getApplicationContext());
                     final float tradePer = SharedPreferencesManager.getTradePer(getApplicationContext());
                     final float tradePerPre = SharedPreferencesManager.getTradePerPre(getApplicationContext());
 
+                    final int downCandle = SharedPreferencesManager.getDownCandle(getApplicationContext());
                     final float downPricePer = SharedPreferencesManager.getDownPricePer(getApplicationContext());
                     final float downPricePerPre = SharedPreferencesManager.getDownPricePerPre(getApplicationContext());
                     final float downTradePer = SharedPreferencesManager.getDownTradePer(getApplicationContext());
                     final float downTradePerPre = SharedPreferencesManager.getDownTradePerPre(getApplicationContext());
 
-                    SettingFragment networkFragment = SettingFragment.newInstance(bunbong, pricePer, pricePerPre, tradePer, tradePerPre, downPricePer, downPricePerPre, downTradePer, downTradePerPre);
+                    SettingFragment networkFragment = SettingFragment.newInstance(upCandle, pricePer, pricePerPre, tradePer, tradePerPre, downCandle, downPricePer, downPricePerPre, downTradePer, downTradePerPre);
                     manager.beginTransaction().replace(R.id.content, networkFragment, networkFragment.getTag()).commitAllowingStateLoss();
                     frag_num = 5;
                     return true;
@@ -149,50 +148,53 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        MobileAds.initialize(this, "ca-app-pub-9946826173060023~4419923481");
-
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         BottomNavigationViewHelper.disableShiftMode(navigation);
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         navigation.setSelectedItemId(R.id.navigation_home);
 
+        pre_Setting();
+
         mVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
-        intent = new Intent(getApplicationContext(),BackService.class);
+        intent = new Intent(getApplicationContext(), BackService.class);
         startService(intent);
 
-        mInterstitialAd = new InterstitialAd(this);
-        mInterstitialAd.setAdUnitId("ca-app-pub-9946826173060023/6306778270");
-        mInterstitialAd.loadAd(new AdRequest.Builder().build());
-
-        if (mInterstitialAd.isLoaded()) {
-            mInterstitialAd.show();
-        } else {
-            Log.d("TAG", "The interstitial wasn't loaded yet.");
-        }
-
+//        final InterstitialAd ad = new InterstitialAd(this);
+//        ad.setAdUnitId(getString(R.string.string_ad_id));
+//
+//        ad.loadAd(new AdRequest.Builder().build());
+//        ad.setAdListener(new AdListener() {
+//            @Override
+//            public void onAdLoaded() {
+//                if (ad.isLoaded()) {
+//                    ad.show();
+//                }
+//            }
+//        });
     }
 
-    private void pre_Setting(){
-        final int bunbong = SharedPreferencesManager.getBunBong(getApplicationContext());
+    private void pre_Setting() {
+        final int upCandle = SharedPreferencesManager.getUpCandle(getApplicationContext());
         final float pricePer = SharedPreferencesManager.getPricePer(getApplicationContext());
         final float pricePerPre = SharedPreferencesManager.getPricePerPre(getApplicationContext());
         final float tradePer = SharedPreferencesManager.getTradePer(getApplicationContext());
         final float tradePerPre = SharedPreferencesManager.getTradePerPre(getApplicationContext());
 
+        final int downCandle = SharedPreferencesManager.getDownCandle(getApplicationContext());
         final float downPricePer = SharedPreferencesManager.getDownPricePer(getApplicationContext());
         final float downPricePerPre = SharedPreferencesManager.getDownPricePerPre(getApplicationContext());
         final float downTradePer = SharedPreferencesManager.getDownTradePer(getApplicationContext());
         final float downTradePerPre = SharedPreferencesManager.getDownTradePerPre(getApplicationContext());
 
-        BackService.mCalJump.setBunBong(bunbong);
+        BackService.mCalJump.setUpCandle(upCandle);
         BackService.mCalJump.setPricePer(pricePer);
         BackService.mCalJump.setPricePerPer(pricePerPre);
         BackService.mCalJump.setTradePer(tradePer);
         BackService.mCalJump.setTradePerPre(tradePerPre);
 
-        BackService.mCalDown.setBunBong(bunbong);
+        BackService.mCalDown.setDownCandle(downCandle);
         BackService.mCalDown.setDownPricePer(downPricePer);
         BackService.mCalDown.setDownPricePerPer(downPricePerPre);
         BackService.mCalDown.setDownTradePer(downTradePer);
@@ -220,29 +222,84 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 //
-//    private void setFullAd(){
-//        interstitialAd = new InterstitialAd(this); //새 광고를 만듭니다.
-//        interstitialAd.setAdUnitId(getResources().getString(R.string.ad_id)); //이전에 String에 저장해 두었던 광고 ID를 전면 광고에 설정합니다.
-//        AdRequest adRequest1 = new AdRequest.Builder().build(); //새 광고요청
-//        interstitialAd.loadAd(adRequest1); //요청한 광고를 load 합니다.
-//        interstitialAd.setAdListener(new AdListener() { //전면 광고의 상태를 확인하는 리스너 등록
+//    private void getAD() {
+//        final InterstitialAd ad = new InterstitialAd(this);
+//        ad.setAdUnitId(getString(R.string.string_ad_id));
 //
-//            @Override
-//            public void onAdClosed() { //전면 광고가 열린 뒤에 닫혔을 때
-//                AdRequest adRequest1 = new AdRequest.Builder().build();  //새 광고요청
-//                interstitialAd.loadAd(adRequest1); //요청한 광고를 load 합니다.
+//        ad.loadAd(new AdRequest.Builder().build());
+//
+//        ad.setAdListener(new AdListener() {
+//            @Override public void onAdLoaded() {
+//                if (ad.isLoaded()) {
+//                    ad.show();
+//                }
 //            }
 //        });
-//    }
-//
-//    public void displayAD(){
-//        if(interstitialAd.isLoaded()) { //광고가 로드 되었을 시
-//            interstitialAd.show(); //보여준다
-//        }
 //    }
 
     protected void onDestroy() {
         super.onDestroy();
         stopService(intent);
+    }
+
+    @Override
+    public void onUpCandleButtonClicked(int candle) {
+        SharedPreferencesManager.setUpCandle(getApplicationContext(), candle);
+        BackService.mCalJump.setUpCandle(candle);
+    }
+
+    @Override
+    public void onUpPrePriceEditted(float prePrice) {
+        SharedPreferencesManager.setPricePer(getApplicationContext(), prePrice);
+        BackService.mCalJump.setPricePer(prePrice);
+    }
+
+    @Override
+    public void onUpPrePrePriceEditted(float prePrePrice) {
+        SharedPreferencesManager.setPricePerPre(getApplicationContext(), prePrePrice);
+        BackService.mCalJump.setPricePerPer(prePrePrice);
+    }
+
+    @Override
+    public void onUpPreTradeEditted(float preTrade) {
+        SharedPreferencesManager.setTradePer(getApplicationContext(), preTrade);
+        BackService.mCalJump.setTradePer(preTrade);
+    }
+
+    @Override
+    public void onUpPrePreTradeEditted(float prePreTrade) {
+        SharedPreferencesManager.setTradePerPre(getApplicationContext(), prePreTrade);
+        BackService.mCalJump.setTradePerPre(prePreTrade);
+
+    }
+
+    @Override
+    public void onDownCandleButtonClicked(int candle) {
+        SharedPreferencesManager.setDownCandle(getApplicationContext(), candle);
+        BackService.mCalDown.setDownCandle(candle);
+    }
+
+    @Override
+    public void onDownPrePriceEditted(float prePrice) {
+        SharedPreferencesManager.setDownPricePer(getApplicationContext(), prePrice);
+        BackService.mCalDown.setDownPricePer(prePrice);
+    }
+
+    @Override
+    public void onDownPrePrePriceEditted(float prePrePrice) {
+        SharedPreferencesManager.setDownPricePerPre(getApplicationContext(), prePrePrice);
+        BackService.mCalDown.setDownPricePerPer(prePrePrice);
+    }
+
+    @Override
+    public void onDownPreTradeEditted(float preTrade) {
+        SharedPreferencesManager.setDownTradePer(getApplicationContext(), preTrade);
+        BackService.mCalDown.setDownTradePer(preTrade);
+    }
+
+    @Override
+    public void onDownPrePreTradeEditted(float prePreTrade) {
+        SharedPreferencesManager.setDownTradePerPre(getApplicationContext(), prePreTrade);
+        BackService.mCalDown.setDownTradePerPre(prePreTrade);
     }
 }
