@@ -179,19 +179,18 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
         intent = new Intent(getApplicationContext(), BackService.class);
         startService(intent);
 
-        final InterstitialAd ad = new InterstitialAd(this);
-        ad.setAdUnitId(getString(R.string.string_ad_id));
-
-        ad.loadAd(new AdRequest.Builder().build());
-
-        ad.setAdListener(new AdListener() {
-            @Override
-            public void onAdLoaded() {
-                if (ad.isLoaded()) {
-                    ad.show();
-                }
-            }
-        });
+//        final InterstitialAd ad = new InterstitialAd(this);
+//        ad.setAdUnitId(getString(R.string.string_ad_id));
+//
+//        ad.loadAd(new AdRequest.Builder().build());
+//        ad.setAdListener(new AdListener() {
+//            @Override
+//            public void onAdLoaded() {
+//                if (ad.isLoaded()) {
+//                    ad.show();
+//                }
+//            }
+//        });
     }
 
     private void LoadSettingData() {
