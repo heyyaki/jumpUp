@@ -24,13 +24,12 @@ import com.example.com.jumpupbitcoin.setting.SettingFragment;
 import java.util.ArrayList;
 import java.util.List;
 
-        import com.google.android.gms.ads.AdListener;
-        import com.google.android.gms.ads.AdRequest;
-        import com.google.android.gms.ads.InterstitialAd;
-        import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SettingFragment.OnSettingFragment {
 
     public static int frag_num = 0;
     private long pressedTime;
@@ -54,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
                     final HomeFragment homeFragment = HomeFragment.newInstance((ArrayList<String>) BackService.mCalPrice.getPrice(), (ArrayList<String>) BackService.mCalPrice.getPer());
                     manager.beginTransaction().replace(R.id.content, homeFragment, homeFragment.getTag()).commitAllowingStateLoss();
                     frag_num = 1;
-                    pre_Setting();
+//                    pre_Setting();
 
                     BackService.mCalPrice.setOnChangedDataLister(new CalPrice.onChangeData() {
                         @Override
@@ -85,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
                     final UpFragment upFragment = UpFragment.newInstance(((ArrayList<String>) BackService.mCalJump.getAlarmReg()), (ArrayList<String>) BackService.mCalJump.getLogList());
                     manager.beginTransaction().replace(R.id.content, upFragment, upFragment.getTag()).commitAllowingStateLoss();
                     frag_num = 2;
-                    pre_Setting();
+//                    pre_Setting();
 
                     BackService.mCalJump.setOnChangedDataLister(new CalJump.onChangeData() {
                         @Override
@@ -122,18 +121,19 @@ public class MainActivity extends AppCompatActivity {
 
                 case R.id.navigation_notifications:
                     setTitle("설정");
-                    final int bunbong = SharedPreferencesManager.getBunBong(getApplicationContext());
+                    final int upCandle = SharedPreferencesManager.getUpCandle(getApplicationContext());
                     final float pricePer = SharedPreferencesManager.getPricePer(getApplicationContext());
                     final float pricePerPre = SharedPreferencesManager.getPricePerPre(getApplicationContext());
                     final float tradePer = SharedPreferencesManager.getTradePer(getApplicationContext());
                     final float tradePerPre = SharedPreferencesManager.getTradePerPre(getApplicationContext());
 
+                    final int downCandle = SharedPreferencesManager.getDownCandle(getApplicationContext());
                     final float downPricePer = SharedPreferencesManager.getDownPricePer(getApplicationContext());
                     final float downPricePerPre = SharedPreferencesManager.getDownPricePerPre(getApplicationContext());
                     final float downTradePer = SharedPreferencesManager.getDownTradePer(getApplicationContext());
                     final float downTradePerPre = SharedPreferencesManager.getDownTradePerPre(getApplicationContext());
 
-                    SettingFragment networkFragment = SettingFragment.newInstance(bunbong, pricePer, pricePerPre, tradePer, tradePerPre, downPricePer, downPricePerPre, downTradePer, downTradePerPre);
+                    SettingFragment networkFragment = SettingFragment.newInstance(upCandle, pricePer, pricePerPre, tradePer, tradePerPre, downCandle, downPricePer, downPricePerPre, downTradePer, downTradePerPre);
                     manager.beginTransaction().replace(R.id.content, networkFragment, networkFragment.getTag()).commitAllowingStateLoss();
                     frag_num = 5;
                     return true;
@@ -148,13 +148,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         BottomNavigationViewHelper.disableShiftMode(navigation);
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         navigation.setSelectedItemId(R.id.navigation_home);
+
+        pre_Setting();
 
         mVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
@@ -167,34 +167,35 @@ public class MainActivity extends AppCompatActivity {
         ad.loadAd(new AdRequest.Builder().build());
 
         ad.setAdListener(new AdListener() {
-            @Override public void onAdLoaded() {
+            @Override
+            public void onAdLoaded() {
                 if (ad.isLoaded()) {
                     ad.show();
                 }
             }
         });
-
     }
 
     private void pre_Setting() {
-        final int bunbong = SharedPreferencesManager.getBunBong(getApplicationContext());
+        final int upCandle = SharedPreferencesManager.getUpCandle(getApplicationContext());
         final float pricePer = SharedPreferencesManager.getPricePer(getApplicationContext());
         final float pricePerPre = SharedPreferencesManager.getPricePerPre(getApplicationContext());
         final float tradePer = SharedPreferencesManager.getTradePer(getApplicationContext());
         final float tradePerPre = SharedPreferencesManager.getTradePerPre(getApplicationContext());
 
+        final int downCandle = SharedPreferencesManager.getDownCandle(getApplicationContext());
         final float downPricePer = SharedPreferencesManager.getDownPricePer(getApplicationContext());
         final float downPricePerPre = SharedPreferencesManager.getDownPricePerPre(getApplicationContext());
         final float downTradePer = SharedPreferencesManager.getDownTradePer(getApplicationContext());
         final float downTradePerPre = SharedPreferencesManager.getDownTradePerPre(getApplicationContext());
 
-        BackService.mCalJump.setBunBong(bunbong);
+        BackService.mCalJump.setUpCandle(upCandle);
         BackService.mCalJump.setPricePer(pricePer);
         BackService.mCalJump.setPricePerPer(pricePerPre);
         BackService.mCalJump.setTradePer(tradePer);
         BackService.mCalJump.setTradePerPre(tradePerPre);
 
-        BackService.mCalDown.setBunBong(bunbong);
+        BackService.mCalDown.setDownCandle(downCandle);
         BackService.mCalDown.setDownPricePer(downPricePer);
         BackService.mCalDown.setDownPricePerPer(downPricePerPre);
         BackService.mCalDown.setDownTradePer(downTradePer);
@@ -240,5 +241,66 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         stopService(intent);
+    }
+
+    @Override
+    public void onUpCandleButtonClicked(int candle) {
+        SharedPreferencesManager.setUpCandle(getApplicationContext(), candle);
+        BackService.mCalJump.setUpCandle(candle);
+    }
+
+    @Override
+    public void onUpPrePriceEditted(float prePrice) {
+        SharedPreferencesManager.setPricePer(getApplicationContext(), prePrice);
+        BackService.mCalJump.setPricePer(prePrice);
+    }
+
+    @Override
+    public void onUpPrePrePriceEditted(float prePrePrice) {
+        SharedPreferencesManager.setPricePerPre(getApplicationContext(), prePrePrice);
+        BackService.mCalJump.setPricePerPer(prePrePrice);
+    }
+
+    @Override
+    public void onUpPreTradeEditted(float preTrade) {
+        SharedPreferencesManager.setTradePer(getApplicationContext(), preTrade);
+        BackService.mCalJump.setTradePer(preTrade);
+    }
+
+    @Override
+    public void onUpPrePreTradeEditted(float prePreTrade) {
+        SharedPreferencesManager.setTradePerPre(getApplicationContext(), prePreTrade);
+        BackService.mCalJump.setTradePerPre(prePreTrade);
+
+    }
+
+    @Override
+    public void onDownCandleButtonClicked(int candle) {
+        SharedPreferencesManager.setDownCandle(getApplicationContext(), candle);
+        BackService.mCalDown.setDownCandle(candle);
+    }
+
+    @Override
+    public void onDownPrePriceEditted(float prePrice) {
+        SharedPreferencesManager.setDownPricePer(getApplicationContext(), prePrice);
+        BackService.mCalDown.setDownPricePer(prePrice);
+    }
+
+    @Override
+    public void onDownPrePrePriceEditted(float prePrePrice) {
+        SharedPreferencesManager.setDownPricePerPre(getApplicationContext(), prePrePrice);
+        BackService.mCalDown.setDownPricePerPer(prePrePrice);
+    }
+
+    @Override
+    public void onDownPreTradeEditted(float preTrade) {
+        SharedPreferencesManager.setDownTradePer(getApplicationContext(), preTrade);
+        BackService.mCalDown.setDownTradePer(preTrade);
+    }
+
+    @Override
+    public void onDownPrePreTradeEditted(float prePreTrade) {
+        SharedPreferencesManager.setDownTradePerPre(getApplicationContext(), prePreTrade);
+        BackService.mCalDown.setDownTradePerPre(prePreTrade);
     }
 }

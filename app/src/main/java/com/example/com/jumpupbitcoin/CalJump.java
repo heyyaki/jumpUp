@@ -26,7 +26,7 @@ public class CalJump {
     private Map<Integer, Integer> duple_check_map = new HashMap<>();
 
     public void upCatch(Document doc2) {
-        int switch_minite = mSettingData.bunbong;
+        int switch_minite = mSettingData.mUpCandle;
         int num_get_price = 1;
 
         mJumpData.alarm_reg.clear();
@@ -174,7 +174,7 @@ public class CalJump {
             long[] pattern = {100, 300, 100, 500, 100, 500};
             MainActivity.mVibrator.vibrate(pattern, -1);
             mJumpData.alarm_reg.add(i + "-" + ary_up_per.get(i) + "-" + temp_now_price[i]);
-            duple_check_map.put(i, mSettingData.bunbong);   // 분봉으로 값 넣기
+            duple_check_map.put(i, mSettingData.mUpCandle);   // 분봉으로 값 넣기
         } else {
             int a = duple_check_map.get(i);
             duple_check_map.put(i, --a);
@@ -196,7 +196,7 @@ public class CalJump {
         return mJumpData.log_list;
     }
 
-    public void setBunBong(int bunBong) { mSettingData.bunbong = bunBong; }
+    public void setUpCandle(int candle) { mSettingData.mUpCandle = candle; }
 
     public void setPricePer(float pricePer) {
         mSettingData.price_per= pricePer;

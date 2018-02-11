@@ -94,7 +94,7 @@ public class BackService extends Service {
     };
 
 //    private void pre_Setting(){
-//        final int bunbong = SharedPreferencesManager.getBunBong(getApplicationContext());
+//        final int mUpCandle = SharedPreferencesManager.getUpCandle(getApplicationContext());
 //        final float pricePer = SharedPreferencesManager.getPricePer(getApplicationContext());
 //        final float pricePerPre = SharedPreferencesManager.getPricePerPre(getApplicationContext());
 //        final float tradePer = SharedPreferencesManager.getTradePer(getApplicationContext());
@@ -105,13 +105,13 @@ public class BackService extends Service {
 //        final float downTradePer = SharedPreferencesManager.getDownTradePer(getApplicationContext());
 //        final float downTradePerPre = SharedPreferencesManager.getDownTradePerPre(getApplicationContext());
 //
-//        mCalJump.setBunBong(bunbong);
+//        mCalJump.setUpCandle(mUpCandle);
 //        mCalJump.setPricePer(pricePer);
 //        mCalJump.setPricePerPer(pricePerPre);
 //        mCalJump.setTradePer(tradePer);
 //        mCalJump.setTradePerPre(tradePerPre);
 //
-//        mCalDown.setBunBong(bunbong);
+//        mCalDown.setUpCandle(mUpCandle);
 //        mCalDown.setDownPricePer(downPricePer);
 //        mCalDown.setDownPricePerPer(downPricePerPre);
 //        mCalDown.setDownTradePer(downTradePer);

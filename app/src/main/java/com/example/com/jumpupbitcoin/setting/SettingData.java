@@ -2,19 +2,24 @@ package com.example.com.jumpupbitcoin.setting;
 
 public class SettingData {
 
-    public int pre_check;    // 전전단계 퍼센티지 계산 유무  - 1 활성, 0 비활성
-    public int trade_check;    // 거래량 증가 확인 유무  - 1 활성, 0 비활성
-    public int pre_trade_check;    // 전전단계 거래량 퍼센티지 계산 유무  - 1 활성, 0 비활성
+    // 전체 설정
+    public boolean isOnVibration;
 
-    public int bunbong;
+    // 급등 검색식 설정
+    public int mUpCandle;
 
     public float price_per;
     public float price_per_pre;
     public float trade_per;
     public float trade_per_pre;
 
+    // 급락 검색식 설정
+    public int mDownCandle;
+
     public float down_price_per;
     public float down_price_per_pre;
     public float down_trade_per;
     public float down_trade_per_pre;
+
+
 }

@@ -3,7 +3,6 @@ package com.example.com.jumpupbitcoin;
 import android.util.Log;
 
 import com.example.com.jumpupbitcoin.downCoin.DownData;
-import com.example.com.jumpupbitcoin.jumpCoin.JumpData;
 import com.example.com.jumpupbitcoin.setting.SettingData;
 
 import org.jsoup.nodes.Document;
@@ -27,7 +26,7 @@ public class CalDown {
     private Map<Integer, Integer> duple_check_map = new HashMap<>();
 
     public void downCatch(Document doc2) {
-        int switch_minite = mSettingData.bunbong;
+        int switch_minite = mSettingData.mDownCandle;
         int num_get_price = 1;
 
         mDownData.alarm_reg.clear();
@@ -176,7 +175,7 @@ public class CalDown {
             MainActivity.mVibrator.vibrate(pattern, -1);
             Log.d("Down duple_check_method", String.valueOf(duple_check_map));
             mDownData.alarm_reg.add(i + "_" + ary_down_per.get(i) + "_" + temp_now_price[i]);
-            duple_check_map.put(i, mSettingData.bunbong);   // 분봉으로 값 넣기
+            duple_check_map.put(i, mSettingData.mDownCandle);   // 분봉으로 값 넣기
         } else {
             int a = duple_check_map.get(i);
             duple_check_map.put(i, --a);
@@ -198,7 +197,7 @@ public class CalDown {
         return mDownData.log_list;
     }
 
-    public void setBunBong(int bunBong) { mSettingData.bunbong = bunBong; }
+    public void setDownCandle(int candle) { mSettingData.mDownCandle = candle; }
 
     public void setDownPricePer(float downPricePer) { mSettingData.down_price_per= downPricePer; }
 

@@ -122,10 +122,10 @@
                 <EditText
                     android:id="@+id/editText"
                     style="@style/setting_edittext"
-                    android:layout_toStartOf="@+id/spinner" />
+                    android:layout_toStartOf="@+id/up_pre_price_spinner" />
 
                 <Spinner
-                    android:id="@+id/spinner"
+                    android:id="@+id/up_pre_price_spinner"
                     style="@style/setting_spinner"
                     android:entries="@array/str_ary_price" />
             </RelativeLayout>
@@ -143,11 +143,11 @@
                 <EditText
                     android:id="@+id/editText2"
                     style="@style/setting_edittext"
-                    android:layout_toStartOf="@+id/spinner2"
+                    android:layout_toStartOf="@+id/up_pre_pre_price_spinner"
                     android:text="1" />
 
                 <Spinner
-                    android:id="@+id/spinner2"
+                    android:id="@+id/up_pre_pre_price_spinner"
                     style="@style/setting_spinner"
                     android:entries="@array/str_ary_price2" />
             </RelativeLayout>
@@ -172,10 +172,10 @@
                 <EditText
                     android:id="@+id/editText3"
                     style="@style/setting_edittext"
-                    android:layout_toStartOf="@+id/spinner3" />
+                    android:layout_toStartOf="@+id/up_pre_trade" />
 
                 <Spinner
-                    android:id="@+id/spinner3"
+                    android:id="@+id/up_pre_trade"
                     style="@style/setting_spinner"
                     android:entries="@array/str_ary_trade" />
             </RelativeLayout>
@@ -192,10 +192,10 @@
                 <EditText
                     android:id="@+id/editText4"
                     style="@style/setting_edittext"
-                    android:layout_toStartOf="@+id/spinner4" />
+                    android:layout_toStartOf="@+id/up_pre_pre_trade" />
 
                 <Spinner
-                    android:id="@+id/spinner4"
+                    android:id="@+id/up_pre_pre_trade"
                     style="@style/setting_spinner"
                     android:entries="@array/str_ary_trade" />
             </RelativeLayout>
@@ -286,10 +286,10 @@
                 <EditText
                     android:id="@+id/editText11"
                     style="@style/setting_edittext"
-                    android:layout_toStartOf="@+id/spinner11" />
+                    android:layout_toStartOf="@+id/down_pre_price_spinner" />
 
                 <Spinner
-                    android:id="@+id/spinner11"
+                    android:id="@+id/down_pre_price_spinner"
                     style="@style/setting_spinner"
                     android:entries="@array/str_ary_price" />
             </RelativeLayout>
@@ -306,10 +306,10 @@
                 <EditText
                     android:id="@+id/editText12"
                     style="@style/setting_edittext"
-                    android:layout_toStartOf="@+id/spinner12" />
+                    android:layout_toStartOf="@+id/down_pre_pre_price_spinner" />
 
                 <Spinner
-                    android:id="@+id/spinner12"
+                    android:id="@+id/down_pre_pre_price_spinner"
                     style="@style/setting_spinner"
                     android:entries="@array/str_ary_price2" />
             </RelativeLayout>
@@ -333,10 +333,10 @@
                 <EditText
                     android:id="@+id/editText13"
                     style="@style/setting_edittext"
-                    android:layout_toStartOf="@+id/spinner13" />
+                    android:layout_toStartOf="@+id/down_pre_trade" />
 
                 <Spinner
-                    android:id="@+id/spinner13"
+                    android:id="@+id/down_pre_trade"
                     style="@style/setting_spinner"
                     android:entries="@array/str_ary_trade" />
             </RelativeLayout>
@@ -353,10 +353,10 @@
                 <EditText
                     android:id="@+id/editText14"
                     style="@style/setting_edittext"
-                    android:layout_toStartOf="@+id/spinner14" />
+                    android:layout_toStartOf="@+id/down_pre_pre_trade" />
 
                 <Spinner
-                    android:id="@+id/spinner14"
+                    android:id="@+id/down_pre_pre_trade"
                     style="@style/setting_spinner"
                     android:entries="@array/str_ary_trade" />
 
