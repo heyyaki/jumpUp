@@ -1,34 +1,33 @@
-package com.example.com.jumpupbitcoin;
+        package com.example.com.jumpupbitcoin;
 
-import android.animation.ArgbEvaluator;
-import android.animation.ValueAnimator;
-import android.content.Context;
-import android.content.Intent;
-import android.os.Build;
-import android.os.Bundle;
-import android.os.Vibrator;
-import android.support.annotation.NonNull;
-import android.support.annotation.RequiresApi;
-import android.support.design.widget.BottomNavigationView;
-import android.support.v7.app.AppCompatActivity;
-import android.view.MenuItem;
-import android.widget.TextView;
-import android.widget.Toast;
+        import android.animation.ArgbEvaluator;
+        import android.animation.ValueAnimator;
+        import android.content.Context;
+        import android.content.Intent;
+        import android.os.Build;
+        import android.os.Bundle;
+        import android.os.Vibrator;
+        import android.support.annotation.NonNull;
+        import android.support.annotation.RequiresApi;
+        import android.support.design.widget.BottomNavigationView;
+        import android.support.v7.app.AppCompatActivity;
+        import android.util.Log;
+        import android.view.MenuItem;
+        import android.widget.TextView;
+        import android.widget.Toast;
 
-import com.example.com.jumpupbitcoin.coinSchedule.CoinSchedule;
-import com.example.com.jumpupbitcoin.downCoin.DownFragment;
-import com.example.com.jumpupbitcoin.jumpCoin.UpFragment;
-import com.example.com.jumpupbitcoin.priceInfo.HomeFragment;
-import com.example.com.jumpupbitcoin.setting.SettingFragment;
+        import com.example.com.jumpupbitcoin.coinSchedule.CoinSchedule;
+        import com.example.com.jumpupbitcoin.downCoin.DownFragment;
+        import com.example.com.jumpupbitcoin.jumpCoin.UpFragment;
+        import com.example.com.jumpupbitcoin.priceInfo.HomeFragment;
+        import com.example.com.jumpupbitcoin.setting.SettingFragment;
 
-import java.util.ArrayList;
-import java.util.List;
-
-        import com.google.android.gms.ads.AdListener;
         import com.google.android.gms.ads.AdRequest;
         import com.google.android.gms.ads.InterstitialAd;
         import com.google.android.gms.ads.MobileAds;
 
+        import java.util.ArrayList;
+        import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -36,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
     private long pressedTime;
 
     Intent intent;
+
+    private InterstitialAd mInterstitialAd;
 
     public static Vibrator mVibrator;
 
@@ -51,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.navigation_home:
                     setTitle("현재 시세");
 
-                    final HomeFragment homeFragment = HomeFragment.newInstance((ArrayList<String>) BackService.mCalPrice.getPrice(), (ArrayList<String>) BackService.mCalPrice.getPer());
+                    final HomeFragment homeFragment = HomeFragment.newInstance((ArrayList<String>) BackService.mCalPrice.getPrice(), (ArrayList<String>)BackService.mCalPrice.getPer());
                     manager.beginTransaction().replace(R.id.content, homeFragment, homeFragment.getTag()).commitAllowingStateLoss();
                     frag_num = 1;
                     pre_Setting();
@@ -59,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
                     BackService.mCalPrice.setOnChangedDataLister(new CalPrice.onChangeData() {
                         @Override
                         public void onDataChanged(List<String> priceList, List<String> perList) {
-                            if (homeFragment.isVisible()) {
+                            if(homeFragment.isVisible()){
                                 final TextView test_clock = (TextView) findViewById(R.id.textClock);
                                 int colorFrom = getResources().getColor(R.color.weakblack);
                                 int colorTo = getResources().getColor(R.color.black);
@@ -68,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
                                 colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                                     @Override
                                     public void onAnimationUpdate(ValueAnimator animator) {
-                                        test_clock.setBackgroundColor((int) animator.getAnimatedValue());
+                                        test_clock.setBackgroundColor((int)animator.getAnimatedValue());
                                     }
                                 });
 
@@ -90,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
                     BackService.mCalJump.setOnChangedDataLister(new CalJump.onChangeData() {
                         @Override
                         public void onDataChanged(List<String> alarmReg, List<String> logList) {
-                            if (!upFragment.isDetached()) {
+                            if(!upFragment.isDetached()){
                                 upFragment.refresh((ArrayList<String>) alarmReg, (ArrayList<String>) logList);
                             }
                         }
@@ -106,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
                     BackService.mCalDown.setOnChangedDataLister(new CalDown.onChangeData() {
                         @Override
                         public void onDataChanged(List<String> alarmReg, List<String> logList) {
-                            if (!downFragment.isDetached()) {
+                            if(!downFragment.isDetached()){
                                 downFragment.refresh((ArrayList<String>) alarmReg, (ArrayList<String>) logList);
                             }
                         }
@@ -148,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
+        MobileAds.initialize(this, "ca-app-pub-9946826173060023~4419923481");
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         BottomNavigationViewHelper.disableShiftMode(navigation);
@@ -158,25 +159,22 @@ public class MainActivity extends AppCompatActivity {
 
         mVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
-        intent = new Intent(getApplicationContext(), BackService.class);
+        intent = new Intent(getApplicationContext(),BackService.class);
         startService(intent);
 
-        final InterstitialAd ad = new InterstitialAd(this);
-        ad.setAdUnitId(getString(R.string.string_ad_id));
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId("ca-app-pub-9946826173060023/6306778270");
+        mInterstitialAd.loadAd(new AdRequest.Builder().build());
 
-        ad.loadAd(new AdRequest.Builder().build());
-
-        ad.setAdListener(new AdListener() {
-            @Override public void onAdLoaded() {
-                if (ad.isLoaded()) {
-                    ad.show();
-                }
-            }
-        });
+        if (mInterstitialAd.isLoaded()) {
+            mInterstitialAd.show();
+        } else {
+            Log.d("TAG", "The interstitial wasn't loaded yet.");
+        }
 
     }
 
-    private void pre_Setting() {
+    private void pre_Setting(){
         final int bunbong = SharedPreferencesManager.getBunBong(getApplicationContext());
         final float pricePer = SharedPreferencesManager.getPricePer(getApplicationContext());
         final float pricePerPre = SharedPreferencesManager.getPricePerPre(getApplicationContext());
@@ -222,19 +220,25 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 //
-//    private void getAD() {
-//        final InterstitialAd ad = new InterstitialAd(this);
-//        ad.setAdUnitId(getString(R.string.string_ad_id));
+//    private void setFullAd(){
+//        interstitialAd = new InterstitialAd(this); //새 광고를 만듭니다.
+//        interstitialAd.setAdUnitId(getResources().getString(R.string.ad_id)); //이전에 String에 저장해 두었던 광고 ID를 전면 광고에 설정합니다.
+//        AdRequest adRequest1 = new AdRequest.Builder().build(); //새 광고요청
+//        interstitialAd.loadAd(adRequest1); //요청한 광고를 load 합니다.
+//        interstitialAd.setAdListener(new AdListener() { //전면 광고의 상태를 확인하는 리스너 등록
 //
-//        ad.loadAd(new AdRequest.Builder().build());
-//
-//        ad.setAdListener(new AdListener() {
-//            @Override public void onAdLoaded() {
-//                if (ad.isLoaded()) {
-//                    ad.show();
-//                }
+//            @Override
+//            public void onAdClosed() { //전면 광고가 열린 뒤에 닫혔을 때
+//                AdRequest adRequest1 = new AdRequest.Builder().build();  //새 광고요청
+//                interstitialAd.loadAd(adRequest1); //요청한 광고를 load 합니다.
 //            }
 //        });
+//    }
+//
+//    public void displayAD(){
+//        if(interstitialAd.isLoaded()) { //광고가 로드 되었을 시
+//            interstitialAd.show(); //보여준다
+//        }
 //    }
 
     protected void onDestroy() {
