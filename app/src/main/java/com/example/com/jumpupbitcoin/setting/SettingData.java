@@ -3,7 +3,7 @@ package com.example.com.jumpupbitcoin.setting;
 public class SettingData {
 
     // 전체 설정
-    public boolean isOnVibration;
+    public int vibration;
 
     // 급등 검색식 설정
     public boolean mUpSettingEnabled;

@@ -38,7 +38,7 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
 
     private static final int DISABLED_VALUE = -1;
 
-    private boolean mIsUpSetting, mIsDownSetting;
+    private boolean mIsUpSetting, mIsDownSetting, mIsVibration;
     private int mUpCandle, mDownCandle;
     private final static ArrayList<Integer> mCandleList = new ArrayList<>();
 
@@ -110,7 +110,7 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        final View v = inflater.inflate(R.layout.fragment_network, container, false);
+        final View v = inflater.inflate(R.layout.setting_fragment, container, false);
 
         // 급등 분봉
         RadioGroup upGroup = (RadioGroup) v.findViewById(R.id.radioGroup1);
@@ -397,10 +397,20 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
             }
         });
 
+        final ViewGroup vibrationLayout = v.findViewById(R.id.vibrate_setting);
+        disableEnableControls(vibrationLayout, mIsVibration);
+
         Switch vibrateSetting = v.findViewById(R.id.vibrate_setting_switch);
+        vibrateSetting.setEnabled(true);
+        vibrateSetting.setChecked(mIsVibration);
         vibrateSetting.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                mIsVibration = isChecked;
+                disableEnableControls(vibrationLayout, isChecked);
+                buttonView.setEnabled(true);
+
+                mListener.onVibrationSelected(0);
             }
         });
 
@@ -413,6 +423,7 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
         upSetting.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                mIsUpSetting = isChecked;
                 disableEnableControls(upSettingLayout, isChecked);
                 buttonView.setEnabled(true);
 
@@ -429,6 +440,7 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
         downSetting.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                mIsDownSetting = isChecked;
                 disableEnableControls(downSettingLayout, isChecked);
                 buttonView.setEnabled(true);
 
@@ -564,6 +576,8 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
     }
 
     public interface OnSettingFragment {
+
+        void onVibrationSelected(int vibration);
 
         void onUpSettingEnabled(boolean isEnabled);
 

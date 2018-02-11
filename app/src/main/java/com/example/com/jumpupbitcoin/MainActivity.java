@@ -25,10 +25,6 @@ import com.example.com.jumpupbitcoin.setting.SettingFragment;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.InterstitialAd;
-
 
 public class MainActivity extends AppCompatActivity implements SettingFragment.OnSettingFragment {
 
@@ -53,7 +49,6 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
                     final HomeFragment homeFragment = HomeFragment.newInstance((ArrayList<String>) BackService.mCalPrice.getPrice(), (ArrayList<String>) BackService.mCalPrice.getPer());
                     manager.beginTransaction().replace(R.id.content, homeFragment, homeFragment.getTag()).commitAllowingStateLoss();
                     frag_num = 1;
-//                    pre_Setting();
 
                     BackService.mCalPrice.setOnChangedDataLister(new CalPrice.onChangeData() {
                         @Override
@@ -84,7 +79,6 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
                     final UpFragment upFragment = UpFragment.newInstance(((ArrayList<String>) BackService.mCalJump.getAlarmReg()), (ArrayList<String>) BackService.mCalJump.getLogList());
                     manager.beginTransaction().replace(R.id.content, upFragment, upFragment.getTag()).commitAllowingStateLoss();
                     frag_num = 2;
-//                    pre_Setting();
 
                     BackService.mCalJump.setOnChangedDataLister(new CalJump.onChangeData() {
                         @Override
@@ -121,20 +115,6 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
 
                 case R.id.navigation_notifications:
                     setTitle("설정");
-//                    final boolean isUpSettingEnabled = SharedPreferencesManager.getUpSettingEnabled(getApplicationContext());
-//                    final int upCandle = SharedPreferencesManager.getUpCandle(getApplicationContext());
-//                    final float pricePer = SharedPreferencesManager.getPricePer(getApplicationContext());
-//                    final float pricePerPre = SharedPreferencesManager.getPricePerPre(getApplicationContext());
-//                    final float tradePer = SharedPreferencesManager.getTradePer(getApplicationContext());
-//                    final float tradePerPre = SharedPreferencesManager.getTradePerPre(getApplicationContext());
-//
-//                    final boolean isDownSettingEnabled = SharedPreferencesManager.getDownSettingEnabled(getApplicationContext());
-//                    final int downCandle = SharedPreferencesManager.getDownCandle(getApplicationContext());
-//                    final float downPricePer = SharedPreferencesManager.getDownPricePer(getApplicationContext());
-//                    final float downPricePerPre = SharedPreferencesManager.getDownPricePerPre(getApplicationContext());
-//                    final float downTradePer = SharedPreferencesManager.getDownTradePer(getApplicationContext());
-//                    final float downTradePerPre = SharedPreferencesManager.getDownTradePerPre(getApplicationContext());
-
                     final boolean isUpSettingEnabled = BackService.getSettingData().mUpSettingEnabled;
                     final int upCandle = BackService.getSettingData().mUpCandle;
                     final float pricePer = BackService.getSettingData().price_per;
@@ -149,10 +129,10 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
                     final float downTradePer = BackService.getSettingData().down_trade_per;
                     final float downTradePerPre = BackService.getSettingData().down_trade_per_pre;
 
-                    SettingFragment networkFragment = SettingFragment.newInstance(
+                    SettingFragment settingFragment = SettingFragment.newInstance(
                             isUpSettingEnabled, upCandle, pricePer, pricePerPre, tradePer, tradePerPre,
                             isDownSettingEnabled, downCandle, downPricePer, downPricePerPre, downTradePer, downTradePerPre);
-                    manager.beginTransaction().replace(R.id.content, networkFragment, networkFragment.getTag()).commitAllowingStateLoss();
+                    manager.beginTransaction().replace(R.id.content, settingFragment, settingFragment.getTag()).commitAllowingStateLoss();
                     frag_num = 5;
                     return true;
             }
@@ -262,6 +242,12 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
     protected void onDestroy() {
         super.onDestroy();
         stopService(intent);
+    }
+
+    @Override
+    public void onVibrationSelected(int vibration) {
+        SharedPreferencesManager.setVibration(getApplicationContext(), vibration);
+        BackService.setVibration(vibration);
     }
 
     @Override

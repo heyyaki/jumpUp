@@ -14,8 +14,6 @@ import com.example.com.jumpupbitcoin.setting.SettingData;
 
 import org.jsoup.nodes.Document;
 
-import java.lang.ref.WeakReference;
-
 
 public class BackService extends Service {
 
@@ -79,8 +77,8 @@ public class BackService extends Service {
                 Document document = (Document) msg.obj;
 
                 // TODO 분봉 넣어야댐
-                mCalJump.upCatch(document);
-                mCalDown.downCatch(document);
+//                mCalJump.upCatch(document);
+//                mCalDown.downCatch(document);
             }
         }
     };
@@ -102,6 +100,10 @@ public class BackService extends Service {
 
     public static SettingData getSettingData() {
         return mSettingData;
+    }
+
+    public static void setVibration(int vibration) {
+        mSettingData.vibration = vibration;
     }
 
     public static void setUpSetting(boolean upSetting) {

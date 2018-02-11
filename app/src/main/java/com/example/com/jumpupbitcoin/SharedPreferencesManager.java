@@ -7,6 +7,9 @@ public class SharedPreferencesManager {
 
     private static final String PREF_NAME = "pref";
 
+    // 진동
+    private static final String VIBRATION = "vibration";
+
     // 급등
     private static final String UP_SETTING = "mUpSetting";
     private static final String UP_CANDLE = "mUpCandle";
@@ -28,6 +31,16 @@ public class SharedPreferencesManager {
 
     private static SharedPreferences getSharedPreferences(Context context) {
         return context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+    }
+
+    public static int getVibration(Context context) {
+        return getSharedPreferences(context).getInt(VIBRATION, 0);
+    }
+
+    public static void setVibration(Context context, int vibration) {
+        final SharedPreferences.Editor editor = getSharedPreferences(context).edit();
+        editor.putInt(VIBRATION, vibration);
+        editor.apply();
     }
 
     public static boolean getUpSettingEnabled(Context context) {
@@ -150,8 +163,6 @@ public class SharedPreferencesManager {
         editor.putFloat(DOWN_TRADE_PER_PRE, downTradePerPre);
         editor.apply();
     }
-
-
 
 
     // other getters/setters

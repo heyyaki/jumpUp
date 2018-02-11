@@ -1,11 +1,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    style="@style/basic_background"
     android:orientation="vertical"
     tools:context="com.example.com.jumpupbitcoin.jumpCoin.UpFragment">
 
     <LinearLayout
+        style="@style/setting_item_backgroud"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0.4"
@@ -13,12 +13,10 @@
 
         <TextView
             android:id="@+id/realText"
+            style="@style/title_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#222222"
-            android:gravity="center"
-            android:text="실시간 급등 코인"
-            android:textColor="#eeeeee" />
+            android:text="실시간 급등 코인" />
 
         <ListView
             android:id="@+id/uplist"
@@ -27,6 +25,7 @@
     </LinearLayout>
 
     <LinearLayout
+        style="@style/setting_item_backgroud"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0.6"
@@ -34,12 +33,10 @@
 
         <TextView
             android:id="@+id/logText"
+            style="@style/title_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#222222"
-            android:gravity="center"
-            android:text="급등 코인 로그"
-            android:textColor="#eeeeee" />
+            android:text="급등 코인 기록" />
 
         <ListView
             android:id="@+id/logList"
@@ -51,7 +48,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="로그 삭제"
+            android:text="기록 삭제"
             android:textColor="#111111" />
     </LinearLayout>
 </LinearLayout>
