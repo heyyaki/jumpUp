@@ -24,6 +24,11 @@ import com.example.com.jumpupbitcoin.setting.SettingFragment;
 import java.util.ArrayList;
 import java.util.List;
 
+        import com.google.android.gms.ads.AdListener;
+        import com.google.android.gms.ads.AdRequest;
+        import com.google.android.gms.ads.InterstitialAd;
+        import com.google.android.gms.ads.MobileAds;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -40,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             android.app.FragmentManager manager = getFragmentManager();
+
 
             switch (item.getItemId()) {
                 case R.id.navigation_home:
@@ -142,6 +148,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         BottomNavigationViewHelper.disableShiftMode(navigation);
 
@@ -152,6 +160,19 @@ public class MainActivity extends AppCompatActivity {
 
         intent = new Intent(getApplicationContext(), BackService.class);
         startService(intent);
+
+        final InterstitialAd ad = new InterstitialAd(this);
+        ad.setAdUnitId(getString(R.string.string_ad_id));
+
+        ad.loadAd(new AdRequest.Builder().build());
+
+        ad.setAdListener(new AdListener() {
+            @Override public void onAdLoaded() {
+                if (ad.isLoaded()) {
+                    ad.show();
+                }
+            }
+        });
 
     }
 
@@ -200,6 +221,21 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+//
+//    private void getAD() {
+//        final InterstitialAd ad = new InterstitialAd(this);
+//        ad.setAdUnitId(getString(R.string.string_ad_id));
+//
+//        ad.loadAd(new AdRequest.Builder().build());
+//
+//        ad.setAdListener(new AdListener() {
+//            @Override public void onAdLoaded() {
+//                if (ad.isLoaded()) {
+//                    ad.show();
+//                }
+//            }
+//        });
+//    }
 
     protected void onDestroy() {
         super.onDestroy();
