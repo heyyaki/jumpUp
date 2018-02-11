@@ -4,6 +4,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
+import com.example.com.jumpupbitcoin.setting.SettingData;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -19,6 +21,8 @@ public class CrawlringJump implements Runnable {
 
     private Handler mHandler;
 
+    private SettingData mSettingData = new SettingData();
+
     CrawlringJump(Handler handler) {
         mHandler = handler;
     }
@@ -27,6 +31,7 @@ public class CrawlringJump implements Runnable {
     public void run() {
         try {
             while (true) {
+                if (mSettingData.price_per != -1) {
                     // TODO 데이터 초기화 요청
                     Message msg = Message.obtain(mHandler, 0);
                     mHandler.sendMessage(msg);
@@ -46,6 +51,7 @@ public class CrawlringJump implements Runnable {
                     Thread.sleep(SLEEP_TIME);
                 }
             }
+        }
         catch (InterruptedException e) {
             e.printStackTrace();
         }
