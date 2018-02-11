@@ -29,8 +29,6 @@
 
                 <Switch
                     style="@style/sub_title_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
                     android:text="진동 설정" />
             </LinearLayout>
         </LinearLayout>
@@ -41,8 +39,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/textView12"
+            <Switch
                 style="@style/title_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -51,8 +48,6 @@
             <TextView
                 android:id="@+id/textView"
                 style="@style/sub_title_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:text="급등 검색식 분봉" />
 
             <RadioGroup
@@ -109,8 +104,6 @@
             <TextView
                 android:id="@+id/textView2"
                 style="@style/sub_title_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:text="가격 상승률" />
 
             <RelativeLayout
@@ -164,8 +157,6 @@
             <TextView
                 android:id="@+id/textView7"
                 style="@style/sub_title_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:text="거래량 등락률" />
 
             <RelativeLayout
@@ -216,8 +207,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/textView13"
+            <Switch
                 style="@style/title_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -226,8 +216,6 @@
             <TextView
                 android:id="@+id/textView_bunbong"
                 style="@style/sub_title_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:text="급락 검색식 분봉" />
 
             <RadioGroup
@@ -284,8 +272,6 @@
             <TextView
                 android:id="@+id/textView14"
                 style="@style/sub_title_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:text="가격 하락율" />
 
             <RelativeLayout
@@ -333,8 +319,6 @@
             <TextView
                 android:id="@+id/textView19"
                 style="@style/sub_title_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:text="거래량 등락률" />
 
             <RelativeLayout
