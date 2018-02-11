@@ -5,25 +5,31 @@ import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.Switch;
 
 import com.example.com.jumpupbitcoin.R;
 
 import java.util.ArrayList;
 
 public class SettingFragment extends Fragment implements RadioGroup.OnCheckedChangeListener, AdapterView.OnItemSelectedListener {
+    private static final String ARG_UP_SETTING = "argument_up_setting";
     private static final String ARG_UP_CANDLE = "argument_up_candle";
     private static final String ARG_PRICE_PER = "argument_pricePer";
     private static final String ARG_PRICE_PER_PRE = "argument_pricePerPre";
     private static final String ARG_TRADE_PER = "argument_tradePer";
     private static final String ARG_TRADE_PER_PRE = "argument_tradePerPre";
+
+    private static final String ARG_DOWN_SETTING = "argument_down_setting";
     private static final String ARG_DOWN_CANDLE = "argument_down_candle";
     private static final String ARG_DOWN_PRICE_PER = "argument_down_pricePer";
     private static final String ARG_DOWN_PRICE_PER_PRE = "argument_down_pricePerPre";
@@ -32,6 +38,7 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
 
     private static final int DISABLED_VALUE = -1;
 
+    private boolean mIsUpSetting, mIsDownSetting;
     private int mUpCandle, mDownCandle;
     private final static ArrayList<Integer> mCandleList = new ArrayList<>();
 
@@ -43,7 +50,6 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
         mCandleList.add(20);
         mCandleList.add(30);
     }
-
 
     private float mPricePer, mPricePerPre, mTradePer, mTradePerPre;
     private float mDownPricePer, mDownPricePerPre, mDownTradePer, mDownTradePerPre;
@@ -57,14 +63,19 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
         // Required empty public constructor
     }
 
-    public static SettingFragment newInstance(int upCandle, float pricePer, float pricePerPre, float tradePer, float tradePerPre, int downCandle, float downPricePer, float downPricePerPre, float downTradePer, float downTradePerPre) {
+    public static SettingFragment newInstance(
+            boolean isUpSettingEnabled, int upCandle, float pricePer, float pricePerPre, float tradePer, float tradePerPre,
+            boolean isDownSettingEnabled, int downCandle, float downPricePer, float downPricePerPre, float downTradePer, float downTradePerPre) {
         SettingFragment fragment = new SettingFragment();
         Bundle args = new Bundle();
+        args.putBoolean(ARG_UP_SETTING, isUpSettingEnabled);
         args.putInt(ARG_UP_CANDLE, upCandle);
         args.putFloat(ARG_PRICE_PER, pricePer);
         args.putFloat(ARG_PRICE_PER_PRE, pricePerPre);
         args.putFloat(ARG_TRADE_PER, tradePer);
         args.putFloat(ARG_TRADE_PER_PRE, tradePerPre);
+
+        args.putBoolean(ARG_DOWN_SETTING, isDownSettingEnabled);
         args.putInt(ARG_DOWN_CANDLE, downCandle);
         args.putFloat(ARG_DOWN_PRICE_PER, downPricePer);
         args.putFloat(ARG_DOWN_PRICE_PER_PRE, downPricePerPre);
@@ -79,11 +90,14 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
+            mIsUpSetting = getArguments().getBoolean(ARG_UP_SETTING);
             mUpCandle = getArguments().getInt(ARG_UP_CANDLE);
             mPricePer = getArguments().getFloat(ARG_PRICE_PER);
             mPricePerPre = getArguments().getFloat(ARG_PRICE_PER_PRE);
             mTradePer = getArguments().getFloat(ARG_TRADE_PER);
             mTradePerPre = getArguments().getFloat(ARG_TRADE_PER_PRE);
+
+            mIsDownSetting = getArguments().getBoolean(ARG_DOWN_SETTING);
             mDownCandle = getArguments().getInt(ARG_DOWN_CANDLE);
             mDownPricePer = getArguments().getFloat(ARG_DOWN_PRICE_PER);
             mDownPricePerPre = getArguments().getFloat(ARG_DOWN_PRICE_PER_PRE);
@@ -158,7 +172,7 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
 
         // 등락률
         mEditTxt = (EditText) v.findViewById(R.id.editText);
-        mEditTxt.setText(String.valueOf(mPricePer));
+        mEditTxt.setText(mPricePer == DISABLED_VALUE ? getResources().getString(R.string.disable) : String.valueOf(mPricePer));
         mEditTxt.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -171,14 +185,12 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
                     return;
                 }
 
-//                float value = 0;
-//                try {
-//                    value = Float.valueOf(text);
-//                } catch (NumberFormatException e) {
-//                    value = DISABLED_VALUE;
-//                }
+                try {
+                    mPricePer = Float.valueOf(s.toString());
+                } catch (NumberFormatException e) {
+                    mPricePer = DISABLED_VALUE;
+                }
 
-                mPricePer = Float.valueOf(s.toString());
                 mListener.onUpPrePriceEditted(mPricePer);
             }
 
@@ -189,7 +201,7 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
         });
 
         mEditTxt2 = (EditText) v.findViewById(R.id.editText2);
-        mEditTxt2.setText(mPricePerPre == DISABLED_VALUE ? "Disable" : String.valueOf(mPricePerPre));
+        mEditTxt2.setText(mPricePerPre == DISABLED_VALUE ? getResources().getString(R.string.disable) : String.valueOf(mPricePerPre));
         mEditTxt2.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -201,7 +213,12 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
                 if (s.length() == 0) {
                     return;
                 }
-                mPricePerPre = Float.valueOf(s.toString());
+                try {
+                    mPricePerPre = Float.valueOf(s.toString());
+                } catch (NumberFormatException e) {
+                    mPricePerPre = DISABLED_VALUE;
+                }
+
                 mListener.onUpPrePrePriceEditted(mPricePerPre);
             }
 
@@ -212,7 +229,7 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
         });
 
         mEditTxt3 = (EditText) v.findViewById(R.id.editText3);
-        mEditTxt3.setText(mTradePer == DISABLED_VALUE ? "Disable" : String.valueOf(mTradePer));
+        mEditTxt3.setText(mTradePer == DISABLED_VALUE ? getResources().getString(R.string.disable) : String.valueOf(mTradePer));
         mEditTxt3.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -224,7 +241,12 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
                 if (s.length() == 0) {
                     return;
                 }
-                mTradePer = Float.valueOf(s.toString());
+                try {
+                    mTradePer = Float.valueOf(s.toString());
+                } catch (NumberFormatException e) {
+                    mTradePer = DISABLED_VALUE;
+                }
+
                 mListener.onUpPreTradeEditted(mTradePer);
             }
 
@@ -235,7 +257,7 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
         });
 
         mEditTxt4 = (EditText) v.findViewById(R.id.editText4);
-        mEditTxt4.setText(mTradePerPre == DISABLED_VALUE ? "Disable" : String.valueOf(mTradePerPre));
+        mEditTxt4.setText(mTradePerPre == DISABLED_VALUE ? getResources().getString(R.string.disable) : String.valueOf(mTradePerPre));
         mEditTxt4.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -247,7 +269,12 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
                 if (s.length() == 0) {
                     return;
                 }
-                mTradePerPre = Float.valueOf(s.toString());
+                try {
+                    mTradePerPre = Float.valueOf(s.toString());
+                } catch (NumberFormatException e) {
+                    mTradePerPre = DISABLED_VALUE;
+                }
+
                 mListener.onUpPrePreTradeEditted(mTradePerPre);
             }
 
@@ -259,7 +286,7 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
 
         // 등락률
         mEditTxt11 = (EditText) v.findViewById(R.id.editText11);
-        mEditTxt11.setText(String.valueOf(mDownPricePer));
+        mEditTxt11.setText(mDownPricePer == DISABLED_VALUE ? getResources().getString(R.string.disable) : String.valueOf(mDownPricePer));
         mEditTxt11.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -271,7 +298,12 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
                 if (s.length() == 0) {
                     return;
                 }
-                mDownPricePer = Float.valueOf(s.toString());
+                try {
+                    mDownPricePer = Float.valueOf(s.toString());
+                } catch (NumberFormatException e) {
+                    mDownPricePer = DISABLED_VALUE;
+                }
+
                 mListener.onDownPrePriceEditted(mDownPricePer);
             }
 
@@ -282,7 +314,7 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
         });
 
         mEditTxt12 = (EditText) v.findViewById(R.id.editText12);
-        mEditTxt12.setText(mDownPricePerPre == DISABLED_VALUE ? "Disable" : String.valueOf(mDownPricePerPre));
+        mEditTxt12.setText(mDownPricePerPre == DISABLED_VALUE ? getResources().getString(R.string.disable) : String.valueOf(mDownPricePerPre));
         mEditTxt12.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -294,7 +326,12 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
                 if (s.length() == 0) {
                     return;
                 }
-                mDownPricePerPre = Float.valueOf(s.toString());
+                try {
+                    mDownPricePerPre = Float.valueOf(s.toString());
+                } catch (NumberFormatException e) {
+                    mDownPricePerPre = DISABLED_VALUE;
+                }
+
                 mListener.onDownPrePrePriceEditted(mDownPricePerPre);
             }
 
@@ -305,7 +342,7 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
         });
 
         mEditTxt13 = (EditText) v.findViewById(R.id.editText13);
-        mEditTxt13.setText(mDownTradePer == DISABLED_VALUE ? "Disable" : String.valueOf(mDownTradePer));
+        mEditTxt13.setText(mDownTradePer == DISABLED_VALUE ? getResources().getString(R.string.disable) : String.valueOf(mDownTradePer));
         mEditTxt13.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -317,7 +354,12 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
                 if (s.length() == 0) {
                     return;
                 }
-                mDownTradePer = Float.valueOf(s.toString());
+                try {
+                    mDownTradePer = Float.valueOf(s.toString());
+                } catch (NumberFormatException e) {
+                    mDownTradePer = DISABLED_VALUE;
+                }
+
                 mListener.onDownPreTradeEditted(mDownTradePer);
             }
 
@@ -328,7 +370,7 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
         });
 
         mEditTxt14 = (EditText) v.findViewById(R.id.editText14);
-        mEditTxt14.setText(mDownTradePerPre == DISABLED_VALUE ? "Disable" : String.valueOf(mDownTradePerPre));
+        mEditTxt14.setText(mDownTradePerPre == DISABLED_VALUE ? getResources().getString(R.string.disable) : String.valueOf(mDownTradePerPre));
         mEditTxt14.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -340,7 +382,12 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
                 if (s.length() == 0) {
                     return;
                 }
-                mDownTradePerPre = Float.valueOf(s.toString());
+                try {
+                    mDownTradePerPre = Float.valueOf(s.toString());
+                } catch (NumberFormatException e) {
+                    mDownTradePerPre = DISABLED_VALUE;
+                }
+
                 mListener.onDownPrePreTradeEditted(mDownTradePerPre);
             }
 
@@ -350,7 +397,58 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
             }
         });
 
+        Switch vibrateSetting = v.findViewById(R.id.vibrate_setting_switch);
+        vibrateSetting.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            }
+        });
+
+        final ViewGroup upSettingLayout = v.findViewById(R.id.up_setting);
+        disableEnableControls(upSettingLayout, mIsUpSetting);
+
+        Switch upSetting = v.findViewById(R.id.up_setting_switch);
+        upSetting.setEnabled(true);
+        upSetting.setChecked(mIsUpSetting);
+        upSetting.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                disableEnableControls(upSettingLayout, isChecked);
+                buttonView.setEnabled(true);
+
+                mListener.onUpSettingEnabled(isChecked);
+            }
+        });
+
+        final ViewGroup downSettingLayout = v.findViewById(R.id.down_setting);
+        disableEnableControls(downSettingLayout, mIsDownSetting);
+
+        Switch downSetting = v.findViewById(R.id.down_setting_switch);
+        downSetting.setEnabled(true);
+        downSetting.setChecked(mIsDownSetting);
+        downSetting.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                disableEnableControls(downSettingLayout, isChecked);
+                buttonView.setEnabled(true);
+
+                mListener.onDownSettingEnabled(isChecked);
+            }
+        });
+
+
+        Log.d("MY_LOG", "mIsDownSetting : " + mIsDownSetting + ", mIsUpSetting : " + mIsUpSetting);
         return v;
+    }
+
+    private void disableEnableControls(ViewGroup vg, boolean enable) {
+        for (int i = 0; i < vg.getChildCount(); i++) {
+            View child = vg.getChildAt(i);
+            child.setEnabled(enable);
+            if (child instanceof ViewGroup) {
+                disableEnableControls((ViewGroup) child, enable);
+            }
+        }
     }
 
     @Override
@@ -418,18 +516,13 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         final String text = parent.getItemAtPosition(position).toString();
-//        float value = 0;
-//        try {
-//            value = Float.valueOf(text);
-//        } catch (NumberFormatException e) {
-//            value = DISABLED_VALUE;
-//        }
-
         final int spinnerId = parent.getId();
+        Log.d("MY_LOG", "onItemSelected : " + text);
 
         switch (spinnerId) {
             case R.id.up_pre_price_spinner:
                 mEditTxt.setText(text);
+                Log.d("MY_LOG", "text : " + text);
 //                mListener.onUpPrePriceEditted(value);
                 break;
             case R.id.up_pre_pre_price_spinner:
@@ -471,6 +564,9 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
     }
 
     public interface OnSettingFragment {
+
+        void onUpSettingEnabled(boolean isEnabled);
+
         void onUpCandleButtonClicked(int candle);
 
         void onUpPrePriceEditted(float prePrice);
@@ -480,6 +576,8 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
         void onUpPreTradeEditted(float preTrade);
 
         void onUpPrePreTradeEditted(float prePreTrade);
+
+        void onDownSettingEnabled(boolean isEnabled);
 
         void onDownCandleButtonClicked(int candle);
 

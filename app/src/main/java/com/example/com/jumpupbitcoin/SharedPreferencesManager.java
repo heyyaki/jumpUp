@@ -8,6 +8,7 @@ public class SharedPreferencesManager {
     private static final String PREF_NAME = "pref";
 
     // 급등
+    private static final String UP_SETTING = "mUpSetting";
     private static final String UP_CANDLE = "mUpCandle";
     private static final String UP_PRICE_PER = "upPricePer";
     private static final String UP_PRICE_PER_PRE = "upPricePerPre";
@@ -15,6 +16,7 @@ public class SharedPreferencesManager {
     private static final String UP_TRADE_PER_PRE = "upTradePerPre";
 
     // 급락
+    private static final String DOWN_SETTING = "mDownSetting";
     private static final String DOWN_CANDLE = "mDownCandle";
     private static final String DOWN_PRICE_PER = "downPricePer";
     private static final String DOWN_PRICE_PER_PRE = "downPricePerPre";
@@ -26,6 +28,16 @@ public class SharedPreferencesManager {
 
     private static SharedPreferences getSharedPreferences(Context context) {
         return context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+    }
+
+    public static boolean getUpSettingEnabled(Context context) {
+        return getSharedPreferences(context).getBoolean(UP_SETTING, true);
+    }
+
+    public static void setUpSettingEnabled(Context context, boolean isEnabled) {
+        final SharedPreferences.Editor editor = getSharedPreferences(context).edit();
+        editor.putBoolean(UP_SETTING, isEnabled);
+        editor.apply();
     }
 
     public static int getUpCandle(Context context) {
@@ -79,6 +91,15 @@ public class SharedPreferencesManager {
     }
 
     // 급락 설정값
+    public static boolean getDownSettingEnabled(Context context) {
+        return getSharedPreferences(context).getBoolean(DOWN_SETTING, true);
+    }
+
+    public static void setDownSettingEnabled(Context context, boolean isEnabled) {
+        final SharedPreferences.Editor editor = getSharedPreferences(context).edit();
+        editor.putBoolean(DOWN_SETTING, isEnabled);
+        editor.apply();
+    }
 
     public static void setDownCandle(Context context, int candle) {
         final SharedPreferences.Editor editor = getSharedPreferences(context).edit();
@@ -129,6 +150,8 @@ public class SharedPreferencesManager {
         editor.putFloat(DOWN_TRADE_PER_PRE, downTradePerPre);
         editor.apply();
     }
+
+
 
 
     // other getters/setters

@@ -11,6 +11,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,7 +45,6 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             android.app.FragmentManager manager = getFragmentManager();
-
 
             switch (item.getItemId()) {
                 case R.id.navigation_home:
@@ -121,19 +121,37 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
 
                 case R.id.navigation_notifications:
                     setTitle("설정");
-                    final int upCandle = SharedPreferencesManager.getUpCandle(getApplicationContext());
-                    final float pricePer = SharedPreferencesManager.getPricePer(getApplicationContext());
-                    final float pricePerPre = SharedPreferencesManager.getPricePerPre(getApplicationContext());
-                    final float tradePer = SharedPreferencesManager.getTradePer(getApplicationContext());
-                    final float tradePerPre = SharedPreferencesManager.getTradePerPre(getApplicationContext());
+//                    final boolean isUpSettingEnabled = SharedPreferencesManager.getUpSettingEnabled(getApplicationContext());
+//                    final int upCandle = SharedPreferencesManager.getUpCandle(getApplicationContext());
+//                    final float pricePer = SharedPreferencesManager.getPricePer(getApplicationContext());
+//                    final float pricePerPre = SharedPreferencesManager.getPricePerPre(getApplicationContext());
+//                    final float tradePer = SharedPreferencesManager.getTradePer(getApplicationContext());
+//                    final float tradePerPre = SharedPreferencesManager.getTradePerPre(getApplicationContext());
+//
+//                    final boolean isDownSettingEnabled = SharedPreferencesManager.getDownSettingEnabled(getApplicationContext());
+//                    final int downCandle = SharedPreferencesManager.getDownCandle(getApplicationContext());
+//                    final float downPricePer = SharedPreferencesManager.getDownPricePer(getApplicationContext());
+//                    final float downPricePerPre = SharedPreferencesManager.getDownPricePerPre(getApplicationContext());
+//                    final float downTradePer = SharedPreferencesManager.getDownTradePer(getApplicationContext());
+//                    final float downTradePerPre = SharedPreferencesManager.getDownTradePerPre(getApplicationContext());
 
-                    final int downCandle = SharedPreferencesManager.getDownCandle(getApplicationContext());
-                    final float downPricePer = SharedPreferencesManager.getDownPricePer(getApplicationContext());
-                    final float downPricePerPre = SharedPreferencesManager.getDownPricePerPre(getApplicationContext());
-                    final float downTradePer = SharedPreferencesManager.getDownTradePer(getApplicationContext());
-                    final float downTradePerPre = SharedPreferencesManager.getDownTradePerPre(getApplicationContext());
+                    final boolean isUpSettingEnabled = BackService.getSettingData().mUpSettingEnabled;
+                    final int upCandle = BackService.getSettingData().mUpCandle;
+                    final float pricePer = BackService.getSettingData().price_per;
+                    final float pricePerPre = BackService.getSettingData().price_per_pre;
+                    final float tradePer = BackService.getSettingData().trade_per;
+                    final float tradePerPre = BackService.getSettingData().trade_per_pre;
 
-                    SettingFragment networkFragment = SettingFragment.newInstance(upCandle, pricePer, pricePerPre, tradePer, tradePerPre, downCandle, downPricePer, downPricePerPre, downTradePer, downTradePerPre);
+                    final boolean isDownSettingEnabled = BackService.getSettingData().mDownSettingEnabled;
+                    final int downCandle = BackService.getSettingData().mDownCandle;
+                    final float downPricePer = BackService.getSettingData().down_price_per;
+                    final float downPricePerPre = BackService.getSettingData().down_price_per_pre;
+                    final float downTradePer = BackService.getSettingData().down_trade_per;
+                    final float downTradePerPre = BackService.getSettingData().down_trade_per_pre;
+
+                    SettingFragment networkFragment = SettingFragment.newInstance(
+                            isUpSettingEnabled, upCandle, pricePer, pricePerPre, tradePer, tradePerPre,
+                            isDownSettingEnabled, downCandle, downPricePer, downPricePerPre, downTradePer, downTradePerPre);
                     manager.beginTransaction().replace(R.id.content, networkFragment, networkFragment.getTag()).commitAllowingStateLoss();
                     frag_num = 5;
                     return true;
@@ -154,7 +172,7 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         navigation.setSelectedItemId(R.id.navigation_home);
 
-        pre_Setting();
+        LoadSettingData();
 
         mVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
@@ -176,30 +194,34 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
         });
     }
 
-    private void pre_Setting() {
+    private void LoadSettingData() {
+        final boolean isUpSettingEnabled = SharedPreferencesManager.getUpSettingEnabled(getApplicationContext());
         final int upCandle = SharedPreferencesManager.getUpCandle(getApplicationContext());
         final float pricePer = SharedPreferencesManager.getPricePer(getApplicationContext());
         final float pricePerPre = SharedPreferencesManager.getPricePerPre(getApplicationContext());
         final float tradePer = SharedPreferencesManager.getTradePer(getApplicationContext());
         final float tradePerPre = SharedPreferencesManager.getTradePerPre(getApplicationContext());
 
+        final boolean isDownSettingEnabled = SharedPreferencesManager.getDownSettingEnabled(getApplicationContext());
         final int downCandle = SharedPreferencesManager.getDownCandle(getApplicationContext());
         final float downPricePer = SharedPreferencesManager.getDownPricePer(getApplicationContext());
         final float downPricePerPre = SharedPreferencesManager.getDownPricePerPre(getApplicationContext());
         final float downTradePer = SharedPreferencesManager.getDownTradePer(getApplicationContext());
         final float downTradePerPre = SharedPreferencesManager.getDownTradePerPre(getApplicationContext());
 
-        BackService.mCalJump.setUpCandle(upCandle);
-        BackService.mCalJump.setPricePer(pricePer);
-        BackService.mCalJump.setPricePerPer(pricePerPre);
-        BackService.mCalJump.setTradePer(tradePer);
-        BackService.mCalJump.setTradePerPre(tradePerPre);
+        BackService.setUpSetting(isUpSettingEnabled);
+        BackService.setUpCandle(upCandle);
+        BackService.setPricePer(pricePer);
+        BackService.setPricePerPer(pricePerPre);
+        BackService.setTradePer(tradePer);
+        BackService.setTradePerPre(tradePerPre);
 
-        BackService.mCalDown.setDownCandle(downCandle);
-        BackService.mCalDown.setDownPricePer(downPricePer);
-        BackService.mCalDown.setDownPricePerPer(downPricePerPre);
-        BackService.mCalDown.setDownTradePer(downTradePer);
-        BackService.mCalDown.setDownTradePerPre(downTradePerPre);
+        BackService.setDownSetting(isDownSettingEnabled);
+        BackService.setDownCandle(downCandle);
+        BackService.setDownPricePer(downPricePer);
+        BackService.setDownPricePerPer(downPricePerPre);
+        BackService.setDownTradePer(downTradePer);
+        BackService.setDownTradePerPre(downTradePerPre);
     }
 
     @Override
@@ -244,63 +266,75 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
     }
 
     @Override
+    public void onUpSettingEnabled(boolean isEnabled) {
+        SharedPreferencesManager.setUpSettingEnabled(getApplicationContext(), isEnabled);
+        BackService.setUpSetting(isEnabled);
+    }
+
+    @Override
     public void onUpCandleButtonClicked(int candle) {
         SharedPreferencesManager.setUpCandle(getApplicationContext(), candle);
-        BackService.mCalJump.setUpCandle(candle);
+        BackService.setUpCandle(candle);
     }
 
     @Override
     public void onUpPrePriceEditted(float prePrice) {
         SharedPreferencesManager.setPricePer(getApplicationContext(), prePrice);
-        BackService.mCalJump.setPricePer(prePrice);
+        BackService.setPricePer(prePrice);
     }
 
     @Override
     public void onUpPrePrePriceEditted(float prePrePrice) {
         SharedPreferencesManager.setPricePerPre(getApplicationContext(), prePrePrice);
-        BackService.mCalJump.setPricePerPer(prePrePrice);
+        BackService.setPricePerPer(prePrePrice);
     }
 
     @Override
     public void onUpPreTradeEditted(float preTrade) {
         SharedPreferencesManager.setTradePer(getApplicationContext(), preTrade);
-        BackService.mCalJump.setTradePer(preTrade);
+        BackService.setTradePer(preTrade);
     }
 
     @Override
     public void onUpPrePreTradeEditted(float prePreTrade) {
         SharedPreferencesManager.setTradePerPre(getApplicationContext(), prePreTrade);
-        BackService.mCalJump.setTradePerPre(prePreTrade);
+        BackService.setTradePerPre(prePreTrade);
+    }
 
+    @Override
+    public void onDownSettingEnabled(boolean isEnabled) {
+        Log.d("MY_LOG", "onDownSettingEnabled : " + isEnabled);
+        SharedPreferencesManager.setDownSettingEnabled(getApplicationContext(), isEnabled);
+        BackService.setDownSetting(isEnabled);
     }
 
     @Override
     public void onDownCandleButtonClicked(int candle) {
         SharedPreferencesManager.setDownCandle(getApplicationContext(), candle);
-        BackService.mCalDown.setDownCandle(candle);
+        BackService.setDownCandle(candle);
     }
 
     @Override
     public void onDownPrePriceEditted(float prePrice) {
         SharedPreferencesManager.setDownPricePer(getApplicationContext(), prePrice);
-        BackService.mCalDown.setDownPricePer(prePrice);
+        BackService.setDownPricePer(prePrice);
     }
 
     @Override
     public void onDownPrePrePriceEditted(float prePrePrice) {
         SharedPreferencesManager.setDownPricePerPre(getApplicationContext(), prePrePrice);
-        BackService.mCalDown.setDownPricePerPer(prePrePrice);
+        BackService.setDownPricePerPer(prePrePrice);
     }
 
     @Override
     public void onDownPreTradeEditted(float preTrade) {
         SharedPreferencesManager.setDownTradePer(getApplicationContext(), preTrade);
-        BackService.mCalDown.setDownTradePer(preTrade);
+        BackService.setDownTradePer(preTrade);
     }
 
     @Override
     public void onDownPrePreTradeEditted(float prePreTrade) {
         SharedPreferencesManager.setDownTradePerPre(getApplicationContext(), prePreTrade);
-        BackService.mCalDown.setDownTradePerPre(prePreTrade);
+        BackService.setDownTradePerPre(prePreTrade);
     }
 }

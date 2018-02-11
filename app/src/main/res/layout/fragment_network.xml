@@ -24,22 +24,26 @@
                 android:text="전체 설정" />
 
             <LinearLayout
+                android:id="@+id/vibrate_setting"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <Switch
+                    android:id="@+id/vibrate_setting_switch"
                     style="@style/sub_title_text"
                     android:text="진동 설정" />
             </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/up_setting"
             style="@style/setting_item_backgroud"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <Switch
+                android:id="@+id/up_setting_switch"
                 style="@style/title_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -202,12 +206,14 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/down_setting"
             style="@style/setting_item_backgroud"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <Switch
+                android:id="@+id/down_setting_switch"
                 style="@style/title_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
