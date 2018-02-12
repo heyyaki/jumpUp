@@ -535,6 +535,10 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         Log.d("MY_LOG", "mSpinnerCounting : " + mSpinnerCounting + ", postion : " + position);
 
+        if (mSpinnerCounting++ < 8) {
+            return;
+        }
+
         final String text = parent.getItemAtPosition(position).toString();
         final int spinnerId = parent.getId();
 
