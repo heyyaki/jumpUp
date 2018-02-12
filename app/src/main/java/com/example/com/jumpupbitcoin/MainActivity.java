@@ -133,6 +133,8 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
             @Override
             public void onDataChanged(final List<String> alarmReg, final List<String> logList) {
                 Log.d("MainActivity", "onDataChanged Up, alarmReg : " + alarmReg.toString() + ", logList : " + logList.toString());
+                mService.notification(alarmReg,true);
+
                 if (mUpFragment == null) {
                     Log.d("MainActivity", "onDataChanged Up, mUpFragment is null");
                     return;
@@ -156,6 +158,7 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
             @Override
             public void onDataChanged(final List<String> alarmReg, final List<String> logList) {
                 Log.d("MainActivity", "onDataChanged Down, alarmReg : " + alarmReg.toString() + ", logList : " + logList.toString());
+                mService.notification(alarmReg, false);
                 if (mDownFragment == null) {
                     Log.d("MainActivity", "onDataChanged Down, mDownFragment is null");
                     return;
@@ -206,6 +209,9 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
                 });
             }
         });
+        //mService.stopForeground(true);
+//        mService.notification(notify_Array);
+
 
 //        MobileAds.initialize(this, "ca-app-pub-9946826173060023~4419923481");
 //        getAD();
