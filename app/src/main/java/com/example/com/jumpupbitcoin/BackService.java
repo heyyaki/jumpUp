@@ -19,6 +19,7 @@ public class BackService extends Service {
 
     public static NotificationCompat.Builder builder;
 
+    private static SettingData mSettingData = new SettingData();
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -47,7 +48,7 @@ public class BackService extends Service {
 
         Log.d("Back Service", "onStartCommand");
 
-        mJumpThread = new Thread(new CrawlringJump(mJumpHandler));
+        mJumpThread = new Thread(new CrawlringJump(mJumpHandler,mSettingData));
         mJumpThread.start();
 
         mPriceThread = new Thread(new CrawlringPrice(mPriceHandler));
@@ -59,7 +60,7 @@ public class BackService extends Service {
     private Thread mJumpThread;
     private Thread mPriceThread;
 
-    private static SettingData mSettingData = new SettingData();
+
     public static CalJump mCalJump = new CalJump(mSettingData);
     public static CalDown mCalDown = new CalDown(mSettingData);
     public static CalPrice mCalPrice = new CalPrice();
@@ -77,8 +78,10 @@ public class BackService extends Service {
                 Document document = (Document) msg.obj;
 
                 // TODO 분봉 넣어야댐
-//                mCalJump.upCatch(document);
-//                mCalDown.downCatch(document);
+                if(mSettingData.mUpSettingEnabled)
+                    mCalJump.upCatch(document);
+                if(mSettingData.mDownSettingEnabled)
+                    mCalDown.downCatch(document);
             }
         }
     };

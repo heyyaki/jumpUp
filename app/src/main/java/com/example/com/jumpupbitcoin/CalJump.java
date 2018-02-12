@@ -172,7 +172,7 @@ public class CalJump {
         } else {
             int a = duple_check_map.get(i);
             duple_check_map.put(i, --a);
-            if (duple_check_map.get(i) == 1) {
+            if (duple_check_map.get(i) == 1 || duple_check_map.get(i) == 0) {
                 duple_check_map.remove(i);
             }
         }

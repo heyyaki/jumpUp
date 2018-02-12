@@ -15,24 +15,29 @@ import java.io.IOException;
 
 public class CrawlringJump implements Runnable {
 
-    private final String url_up_coin = "http://13.125.173.93:8080/crawlring/coin_up.html";
-    //private final String url_up_coin = "http://122.40.239.103:8080/crawlring/up_coin.html";
+    //private final String url_up_coin = "http://13.125.173.93:8080/crawlring/coin_up.html";
+    private final String url_up_coin = "http://122.40.239.103:8080/crawlring/up_coin.html";
     private final int SLEEP_TIME = 30 * 1000;
 
     private Handler mHandler;
 
-    private SettingData mSettingData = new SettingData();
+    private SettingData mSettingData;
 
-    CrawlringJump(Handler handler) {
+    CrawlringJump(Handler handler, SettingData settingData) {
         mHandler = handler;
+        mSettingData = settingData;
     }
 
     @Override
     public void run() {
         try {
             while (true) {
-                if (mSettingData.price_per != -1) {
+                if (!mSettingData.mUpSettingEnabled && !mSettingData.mDownSettingEnabled) {
+                }
+                else{
                     // TODO 데이터 초기화 요청
+                    Log.d("mUpSettingEnabled", String.valueOf(mSettingData.mUpSettingEnabled));
+                    Log.d("mDownSettingEnabled", String.valueOf(mSettingData.mDownSettingEnabled));
                     Message msg = Message.obtain(mHandler, 0);
                     mHandler.sendMessage(msg);
 

@@ -62,7 +62,7 @@ public class CalDown {
         }
 
         //Log.d("CalDown str_Swtich_minite", str_switch_minite);
-        //Log.d("str_switch_trade", str_switch_trade);
+        Log.d("str_switch_trade", str_switch_trade);
         down_per_Calc(str_switch_minite, str_switch_trade);
     }
 
@@ -93,57 +93,57 @@ public class CalDown {
         temp_trade = temp_arr_trade[1].split(",");
         temp_trade_pre = temp_arr_trade[2].split(",");
 
-        List<String> ary_up_per = new ArrayList<>();
-        List<String> ary_up_trade_per = new ArrayList<>();
-        List<String> ary_up_trade_per_pre = new ArrayList<>();
-        List<String> ary_up_per_pre = new ArrayList<>();
+        List<String> ary_down_per = new ArrayList<>();
+        List<String> ary_down_trade_per = new ArrayList<>();
+        List<String> ary_down_trade_per_pre = new ArrayList<>();
+        List<String> ary_down_per_pre = new ArrayList<>();
 
         try {
             for (int i = 0; i < temp_now_price.length; i++) {
                 DecimalFormat form = new DecimalFormat("0.00");
-                if (ary_up_per.size() < 36) {
-                    ary_up_per.add(form.format((Float.parseFloat(temp_now_price[i]) / Float.parseFloat(temp_price[i])) * 100 - 100));
-                    ary_up_per_pre.add(form.format((Float.parseFloat(temp_price[i]) / Float.parseFloat(temp_price_pre[i])) * 100 - 100));
-                    ary_up_trade_per.add(form.format((Float.parseFloat(temp_now_trade[i]) / Float.parseFloat(temp_trade[i])) * 100 - 100));
-                    ary_up_trade_per_pre.add(form.format((Float.parseFloat(temp_trade[i]) / Float.parseFloat(temp_trade_pre[i])) * 100 - 100));
+                if (ary_down_per.size() < 36) {
+                    ary_down_per.add(form.format((Float.parseFloat(temp_now_price[i]) / Float.parseFloat(temp_price[i])) * 100 - 100));
+                    ary_down_per_pre.add(form.format((Float.parseFloat(temp_price[i]) / Float.parseFloat(temp_price_pre[i])) * 100 - 100));
+                    ary_down_trade_per.add(form.format((Float.parseFloat(temp_now_trade[i]) / Float.parseFloat(temp_trade[i])) * 100 - 100));
+                    ary_down_trade_per_pre.add(form.format((Float.parseFloat(temp_trade[i]) / Float.parseFloat(temp_trade_pre[i])) * 100 - 100));
                 } else {
-                    ary_up_per.set(i, form.format((Float.parseFloat(temp_now_price[i]) / Float.parseFloat(temp_price[i])) * 100 - 100));
-                    ary_up_per_pre.set(i, form.format((Float.parseFloat(temp_price[i]) / Float.parseFloat(temp_price_pre[i])) * 100 - 100));
-                    ary_up_trade_per.set(i, form.format((Float.parseFloat(temp_now_trade[i]) / Float.parseFloat(temp_trade[i])) * 100 - 100));
-                    ary_up_trade_per_pre.add(i, form.format((Float.parseFloat(temp_trade[i]) / Float.parseFloat(temp_trade_pre[i])) * 100 - 100));
+                    ary_down_per.set(i, form.format((Float.parseFloat(temp_now_price[i]) / Float.parseFloat(temp_price[i])) * 100 - 100));
+                    ary_down_per_pre.set(i, form.format((Float.parseFloat(temp_price[i]) / Float.parseFloat(temp_price_pre[i])) * 100 - 100));
+                    ary_down_trade_per.set(i, form.format((Float.parseFloat(temp_now_trade[i]) / Float.parseFloat(temp_trade[i])) * 100 - 100));
+                    ary_down_trade_per_pre.add(i, form.format((Float.parseFloat(temp_trade[i]) / Float.parseFloat(temp_trade_pre[i])) * 100 - 100));
                 }
                 // price_per = -1일때로 처리하기!
                 if (mSettingData.down_price_per_pre == -1 && mSettingData.down_trade_per == -1 && mSettingData.down_trade_per_pre == -1) {
-                    if (Float.parseFloat(ary_up_per.get(i)) < -mSettingData.down_price_per) {
-                        duple_check_method(i, ary_up_per, temp_now_price);
+                    if (Float.parseFloat(ary_down_per.get(i)) < -mSettingData.down_price_per) {
+                        duple_check_method(i, ary_down_per, temp_now_price);
                     }
                 } else if (mSettingData.down_price_per_pre == -1 && mSettingData.down_trade_per == -1 && mSettingData.down_trade_per_pre != -1) {
-                    if (Float.parseFloat(ary_up_per.get(i)) < -mSettingData.down_price_per && Float.parseFloat(ary_up_trade_per_pre.get(i)) > mSettingData.down_trade_per_pre) {
-                        duple_check_method(i, ary_up_per, temp_now_price);
+                    if (Float.parseFloat(ary_down_per.get(i)) < -mSettingData.down_price_per && Float.parseFloat(ary_down_trade_per_pre.get(i)) > mSettingData.down_trade_per_pre) {
+                        duple_check_method(i, ary_down_per, temp_now_price);
                     }
                 } else if (mSettingData.down_price_per_pre == -1 && mSettingData.down_trade_per != -1 && mSettingData.down_trade_per_pre == -1) {
-                    if (Float.parseFloat(ary_up_per.get(i)) < -mSettingData.down_price_per && Float.parseFloat(ary_up_trade_per.get(i)) > mSettingData.down_trade_per) {
-                        duple_check_method(i, ary_up_per, temp_now_price);
+                    if (Float.parseFloat(ary_down_per.get(i)) < -mSettingData.down_price_per && Float.parseFloat(ary_down_trade_per.get(i)) > mSettingData.down_trade_per) {
+                        duple_check_method(i, ary_down_per, temp_now_price);
                     }
                 } else if (mSettingData.down_price_per_pre == -1 && mSettingData.down_trade_per != -1 && mSettingData.down_trade_per_pre != -1) {
-                    if (Float.parseFloat(ary_up_per.get(i)) < -mSettingData.down_price_per && Float.parseFloat(ary_up_trade_per.get(i)) > mSettingData.down_trade_per && Float.parseFloat(ary_up_trade_per_pre.get(i)) > mSettingData.down_trade_per_pre) {
-                        duple_check_method(i, ary_up_per, temp_now_price);
+                    if (Float.parseFloat(ary_down_per.get(i)) < -mSettingData.down_price_per && Float.parseFloat(ary_down_trade_per.get(i)) > mSettingData.down_trade_per && Float.parseFloat(ary_down_trade_per_pre.get(i)) > mSettingData.down_trade_per_pre) {
+                        duple_check_method(i, ary_down_per, temp_now_price);
                     }
                 } else if (mSettingData.down_price_per_pre != -1 && mSettingData.down_trade_per == -1 && mSettingData.down_trade_per_pre == -1) {
-                    if (Float.parseFloat(ary_up_per.get(i)) < -mSettingData.down_price_per && Float.parseFloat(ary_up_per_pre.get(i)) < -mSettingData.down_price_per_pre) {
-                        duple_check_method(i, ary_up_per, temp_now_price);
+                    if (Float.parseFloat(ary_down_per.get(i)) < -mSettingData.down_price_per && Float.parseFloat(ary_down_per_pre.get(i)) < -mSettingData.down_price_per_pre) {
+                        duple_check_method(i, ary_down_per, temp_now_price);
                     }
                 } else if (mSettingData.down_price_per_pre != -1 && mSettingData.down_trade_per == -1 && mSettingData.down_trade_per_pre != -1) {
-                    if (Float.parseFloat(ary_up_per.get(i)) < -mSettingData.down_price_per && Float.parseFloat(ary_up_per_pre.get(i)) < -mSettingData.down_price_per_pre && Float.parseFloat(ary_up_trade_per_pre.get(i)) > mSettingData.down_trade_per_pre) {
-                        duple_check_method(i, ary_up_per, temp_now_price);
+                    if (Float.parseFloat(ary_down_per.get(i)) < -mSettingData.down_price_per && Float.parseFloat(ary_down_per_pre.get(i)) < -mSettingData.down_price_per_pre && Float.parseFloat(ary_down_trade_per_pre.get(i)) > mSettingData.down_trade_per_pre) {
+                        duple_check_method(i, ary_down_per, temp_now_price);
                     }
                 } else if (mSettingData.down_price_per_pre != -1 && mSettingData.down_trade_per != -1 && mSettingData.down_trade_per_pre == -1) {
-                    if (Float.parseFloat(ary_up_per.get(i)) < -mSettingData.down_price_per && Float.parseFloat(ary_up_per_pre.get(i)) < -mSettingData.down_price_per_pre && Float.parseFloat(ary_up_trade_per.get(i)) > mSettingData.down_trade_per) {
-                        duple_check_method(i, ary_up_per, temp_now_price);
+                    if (Float.parseFloat(ary_down_per.get(i)) < -mSettingData.down_price_per && Float.parseFloat(ary_down_per_pre.get(i)) < -mSettingData.down_price_per_pre && Float.parseFloat(ary_down_trade_per.get(i)) > mSettingData.down_trade_per) {
+                        duple_check_method(i, ary_down_per, temp_now_price);
                     }
                 } else if (mSettingData.down_price_per_pre != -1 && mSettingData.down_trade_per != -1 && mSettingData.down_trade_per_pre != -1) {
-                    if (Float.parseFloat(ary_up_per.get(i)) < -mSettingData.down_price_per && Float.parseFloat(ary_up_per_pre.get(i)) < -mSettingData.down_price_per_pre && Float.parseFloat(ary_up_trade_per.get(i)) > mSettingData.down_trade_per && Float.parseFloat(ary_up_trade_per_pre.get(i)) > mSettingData.down_trade_per_pre) {
-                        duple_check_method(i, ary_up_per, temp_now_price);
+                    if (Float.parseFloat(ary_down_per.get(i)) < -mSettingData.down_price_per && Float.parseFloat(ary_down_per_pre.get(i)) < -mSettingData.down_price_per_pre && Float.parseFloat(ary_down_trade_per.get(i)) > mSettingData.down_trade_per && Float.parseFloat(ary_down_trade_per_pre.get(i)) > mSettingData.down_trade_per_pre) {
+                        duple_check_method(i, ary_down_per, temp_now_price);
                     }
                 }
             }
@@ -167,7 +167,6 @@ public class CalDown {
         if (!duple_check_map.containsKey(i)) {
             long[] pattern = {100, 300, 100, 500, 100, 500};
             MainActivity.mVibrator.vibrate(pattern, -1);
-            Log.d("Down duple_check_method", String.valueOf(duple_check_map));
             mDownData.alarm_reg.add(i + "_" + ary_down_per.get(i) + "_" + temp_now_price[i]);
             duple_check_map.put(i, mSettingData.mDownCandle);   // 분봉으로 값 넣기
         } else {

@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
                     final HomeFragment homeFragment = HomeFragment.newInstance((ArrayList<String>) BackService.mCalPrice.getPrice(), (ArrayList<String>) BackService.mCalPrice.getPer());
                     manager.beginTransaction().replace(R.id.content, homeFragment, homeFragment.getTag()).commitAllowingStateLoss();
                     frag_num = 1;
+                    LoadSettingData();
 
                     BackService.mCalPrice.setOnChangedDataLister(new CalPrice.onChangeData() {
                         @Override
