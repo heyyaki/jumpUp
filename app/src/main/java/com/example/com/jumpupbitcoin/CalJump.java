@@ -169,6 +169,10 @@ public class CalJump {
 //            long[] pattern = {100, 300};
 //            MainActivity.mVibrator.vibrate(pattern, -1);
 
+            if (mSettingData.mVibration != Const.VIBRATION_DISABLED) {
+                MainActivity.mVibrator.vibrate(Const.vibPattern, -1);
+            }
+
             mJumpData.alarm_reg.add(i + "_" + ary_up_per.get(i) + "_" + temp_now_price[i]);
             duple_check_map.put(i, mSettingData.mUpCandle);   // 분봉으로 값 넣기
         } else {

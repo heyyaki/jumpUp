@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
 
     private long pressedTime;
     public static int frag_num = 0;
-    public Vibrator mVibrator;
+    public static Vibrator mVibrator;
 
     private BackService mService;
     private boolean mIsBound = false;
@@ -251,12 +251,12 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
                     mCalJump.setOnChangedDataLister(new CalJump.onChangeData() {
                         @Override
                         public void onDataChanged(List<String> alarmReg, List<String> logList) {
-                            Log.d("MainActivity", "onDataChanged(jump), size of alarmReg : " + alarmReg.size() + ", size of logList : " + upFragment.getAlarmReg().size()+ ", vib : " + mSettingData.mVibration);
+//                            Log.d("MainActivity", "onDataChanged(jump), size of alarmReg : " + alarmReg.size() + ", size of logList : " + upFragment.getAlarmReg().size()+ ", vib : " + mSettingData.mVibration);
 
-                            if (mSettingData.mVibration != Const.VIBRATION_DISABLED && !equalLists(alarmReg, upFragment.getAlarmReg())) {
-                                Log.d("MainActivity", "onDataChanged(jump), vibrate!!!");
-                                mVibrator.vibrate(Const.vibPattern, -1);
-                            }
+//                            if (mSettingData.mVibration != Const.VIBRATION_DISABLED && !equalLists(alarmReg, upFragment.getAlarmReg())) {
+//                                Log.d("MainActivity", "onDataChanged(jump), vibrate!!!");
+//                                mVibrator.vibrate(Const.vibPattern, -1);
+//                            }
 
                             if (!upFragment.isDetached()) {
                                 upFragment.refresh((ArrayList<String>) alarmReg, (ArrayList<String>) logList);
@@ -274,12 +274,12 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
                     mCalDown.setOnChangedDataLister(new CalDown.onChangeData() {
                         @Override
                         public void onDataChanged(List<String> alarmReg, List<String> logList) {
-                            Log.d("MainActivity", "onDataChanged(down), size of alarmReg : " + alarmReg.size() + ", size of logList : " + downFragment.getAlarmReg().size() + ", vib : " + mSettingData.mVibration);
+//                            Log.d("MainActivity", "onDataChanged(down), size of alarmReg : " + alarmReg.size() + ", size of logList : " + downFragment.getAlarmReg().size() + ", vib : " + mSettingData.mVibration);
 
-                            if (mSettingData.mVibration != Const.VIBRATION_DISABLED && !equalLists(alarmReg, downFragment.getAlarmReg())) {
-                                Log.d("MainActivity", "onDataChanged(down), vibrate!!!");
-                                mVibrator.vibrate(Const.vibPattern, -1);
-                            }
+//                            if (mSettingData.mVibration != Const.VIBRATION_DISABLED && !equalLists(alarmReg, downFragment.getAlarmReg())) {
+//                                Log.d("MainActivity", "onDataChanged(down), vibrate!!!");
+//                                mVibrator.vibrate(Const.vibPattern, -1);
+//                            }
 
                             if (!downFragment.isDetached()) {
                                 downFragment.refresh((ArrayList<String>) alarmReg, (ArrayList<String>) logList);
