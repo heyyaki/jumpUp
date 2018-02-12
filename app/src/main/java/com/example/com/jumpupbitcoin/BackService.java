@@ -61,8 +61,6 @@ public class BackService extends Service {
         List<String> alarmReg=null;
         notification(alarmReg, true);
 
-        addMap();
-
         mJumpThread = new Thread(mCrawlringJump);
         mJumpThread.start();
 
@@ -122,43 +120,5 @@ public class BackService extends Service {
         Notification notification = builder.build();
         startForeground(1, notification);
 
-    }
-
-    private void addMap() {
-        map.put(0, "비트코인");
-        map.put(1, "에이다");
-        map.put(2, "리플");
-        map.put(3, "스테이터스네트워크토큰");
-        map.put(4, "퀀텀");
-        map.put(5, "이더리움");
-        map.put(6, "머큐리");
-        map.put(7, "네오");
-        map.put(8, "스팀달러");
-        map.put(9, "스팀");
-        map.put(10, "스텔라루멘");
-        map.put(11, "아인스타이늄");
-        map.put(12, "비트코인 골드");
-        map.put(13, "아더");
-        map.put(14, "뉴이코미무브먼트");
-        map.put(15, "블록틱스");
-        map.put(16, "파워렛저");
-        map.put(17, "비트코인캐시");
-        map.put(18, "코모도");
-        map.put(19, "스트라티스");
-        map.put(20, "이더리움클래식");
-        map.put(21, "오미세고");
-        map.put(22, "그리스톨코인");
-        map.put(23, "스토리지");
-        map.put(24, "어거");
-        map.put(25, "웨이브");
-        map.put(26, "아크");
-        map.put(27, "모네로");
-        map.put(28, "라이트코인");
-        map.put(29, "리스크");
-        map.put(30, "버트코인");
-        map.put(31, "피벡스");
-        map.put(32, "메탈");
-        map.put(33, "대쉬");
-        map.put(34, "지캐시");
     }
 }
