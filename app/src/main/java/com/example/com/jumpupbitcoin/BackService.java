@@ -87,18 +87,18 @@ public class BackService extends Service {
         Intent notificationIntent = new Intent(this, MainActivity.class);
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         if(alarmReg!=null) {
-            if(alarmReg.size()>0){
+            if(alarmReg.size()>0) {
                 NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
                 ArrayList<String> alarm_coin = new ArrayList<String>();
-                for(String temp : alarmReg){
-                    Log.d("alarmReg",temp);
+                for (String temp : alarmReg) {
+                    Log.d("alarmReg", temp);
                     String[] coin_arr = temp.split("_");
-                    alarm_coin.add(Const.sCoinNames.get(Integer.parseInt(coin_arr[0]))+"       "+coin_arr[1]+"%");
+                    alarm_coin.add(Const.sCoinNames.get(Integer.parseInt(coin_arr[0])) + "       " + coin_arr[1] + "%");
                 }
-                if(updown) {
+                if (updown) {
                     inboxStyle.setBigContentTitle("급등 코인 " + alarmReg.size() + "개");
                     inboxStyle.setSummaryText("검색된 급등 코인이 존재합니다");
-                }else{
+                } else {
                     inboxStyle.setBigContentTitle("급락 코인 " + alarmReg.size() + "개");
                     inboxStyle.setSummaryText("검색된 급락 코인이 존재합니다");
                 }
@@ -107,6 +107,12 @@ public class BackService extends Service {
                 }
                 builder.setSmallIcon(R.drawable.ic_app)
                         .setStyle(inboxStyle)
+                        .setContentIntent(contentIntent);
+            }else{
+                builder.setSmallIcon(R.drawable.ic_app)
+                        .setContentTitle("코인을 감시중입니다...")
+                        .setContentText("Jump Up Coin")
+                        .setTicker("Jump Up Service Running")
                         .setContentIntent(contentIntent);
             }
         }else{
