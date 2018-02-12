@@ -29,6 +29,7 @@ import com.example.com.jumpupbitcoin.setting.SettingFragment;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
 
 import org.jsoup.nodes.Document;
 
@@ -211,12 +212,9 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
                 });
             }
         });
-        //mService.stopForeground(true);
-//        mService.notification(notify_Array);
 
-
-//        MobileAds.initialize(this, "ca-app-pub-9946826173060023~4419923481");
-//        getAD();
+        MobileAds.initialize(this, "ca-app-pub-9946826173060023~4419923481");
+        getAD();
     }
 
 
