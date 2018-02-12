@@ -1,6 +1,7 @@
 package com.example.com.jumpupbitcoin;
 
 import android.os.Message;
+import android.util.Log;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -31,7 +32,7 @@ public class CrawlringJump implements Runnable {
     public void run() {
         try {
             while (true) {
-                if (mCallback != null && !mCallback.isDownSettingEnabled() && !mCallback.isUpSettingEnabled()) {
+                if (mCallback != null && (mCallback.isDownSettingEnabled() || mCallback.isUpSettingEnabled())) {
                     Message msg = Message.obtain();
                     msg.what = 0;
                     mCallback.onReceiveJumpData(msg);
