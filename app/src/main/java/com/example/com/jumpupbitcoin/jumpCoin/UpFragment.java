@@ -106,12 +106,12 @@ public class UpFragment extends Fragment {
 //        listview2.requestLayout();
 //    }
 
-    public void refresh(ArrayList<String> alarmReg, ArrayList<String> logList) {
+    public void refresh(List<String> alarmReg, List<String> logList) {
         //mAlarmReg.addAll(alarmReg);
         //mLogList.addAll(logList);
 
-        mAlarmReg = alarmReg;
-        mLogList = logList;
+        mAlarmReg = (ArrayList<String>) alarmReg;
+        mLogList = (ArrayList<String>) logList;
 
         Adapter.notifyDataSetChanged();
         Adapter2.notifyDataSetChanged();

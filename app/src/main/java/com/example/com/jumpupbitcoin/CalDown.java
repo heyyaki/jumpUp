@@ -194,8 +194,7 @@ public class CalDown {
         return mDownData.log_list;
     }
 
-
-    private onChangeData mChangeData;
+    private onChangeData mChangeData = null;
 
     public void setOnChangedDataLister(onChangeData changeData) {
         mChangeData = changeData;

@@ -196,16 +196,11 @@ public class CalJump {
         return mJumpData.log_list;
     }
 
-    private onChangeData mChangeData;
+    private onChangeData mChangeData = null;
 
     public void setOnChangedDataLister(onChangeData changeData) {
         mChangeData = changeData;
     }
-
-    public boolean getUpSettingEnabled() {
-        return mSettingData.mIsUpSettingEnabled;
-    }
-
 
     interface onChangeData {
         void onDataChanged(List<String> alarmReg, List<String> logList);

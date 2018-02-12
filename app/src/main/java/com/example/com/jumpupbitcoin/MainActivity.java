@@ -31,7 +31,6 @@ import com.google.android.gms.ads.InterstitialAd;
 import org.jsoup.nodes.Document;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 
@@ -43,8 +42,11 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
     public CalDown mCalDown = new CalDown(mSettingData);
     public CalPrice mCalPrice = new CalPrice();
 
+    private DownFragment mDownFragment;
+    private UpFragment mUpFragment;
+    private HomeFragment mHomeFragment;
+
     private long pressedTime;
-    public static int frag_num = 0;
     public static Vibrator mVibrator;
 
     private BackService mService;
@@ -129,6 +131,84 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
         mVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         startService();
 
+        mCalJump.setOnChangedDataLister(new CalJump.onChangeData() {
+            @Override
+            public void onDataChanged(final List<String> alarmReg, final List<String> logList) {
+                Log.d("MainActivity", "onDataChanged Up, alarmReg : " + alarmReg.toString() + ", logList : " + logList.toString());
+                if (mUpFragment == null) {
+                    Log.d("MainActivity", "onDataChanged Up, mUpFragment is null");
+                    return;
+                }
+                if (!mUpFragment.isVisible()) {
+                    Log.d("MainActivity", "onDataChanged Up, !mUpFragment.isVisible()");
+                    return;
+                }
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.d("MainActivity", "onDataChanged Up, refresh GUI");
+                        mUpFragment.refresh(alarmReg, logList);
+                    }
+                });
+            }
+        });
+
+        mCalDown.setOnChangedDataLister(new CalDown.onChangeData() {
+            @Override
+            public void onDataChanged(final List<String> alarmReg, final List<String> logList) {
+                Log.d("MainActivity", "onDataChanged Down, alarmReg : " + alarmReg.toString() + ", logList : " + logList.toString());
+                if (mDownFragment == null) {
+                    Log.d("MainActivity", "onDataChanged Down, mDownFragment is null");
+                    return;
+                }
+                if (!mDownFragment.isVisible()) {
+                    Log.d("MainActivity", "onDataChanged Down, !mDownFragment.isVisible()");
+                    return;
+                }
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.d("MainActivity", "onDataChanged Down, refresh GUI");
+                        mDownFragment.refresh(alarmReg, logList);
+                    }
+                });
+            }
+        });
+
+        mCalPrice.setOnChangedDataLister(new CalPrice.onChangeData() {
+            @Override
+            public void onDataChanged(final List<String> priceList, final List<String> perList) {
+                Log.d("MainActivity", "onDataChanged price, priceList : " + priceList.toString() + ", perList : " + perList.toString());
+
+                if (mHomeFragment == null) {
+                    Log.d("MainActivity", "onDataChanged price, mHomeFragment is null");
+                    return;
+                }
+
+                if (!mHomeFragment.isVisible()) {
+                    Log.d("MainActivity", "onDataChanged price, !mHomeFragment.isVisible()");
+                    return;
+                }
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.d("MainActivity", "onDataChanged price, refresh GUI");
+
+                        mHomeFragment.blinkAnimateTextClock();
+
+                        if (priceList.size() == 0 || perList.size() == 0 || priceList.size() != perList.size()) {
+                            mHomeFragment.showNoItemView();
+                        } else {
+                            mHomeFragment.refreshListView(priceList, perList);
+                        }
+                    }
+                });
+            }
+        });
+
 //        MobileAds.initialize(this, "ca-app-pub-9946826173060023~4419923481");
 //        getAD();
     }
@@ -185,7 +265,6 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
         }
     }
 
-    //
     private void getAD() {
         final InterstitialAd ad = new InterstitialAd(this);
         ad.setAdUnitId(getString(R.string.ad_id));
@@ -215,125 +294,41 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
 
                     final ArrayList<String> priceList = (ArrayList<String>) mCalPrice.getPrice();
                     final ArrayList<String> perList = (ArrayList<String>) mCalPrice.getPer();
+                    mHomeFragment = HomeFragment.newInstance(priceList, perList);
+                    fragmentManager.beginTransaction().replace(R.id.content, mHomeFragment, mHomeFragment.getTag()).commitAllowingStateLoss();
 
-                    final HomeFragment homeFragment = HomeFragment.newInstance(priceList, perList);
-                    fragmentManager.beginTransaction().replace(R.id.content, homeFragment, homeFragment.getTag()).commitAllowingStateLoss();
-                    frag_num = 1;
-                    mCalPrice.setOnChangedDataLister(new CalPrice.onChangeData() {
-                        @Override
-                        public void onDataChanged(final List<String> priceList, final List<String> perList) {
-                            if (!homeFragment.isVisible()) {
-                                return;
-                            }
-
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    homeFragment.blinkAnimateTextClock();
-
-                                    if (priceList.size() == 0 || perList.size() == 0 || priceList.size() != perList.size()) {
-                                        homeFragment.showNoItemView();
-                                    } else {
-                                        homeFragment.refreshListView(priceList, perList);
-                                    }
-                                }
-                            });
-                        }
-                    });
                     return true;
 
                 case R.id.navigation_dashboard:
                     setTitle("급등 코인");
-                    final UpFragment upFragment = UpFragment.newInstance(((ArrayList<String>) mCalJump.getAlarmReg()), (ArrayList<String>) mCalJump.getLogList());
-                    fragmentManager.beginTransaction().replace(R.id.content, upFragment, upFragment.getTag()).commitAllowingStateLoss();
-                    frag_num = 2;
-
-                    mCalJump.setOnChangedDataLister(new CalJump.onChangeData() {
-                        @Override
-                        public void onDataChanged(List<String> alarmReg, List<String> logList) {
-//                            Log.d("MainActivity", "onDataChanged(jump), size of alarmReg : " + alarmReg.size() + ", size of logList : " + upFragment.getAlarmReg().size()+ ", vib : " + mSettingData.mVibration);
-
-//                            if (mSettingData.mVibration != Const.VIBRATION_DISABLED && !equalLists(alarmReg, upFragment.getAlarmReg())) {
-//                                Log.d("MainActivity", "onDataChanged(jump), vibrate!!!");
-//                                mVibrator.vibrate(Const.vibPattern, -1);
-//                            }
-
-                            if (!upFragment.isDetached()) {
-                                upFragment.refresh((ArrayList<String>) alarmReg, (ArrayList<String>) logList);
-                            }
-                        }
-                    });
+                    mUpFragment = UpFragment.newInstance(((ArrayList<String>) mCalJump.getAlarmReg()), (ArrayList<String>) mCalJump.getLogList());
+                    fragmentManager.beginTransaction().replace(R.id.content, mUpFragment, mUpFragment.getTag()).commitAllowingStateLoss();
                     return true;
 
                 case R.id.navigation_dashboard_down:
                     setTitle("급락 코인");
-                    final DownFragment downFragment = DownFragment.newInstance(((ArrayList<String>) mCalDown.getAlarmReg()), (ArrayList<String>) mCalDown.getLogList());
-                    fragmentManager.beginTransaction().replace(R.id.content, downFragment, downFragment.getTag()).commitAllowingStateLoss();
-                    frag_num = 3;
-
-                    mCalDown.setOnChangedDataLister(new CalDown.onChangeData() {
-                        @Override
-                        public void onDataChanged(List<String> alarmReg, List<String> logList) {
-//                            Log.d("MainActivity", "onDataChanged(down), size of alarmReg : " + alarmReg.size() + ", size of logList : " + downFragment.getAlarmReg().size() + ", vib : " + mSettingData.mVibration);
-
-//                            if (mSettingData.mVibration != Const.VIBRATION_DISABLED && !equalLists(alarmReg, downFragment.getAlarmReg())) {
-//                                Log.d("MainActivity", "onDataChanged(down), vibrate!!!");
-//                                mVibrator.vibrate(Const.vibPattern, -1);
-//                            }
-
-                            if (!downFragment.isDetached()) {
-                                downFragment.refresh((ArrayList<String>) alarmReg, (ArrayList<String>) logList);
-                            }
-                        }
-                    });
+                    mDownFragment = DownFragment.newInstance(((ArrayList<String>) mCalDown.getAlarmReg()), (ArrayList<String>) mCalDown.getLogList());
+                    fragmentManager.beginTransaction().replace(R.id.content, mDownFragment, mDownFragment.getTag()).commitAllowingStateLoss();
                     return true;
 
                 case R.id.navigation_schedule:
                     setTitle("코인 일정");
                     CoinSchedule coin_shcedule_fragment = new CoinSchedule();
                     fragmentManager.beginTransaction().replace(R.id.content, coin_shcedule_fragment, coin_shcedule_fragment.getTag()).commitAllowingStateLoss();
-                    frag_num = 4;
                     return true;
 
                 case R.id.navigation_notifications:
                     setTitle("설정");
-                    final int vibrationSettingEnabled = mSettingData.mVibration;
-                    final boolean isUpSettingEnabled = mSettingData.mIsUpSettingEnabled;
-                    final int upCandle = mSettingData.mUpCandle;
-                    final float pricePer = mSettingData.price_per;
-                    final float pricePerPre = mSettingData.price_per_pre;
-                    final float tradePer = mSettingData.trade_per;
-                    final float tradePerPre = mSettingData.trade_per_pre;
-
-                    final boolean isDownSettingEnabled = mSettingData.mIsDownSettingEnabled;
-                    final int downCandle = mSettingData.mDownCandle;
-                    final float downPricePer = mSettingData.down_price_per;
-                    final float downPricePerPre = mSettingData.down_price_per_pre;
-                    final float downTradePer = mSettingData.down_trade_per;
-                    final float downTradePerPre = mSettingData.down_trade_per_pre;
-
                     SettingFragment settingFragment = SettingFragment.newInstance(
-                            vibrationSettingEnabled,
-                            isUpSettingEnabled, upCandle, pricePer, pricePerPre, tradePer, tradePerPre,
-                            isDownSettingEnabled, downCandle, downPricePer, downPricePerPre, downTradePer, downTradePerPre);
+                            mSettingData.mVibration,
+                            mSettingData.mIsUpSettingEnabled, mSettingData.mUpCandle, mSettingData.price_per, mSettingData.price_per_pre, mSettingData.trade_per, mSettingData.trade_per_pre,
+                            mSettingData.mIsDownSettingEnabled, mSettingData.mDownCandle, mSettingData.down_price_per, mSettingData.down_price_per_pre, mSettingData.down_trade_per, mSettingData.down_trade_per_pre);
                     fragmentManager.beginTransaction().replace(R.id.content, settingFragment, settingFragment.getTag()).commitAllowingStateLoss();
-                    frag_num = 5;
                     return true;
             }
             return false;
         }
     };
-
-    private boolean equalLists(List<String> a, List<String> b) {
-        if (a == null && b == null) return true;
-        if ((a == null && b != null) || (a != null && b == null) || (a.size() != b.size())) {
-            return false;
-        }
-
-        Collections.sort(a);
-        Collections.sort(b);
-        return a.equals(b);
-    }
 
     protected void onDestroy() {
         super.onDestroy();
