@@ -72,5 +72,9 @@
         <item name="android:layout_height">1dp</item>
         <item name="android:layout_margin">8dp</item>
     </style>
+
+    <style name="SplashTheme" parent="@android:style/Theme.Light.NoTitleBar">
+        <item name="android:windowBackground">@drawable/background</item>
+    </style>
 </resources>
 

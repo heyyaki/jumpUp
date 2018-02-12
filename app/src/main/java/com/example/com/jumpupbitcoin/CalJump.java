@@ -165,7 +165,8 @@ public class CalJump {
 
     private void duple_check_method(int i, List<String> ary_up_per, String[] temp_now_price) {
         if (!duple_check_map.containsKey(i)) {
-            long[] pattern = {100, 300, 100, 500, 100, 500};
+            //long[] pattern = {100, 300, 100, 500, 100, 500};
+            long[] pattern = {100, 300};
             MainActivity.mVibrator.vibrate(pattern, -1);
             mJumpData.alarm_reg.add(i + "_" + ary_up_per.get(i) + "_" + temp_now_price[i]);
             duple_check_map.put(i, mSettingData.mUpCandle);   // 분봉으로 값 넣기
