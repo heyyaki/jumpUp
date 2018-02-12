@@ -1,9 +1,5 @@
 package com.example.com.jumpupbitcoin;
 
-import android.os.Handler;
-import android.os.Looper;
-import android.util.Log;
-
 import com.example.com.jumpupbitcoin.priceInfo.PriceData;
 
 import java.text.DecimalFormat;
@@ -12,8 +8,17 @@ import java.util.List;
 public class CalPrice {
 
     private PriceData mPriceData = new PriceData();
+    private onChangeData mChangeData = null;
 
-    public void Calc(String recv_str) {
+    interface onChangeData {
+        void onDataChanged(List<String> priceList, List<String> perList);
+    }
+
+    void setOnChangedDataLister(onChangeData changeData) {
+        mChangeData = changeData;
+    }
+
+    void Calc(String recv_str) {
         String filter_str = "";
         String[] filter_word = {" ", "\\[", "\\]"};
         for (int i = 0; i < filter_word.length; i++) {
@@ -22,12 +27,12 @@ public class CalPrice {
         }
 
         mPriceData.ary_price.clear();
-        for(String a :recv_str.split(",")){
+        for (String a : recv_str.split(",")) {
             mPriceData.ary_price.add(a);
         }
     }
 
-    public void per_Calc(String recv_str) {
+    void per_Calc(String recv_str) {
         String filter_str = "";
         String[] filter_word = {" ", "\\[", "\\]"};
         for (int i = 0; i < filter_word.length; i++) {
@@ -46,23 +51,16 @@ public class CalPrice {
             }
         }
 
-        mChangeData.onDataChanged(mPriceData.ary_price, mPriceData.ary_start_per);
+        if (mChangeData != null) {
+            mChangeData.onDataChanged(mPriceData.ary_price, mPriceData.ary_start_per);
+        }
     }
 
-    public List<String> getPrice() {
+    List<String> getPrice() {
         return mPriceData.ary_price;
     }
 
-    public List<String> getPer() {
+    List<String> getPer() {
         return mPriceData.ary_start_per;
-    }
-
-    private onChangeData mChangeData;
-    public void setOnChangedDataLister(onChangeData changeData){
-        mChangeData = changeData;
-    }
-
-    interface onChangeData {
-        void onDataChanged(List<String> priceList,  List<String> perList);
     }
 }
