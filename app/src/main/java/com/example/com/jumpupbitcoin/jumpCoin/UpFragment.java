@@ -80,7 +80,7 @@ public class UpFragment extends Fragment {
         public View getView(int i, View convertView, ViewGroup parent) {
             UpListView view = new UpListView(getContext());
             if (!mAlarmReg.get(i).isEmpty()) {
-                String[] coin_arr = mAlarmReg.get(i).split("-");
+                String[] coin_arr = mAlarmReg.get(i).split("_");
                 view.setName(map.get(Integer.parseInt(coin_arr[0])));
                 view.setPrice(Integer.parseInt(coin_arr[2]));
                 view.setPer(coin_arr[1]);

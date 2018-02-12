@@ -21,6 +21,10 @@ import com.example.com.jumpupbitcoin.downCoin.DownFragment;
 import com.example.com.jumpupbitcoin.jumpCoin.UpFragment;
 import com.example.com.jumpupbitcoin.priceInfo.HomeFragment;
 import com.example.com.jumpupbitcoin.setting.SettingFragment;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -160,18 +164,9 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
         intent = new Intent(getApplicationContext(), BackService.class);
         startService(intent);
 
-//        final InterstitialAd ad = new InterstitialAd(this);
-//        ad.setAdUnitId(getString(R.string.string_ad_id));
-//
-//        ad.loadAd(new AdRequest.Builder().build());
-//        ad.setAdListener(new AdListener() {
-//            @Override
-//            public void onAdLoaded() {
-//                if (ad.isLoaded()) {
-//                    ad.show();
-//                }
-//            }
-//        });
+        MobileAds.initialize(this, "ca-app-pub-9946826173060023~4419923481");
+        getAD();
+
     }
 
     private void LoadSettingData() {
@@ -225,20 +220,20 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
         }
     }
 //
-//    private void getAD() {
-//        final InterstitialAd ad = new InterstitialAd(this);
-//        ad.setAdUnitId(getString(R.string.string_ad_id));
-//
-//        ad.loadAd(new AdRequest.Builder().build());
-//
-//        ad.setAdListener(new AdListener() {
-//            @Override public void onAdLoaded() {
-//                if (ad.isLoaded()) {
-//                    ad.show();
-//                }
-//            }
-//        });
-//    }
+    private void getAD() {
+        final InterstitialAd ad = new InterstitialAd(this);
+        ad.setAdUnitId(getString(R.string.ad_id));
+
+        ad.loadAd(new AdRequest.Builder().build());
+
+        ad.setAdListener(new AdListener() {
+            @Override public void onAdLoaded() {
+                if (ad.isLoaded()) {
+                    ad.show();
+                }
+            }
+        });
+    }
 
     protected void onDestroy() {
         super.onDestroy();

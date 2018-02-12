@@ -152,7 +152,7 @@ public class CalJump {
                 String time = new SimpleDateFormat("MM/dd HH:mm:ss").format(new Date(System.currentTimeMillis()));
 //                String[] coin_arr = mJumpData.alarm_reg.get(i).split("-");
 //               if (mJumpData.alarm_reg.size() != 0) {
-                mJumpData.log_list.add(mJumpData.alarm_reg.get(i) + "-" + time);
+                mJumpData.log_list.add(mJumpData.alarm_reg.get(i) + "_" + time);
 //                }
             }
 
@@ -167,7 +167,7 @@ public class CalJump {
         if (!duple_check_map.containsKey(i)) {
             long[] pattern = {100, 300, 100, 500, 100, 500};
             MainActivity.mVibrator.vibrate(pattern, -1);
-            mJumpData.alarm_reg.add(i + "-" + ary_up_per.get(i) + "-" + temp_now_price[i]);
+            mJumpData.alarm_reg.add(i + "_" + ary_up_per.get(i) + "_" + temp_now_price[i]);
             duple_check_map.put(i, mSettingData.mUpCandle);   // 분봉으로 값 넣기
         } else {
             int a = duple_check_map.get(i);
