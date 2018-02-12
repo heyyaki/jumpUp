@@ -179,7 +179,7 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
                 pressedTime = 0;
             } else {
                 super.onBackPressed();
-                startService();
+                stopService();
                 finish(); // app 종료 시키기
             }
         }
