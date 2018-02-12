@@ -112,7 +112,7 @@ public class UpFragment extends Fragment {
             int a = mLogList.size();
             if (!mLogList.get(i).isEmpty()) {
                 a = --a - i;
-                String[] coin_arr = mLogList.get(a).split("-");
+                String[] coin_arr = mLogList.get(a).split("_");
                 view.setName(map.get(Integer.parseInt(coin_arr[0])));
                 view.setPrice(Integer.valueOf(coin_arr[2]));
                 view.setPer(coin_arr[1]);
