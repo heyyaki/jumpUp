@@ -2,7 +2,6 @@ package com.example.com.jumpupbitcoin.downCoin;
 
 import android.app.Fragment;
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,7 +23,7 @@ public class DownFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    private OnFragmentInteractionListener mListener;
+    private DownFragmentListener mListener;
 
     myAdapter Adapter;
     myAdapter2 Adapter2;
@@ -148,25 +147,22 @@ public class DownFragment extends Fragment {
         btn_log_del.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (mListener != null) {
+                    mListener.onClearDownLogData();
+                }
                 mLogList.clear();
+                Adapter2.notifyDataSetChanged();
             }
         });
 
         return v;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        if (context instanceof DownFragmentListener) {
+            mListener = (DownFragmentListener) context;
         } else {
             //Toast.makeText(context, "Up Fragment Attached", Toast.LENGTH_SHORT).show();
         }
@@ -178,25 +174,11 @@ public class DownFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+    public interface DownFragmentListener {
+        void onClearDownLogData();
     }
 
     public void refresh(List<String> alarmReg, List<String> logList) {
-        //mAlarmReg.addAll(alarmReg);
-        //mLogList.addAll(logList);
-
         mAlarmReg = (ArrayList<String>) alarmReg;
         mLogList = (ArrayList<String>) logList;
 

@@ -3,14 +3,11 @@ package com.example.com.jumpupbitcoin.jumpCoin;
 import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.content.Context;
-import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -32,8 +29,8 @@ public class UpFragment extends Fragment {
     myAdapter Adapter;
     myAdapter2 Adapter2;
 
-    ListView listview;
-    ListView listview2;
+    ListView listview, listview2;
+    private UpFragmentListener mListener;
 
     private ArrayList<String> mAlarmReg;
     private ArrayList<String> mLogList;
@@ -81,30 +78,39 @@ public class UpFragment extends Fragment {
         btn_log_del.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (mListener != null) {
+                    mListener.onClearUpLogData();
+                }
+
                 mLogList.clear();
+                Adapter2.notifyDataSetChanged();
             }
         });
 
         return v;
     }
-//
-//    private void setListViewHeight() {
-//        WindowManager windowManager = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
-//        Display display = windowManager.getDefaultDisplay();
-//        Point size = new Point();
-//        display.getSize(size);
-//        final int height = size.y;
-//
-//        ViewGroup.LayoutParams params = listview.getLayoutParams();
-//        params.height = height / 2;
-//        listview.setLayoutParams(params);
-//        listview.requestLayout();
-//
-//        params = listview2.getLayoutParams();
-//        params.height = height / 2;
-//        listview2.setLayoutParams(params);
-//        listview2.requestLayout();
-//    }
+
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof UpFragmentListener) {
+            mListener = (UpFragmentListener) context;
+        } else {
+            //Toast.makeText(context, "Up Fragment Attached", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    public interface UpFragmentListener {
+
+        void onClearUpLogData();
+    }
 
     public void refresh(List<String> alarmReg, List<String> logList) {
         //mAlarmReg.addAll(alarmReg);

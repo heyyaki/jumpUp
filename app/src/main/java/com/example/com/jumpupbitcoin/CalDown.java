@@ -23,13 +23,18 @@ public class CalDown {
     private SettingData mSettingData = new SettingData();
     private Map<Integer, Integer> duple_check_map = new HashMap<>();
 
-    public CalDown(SettingData settingData) {
+    CalDown(SettingData settingData) {
         mSettingData = settingData;
     }
 
-    public void downCatch(Document doc2) {
+    void downCatch(Document doc2) {
         int switch_minite = mSettingData.mDownCandle;
         int num_get_price = 1;
+
+        for (int i = 0; i < mDownData.alarm_reg.size(); i++) {
+            String time = new SimpleDateFormat("MM/dd HH:mm:ss").format(new Date(System.currentTimeMillis()));
+            mDownData.log_list.add(mDownData.alarm_reg.get(i) + "_" + time);
+        }
 
         mDownData.alarm_reg.clear();
 
@@ -148,13 +153,6 @@ public class CalDown {
                 }
             }
 
-            for (int i = 0; i < mDownData.alarm_reg.size(); i++) {
-                String time = new SimpleDateFormat("MM/dd HH:mm:ss").format(new Date(System.currentTimeMillis()));
-//                String[] coin_arr = mDownData.alarm_reg.get(i).split("-");
-//               if (mDownData.alarm_reg.size() != 0) {
-                mDownData.log_list.add(mDownData.alarm_reg.get(i) + "_" + time);
-//                }
-            }
 
             mChangeData.onDataChanged(mDownData.alarm_reg, mDownData.log_list);
         } catch (Exception e) {
@@ -165,8 +163,6 @@ public class CalDown {
 
     private void duple_check_method(int i, List<String> ary_down_per, String[] temp_now_price) {
         if (!duple_check_map.containsKey(i)) {
-            //long[] pattern = {100, 300, 100, 500, 100, 500};
-//            long[] pattern = {100, 300};
             if (mSettingData.mVibration != Const.VIBRATION_DISABLED) {
                 MainActivity.mVibrator.vibrate(Const.vibPattern, -1);
             }
@@ -182,22 +178,22 @@ public class CalDown {
         }
     }
 
-    public void clearData() {
-        mDownData.clearData();
-    }
-
-    public List<String> getAlarmReg() {
+    List<String> getAlarmReg() {
         return mDownData.alarm_reg;
     }
 
-    public List<String> getLogList() {
+    List<String> getLogList() {
         return mDownData.log_list;
     }
 
     private onChangeData mChangeData = null;
 
-    public void setOnChangedDataLister(onChangeData changeData) {
+    void setOnChangedDataLister(onChangeData changeData) {
         mChangeData = changeData;
+    }
+
+    public void clearLogData() {
+        mDownData.log_list.clear();
     }
 
     interface onChangeData {

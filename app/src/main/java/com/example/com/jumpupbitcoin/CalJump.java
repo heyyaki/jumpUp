@@ -31,6 +31,11 @@ public class CalJump {
         int switch_minite = mSettingData.mUpCandle;
         int num_get_price = 1;
 
+        for (int i = 0; i < mJumpData.alarm_reg.size(); i++) {
+            String time = new SimpleDateFormat("MM/dd HH:mm:ss").format(new Date(System.currentTimeMillis()));
+            mJumpData.log_list.add(mJumpData.alarm_reg.get(i) + "_" + time);
+        }
+
         mJumpData.alarm_reg.clear();
 
         String str_switch_minite = "";
@@ -148,14 +153,6 @@ public class CalJump {
                 }
             }
 
-            for (int i = 0; i < mJumpData.alarm_reg.size(); i++) {
-                String time = new SimpleDateFormat("MM/dd HH:mm:ss").format(new Date(System.currentTimeMillis()));
-//                String[] coin_arr = mJumpData.alarm_reg.get(i).split("-");
-//               if (mJumpData.alarm_reg.size() != 0) {
-                mJumpData.log_list.add(mJumpData.alarm_reg.get(i) + "_" + time);
-//                }
-            }
-
             mChangeData.onDataChanged(mJumpData.alarm_reg, mJumpData.log_list);
         } catch (Exception e) {
             e.printStackTrace();
@@ -165,10 +162,6 @@ public class CalJump {
 
     private void duple_check_method(int i, List<String> ary_up_per, String[] temp_now_price) {
         if (!duple_check_map.containsKey(i)) {
-            //long[] pattern = {100, 300, 100, 500, 100, 500};
-//            long[] pattern = {100, 300};
-//            MainActivity.mVibrator.vibrate(pattern, -1);
-
             if (mSettingData.mVibration != Const.VIBRATION_DISABLED) {
                 MainActivity.mVibrator.vibrate(Const.vibPattern, -1);
             }
@@ -184,21 +177,21 @@ public class CalJump {
         }
     }
 
-    public void clearData() {
-        mJumpData.clearData();
+    void clearLogData() {
+        mJumpData.log_list.clear();
     }
 
-    public List<String> getAlarmReg() {
+    List<String> getAlarmReg() {
         return mJumpData.alarm_reg;
     }
 
-    public List<String> getLogList() {
+    List<String> getLogList() {
         return mJumpData.log_list;
     }
 
     private onChangeData mChangeData = null;
 
-    public void setOnChangedDataLister(onChangeData changeData) {
+    void setOnChangedDataLister(onChangeData changeData) {
         mChangeData = changeData;
     }
 

@@ -34,7 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class MainActivity extends AppCompatActivity implements SettingFragment.OnSettingFragment {
+public class MainActivity extends AppCompatActivity implements SettingFragment.OnSettingFragment, DownFragment.DownFragmentListener, UpFragment.UpFragmentListener {
     private String TAG = "MainActivity";
 
     private SettingData mSettingData = new SettingData();
@@ -70,7 +70,6 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
                         // 급등계산 모듈
                         Document document = (Document) msg.obj;
 
-                        // TODO 분봉 넣어야댐
                         if (mSettingData.mIsUpSettingEnabled)
                             mCalJump.upCatch(document);
                         if (mSettingData.mIsDownSettingEnabled)
@@ -107,7 +106,6 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
         @Override
         public void onServiceDisconnected(ComponentName name) {
             Log.d(TAG, "onServiceDisconnected");
-
             mService = null;
         }
     };
@@ -335,6 +333,7 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
         stopService();
     }
 
+    // Setting Listener
     @Override
     public void onVibrationSelected(int vibration) {
         SharedPreferencesManager.setVibration(getApplicationContext(), vibration);
@@ -412,5 +411,17 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
     public void onDownPrePreTradeEditted(float prePreTrade) {
         SharedPreferencesManager.setDownTradePerPre(getApplicationContext(), prePreTrade);
         mSettingData.down_trade_per_pre = prePreTrade;
+    }
+
+    // UpFragment Listener
+    @Override
+    public void onClearUpLogData() {
+        mCalJump.clearLogData();
+    }
+
+    // DownFragment Listener
+    @Override
+    public void onClearDownLogData() {
+        mCalDown.clearLogData();
     }
 }
