@@ -54,7 +54,7 @@ public class SharedPreferencesManager {
     }
 
     public static int getUpCandle(Context context) {
-        return getSharedPreferences(context).getInt(UP_CANDLE, 30);
+        return getSharedPreferences(context).getInt(UP_CANDLE, 6);
     }
 
     public static void setUpCandle(Context context, int bunbong) {
@@ -64,7 +64,7 @@ public class SharedPreferencesManager {
     }
 
     public static float getPricePer(Context context) {
-        return getSharedPreferences(context).getFloat(UP_PRICE_PER, 0f);
+        return getSharedPreferences(context).getFloat(UP_PRICE_PER, 2f);
     }
 
     public static void setPricePer(Context context, float pricePer) {
@@ -74,7 +74,7 @@ public class SharedPreferencesManager {
     }
 
     public static float getPricePerPre(Context context) {
-        return getSharedPreferences(context).getFloat(UP_PRICE_PER_PRE, 0f);
+        return getSharedPreferences(context).getFloat(UP_PRICE_PER_PRE, -1f);
     }
 
     public static void setPricePerPre(Context context, float pricePerPre) {
@@ -84,7 +84,7 @@ public class SharedPreferencesManager {
     }
 
     public static float getTradePer(Context context) {
-        return getSharedPreferences(context).getFloat(UP_TRADE_PER, 0f);
+        return getSharedPreferences(context).getFloat(UP_TRADE_PER, -1f);
     }
 
     public static void setTradePer(Context context, float tradePer) {
@@ -94,7 +94,7 @@ public class SharedPreferencesManager {
     }
 
     public static float getTradePerPre(Context context) {
-        return getSharedPreferences(context).getFloat(UP_TRADE_PER_PRE, 0f);
+        return getSharedPreferences(context).getFloat(UP_TRADE_PER_PRE, -1f);
     }
 
     public static void setTradePerPre(Context context, float tradePerPre) {
@@ -105,7 +105,7 @@ public class SharedPreferencesManager {
 
     // 급락 설정값
     public static boolean getDownSettingEnabled(Context context) {
-        return getSharedPreferences(context).getBoolean(DOWN_SETTING, true);
+        return getSharedPreferences(context).getBoolean(DOWN_SETTING, false);
     }
 
     public static void setDownSettingEnabled(Context context, boolean isEnabled) {
@@ -121,11 +121,11 @@ public class SharedPreferencesManager {
     }
 
     public static int getDownCandle(Context context) {
-        return getSharedPreferences(context).getInt(DOWN_CANDLE, 30);
+        return getSharedPreferences(context).getInt(DOWN_CANDLE, 6);
     }
 
     public static float getDownPricePer(Context context) {
-        return getSharedPreferences(context).getFloat(DOWN_PRICE_PER, 0f);
+        return getSharedPreferences(context).getFloat(DOWN_PRICE_PER, 2f);
     }
 
     public static void setDownPricePer(Context context, float downPricePer) {
@@ -135,7 +135,7 @@ public class SharedPreferencesManager {
     }
 
     public static float getDownPricePerPre(Context context) {
-        return getSharedPreferences(context).getFloat(DOWN_PRICE_PER_PRE, 0f);
+        return getSharedPreferences(context).getFloat(DOWN_PRICE_PER_PRE, -1f);
     }
 
     public static void setDownPricePerPre(Context context, float downPricePerPre) {
@@ -145,7 +145,7 @@ public class SharedPreferencesManager {
     }
 
     public static float getDownTradePer(Context context) {
-        return getSharedPreferences(context).getFloat(DOWN_TRADE_PER, 0f);
+        return getSharedPreferences(context).getFloat(DOWN_TRADE_PER, -1f);
     }
 
     public static void setDownTradePer(Context context, float downTradePer) {
@@ -155,7 +155,7 @@ public class SharedPreferencesManager {
     }
 
     public static float getDownTradePerPre(Context context) {
-        return getSharedPreferences(context).getFloat(DOWN_TRADE_PER_PRE, 0f);
+        return getSharedPreferences(context).getFloat(DOWN_TRADE_PER_PRE, -1f);
     }
 
     public static void setDownTradePerPre(Context context, float downTradePerPre) {
