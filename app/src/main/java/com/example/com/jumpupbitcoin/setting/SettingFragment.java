@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -140,47 +141,31 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
             }
         }
 
-        Spinner mSpinner, mSpinner2, mSpinner3, mSpinner4;
+        Spinner spinner = (Spinner) v.findViewById(R.id.up_pre_price_spinner);
+        Spinner spinner2 = (Spinner) v.findViewById(R.id.up_pre_pre_price_spinner);
+        Spinner spinner3 = (Spinner) v.findViewById(R.id.up_pre_trade);
+        Spinner spinner4 = (Spinner) v.findViewById(R.id.up_pre_pre_trade);
 
-        mSpinner = (Spinner) v.findViewById(R.id.up_pre_price_spinner);
-        mSpinner.setSelection(0, false);
+        spinner.setOnItemSelectedListener(this);
+        spinner2.setOnItemSelectedListener(this);
+        spinner3.setOnItemSelectedListener(this);
+        spinner4.setOnItemSelectedListener(this);
 
-        mSpinner2 = (Spinner) v.findViewById(R.id.up_pre_pre_price_spinner);
-        mSpinner2.setSelection(0, false);
+        Spinner spinner11 = (Spinner) v.findViewById(R.id.down_pre_price_spinner);
+        Spinner spinner12 = (Spinner) v.findViewById(R.id.down_pre_pre_price_spinner);
+        Spinner spinner13 = (Spinner) v.findViewById(R.id.down_pre_trade);
+        Spinner spinner14 = (Spinner) v.findViewById(R.id.down_pre_pre_trade);
 
-        mSpinner3 = (Spinner) v.findViewById(R.id.up_pre_trade);
-        mSpinner3.setSelection(0, false);
-
-        mSpinner4 = (Spinner) v.findViewById(R.id.up_pre_pre_trade);
-        mSpinner4.setSelection(0, false);
-
-        mSpinner.setOnItemSelectedListener(this);
-        mSpinner2.setOnItemSelectedListener(this);
-        mSpinner3.setOnItemSelectedListener(this);
-        mSpinner4.setOnItemSelectedListener(this);
-
-        Spinner mSpinner11, mSpinner12, mSpinner13, mSpinner14;
-
-        mSpinner11 = (Spinner) v.findViewById(R.id.down_pre_price_spinner);
-        mSpinner11.setSelection(0, false);
-
-        mSpinner12 = (Spinner) v.findViewById(R.id.down_pre_pre_price_spinner);
-        mSpinner12.setSelection(0, false);
-
-        mSpinner13 = (Spinner) v.findViewById(R.id.down_pre_trade);
-        mSpinner13.setSelection(0, false);
-
-        mSpinner14 = (Spinner) v.findViewById(R.id.down_pre_pre_trade);
-        mSpinner14.setSelection(0, false);
-
-        mSpinner11.setOnItemSelectedListener(this);
-        mSpinner12.setOnItemSelectedListener(this);
-        mSpinner13.setOnItemSelectedListener(this);
-        mSpinner14.setOnItemSelectedListener(this);
+        spinner11.setOnItemSelectedListener(this);
+        spinner12.setOnItemSelectedListener(this);
+        spinner13.setOnItemSelectedListener(this);
+        spinner14.setOnItemSelectedListener(this);
 
         // 등락률
         mEditTxt = (EditText) v.findViewById(R.id.editText);
         mEditTxt.setText(mPricePer == DISABLED_VALUE ? getResources().getString(R.string.disable) : String.valueOf(mPricePer));
+        spinner.setSelection(mPricePer == DISABLED_VALUE ? 0 : 1, false);
+
         mEditTxt.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -210,6 +195,8 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
 
         mEditTxt2 = (EditText) v.findViewById(R.id.editText2);
         mEditTxt2.setText(mPricePerPre == DISABLED_VALUE ? getResources().getString(R.string.disable) : String.valueOf(mPricePerPre));
+        spinner2.setSelection(mPricePerPre == DISABLED_VALUE ? 0 : 1, false);
+
         mEditTxt2.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -238,6 +225,8 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
 
         mEditTxt3 = (EditText) v.findViewById(R.id.editText3);
         mEditTxt3.setText(mTradePer == DISABLED_VALUE ? getResources().getString(R.string.disable) : String.valueOf(mTradePer));
+        spinner3.setSelection(mTradePer == DISABLED_VALUE ? 0 : 1, false);
+
         mEditTxt3.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -266,6 +255,8 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
 
         mEditTxt4 = (EditText) v.findViewById(R.id.editText4);
         mEditTxt4.setText(mTradePerPre == DISABLED_VALUE ? getResources().getString(R.string.disable) : String.valueOf(mTradePerPre));
+        spinner3.setSelection(mTradePerPre == DISABLED_VALUE ? 0 : 1, false);
+
         mEditTxt4.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -295,6 +286,8 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
         // 등락률
         mEditTxt11 = (EditText) v.findViewById(R.id.editText11);
         mEditTxt11.setText(mDownPricePer == DISABLED_VALUE ? getResources().getString(R.string.disable) : String.valueOf(mDownPricePer));
+        spinner11.setSelection(mDownPricePer == DISABLED_VALUE ? 0 : 1, false);
+
         mEditTxt11.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -323,6 +316,8 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
 
         mEditTxt12 = (EditText) v.findViewById(R.id.editText12);
         mEditTxt12.setText(mDownPricePerPre == DISABLED_VALUE ? getResources().getString(R.string.disable) : String.valueOf(mDownPricePerPre));
+        spinner12.setSelection(mDownPricePerPre == DISABLED_VALUE ? 0 : 1, false);
+
         mEditTxt12.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -351,6 +346,8 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
 
         mEditTxt13 = (EditText) v.findViewById(R.id.editText13);
         mEditTxt13.setText(mDownTradePer == DISABLED_VALUE ? getResources().getString(R.string.disable) : String.valueOf(mDownTradePer));
+        spinner13.setSelection(mDownTradePer == DISABLED_VALUE ? 0 : 1, false);
+
         mEditTxt13.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -379,6 +376,7 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
 
         mEditTxt14 = (EditText) v.findViewById(R.id.editText14);
         mEditTxt14.setText(mDownTradePerPre == DISABLED_VALUE ? getResources().getString(R.string.disable) : String.valueOf(mDownTradePerPre));
+        spinner14.setSelection(mDownTradePerPre == DISABLED_VALUE ? 0 : 1, false);
         mEditTxt14.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -530,8 +528,13 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
         mListener.onDownCandleButtonClicked(mDownCandle);
     }
 
+    // 스피너가 초기화할 때, onItemSelected을 자동으로 불리는 것을 피하기 위해
+    private int mSpinnerCounting = 0;
+
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        Log.d("MY_LOG", "mSpinnerCounting : " + mSpinnerCounting + ", postion : " + position);
+
         final String text = parent.getItemAtPosition(position).toString();
         final int spinnerId = parent.getId();
 
