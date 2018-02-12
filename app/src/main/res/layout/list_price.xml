@@ -1,45 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="46dp">
 
     <ImageView
         android:id="@+id/image_coin1"
-        android:layout_width="26dp"
-        android:layout_height="26dp"
+        style="@style/list_coin_image"
         android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
-        android:layout_marginStart="16dp"
-        app:srcCompat="@mipmap/ic_launcher_round" />
+        android:layout_centerVertical="true" />
 
     <TextView
         android:id="@+id/name_coin_txt"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_marginStart="8dp"
-        android:layout_toEndOf="@+id/image_coin1"
-        android:gravity="center_vertical|start"
-        android:textColor="@color/textColor"
-        android:textSize="14dp" />
+        style="@style/list_coin_name"
+        android:layout_toEndOf="@+id/image_coin1" />
 
     <TextView
         android:id="@+id/price_coin_txt"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_toStartOf="@+id/start_per_txt"
-        android:gravity="center_vertical|end"
-        android:textColor="@color/red"
-        android:textSize="14dp" />
+        style="@style/list_coin_price"
+        android:layout_toStartOf="@+id/start_per_txt" />
 
     <TextView
         android:id="@+id/start_per_txt"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
-        android:gravity="center_vertical|end"
-        android:textColor="@color/red"
-        android:textSize="14dp" />
+        style="@style/list_coin_per"
+        android:layout_alignParentEnd="true" />
 </RelativeLayout>

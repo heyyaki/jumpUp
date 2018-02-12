@@ -82,6 +82,39 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="list_coin_image">
+        <item name="android:layout_width">26dp</item>
+        <item name="android:layout_height">26dp</item>
+        <item name="android:layout_marginStart">16dp</item>
+    </style>
+
+    <style name="list_coin_name">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_marginStart">8dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textColor">@color/textColor</item>
+        <item name="android:textSize">14dp</item>
+    </style>
+
+    <style name="list_coin_price">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textColor">@color/textColor</item>
+        <item name="android:textSize">14dp</item>
+    </style>
+
+    <style name="list_coin_per">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textColor">@color/textColor</item>
+        <item name="android:textSize">14dp</item>
+        <item name="android:layout_marginEnd">16dp</item>
+        <item name="android:layout_marginStart">16dp</item>
+    </style>
+
     <style name="SplashTheme" parent="@android:style/Theme.Light.NoTitleBar">
         <item name="android:windowBackground">@drawable/background</item>
     </style>

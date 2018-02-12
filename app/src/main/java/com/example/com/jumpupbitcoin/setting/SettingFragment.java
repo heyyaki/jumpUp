@@ -17,11 +17,14 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Switch;
 
+import com.example.com.jumpupbitcoin.Const;
 import com.example.com.jumpupbitcoin.R;
 
 import java.util.ArrayList;
 
 public class SettingFragment extends Fragment implements RadioGroup.OnCheckedChangeListener, AdapterView.OnItemSelectedListener {
+    private static final String ARG_VIBRATION = "argument_vibration";
+
     private static final String ARG_UP_SETTING = "argument_up_setting";
     private static final String ARG_UP_CANDLE = "argument_up_candle";
     private static final String ARG_PRICE_PER = "argument_pricePer";
@@ -38,8 +41,8 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
 
     private static final int DISABLED_VALUE = -1;
 
-    private boolean mIsUpSetting, mIsDownSetting, mIsVibration;
-    private int mUpCandle, mDownCandle;
+    private boolean mIsUpSetting, mIsDownSetting;
+    private int mIsVibration, mUpCandle, mDownCandle;
     private final static ArrayList<Integer> mCandleList = new ArrayList<>();
 
     static {
@@ -64,10 +67,14 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
     }
 
     public static SettingFragment newInstance(
+            int vibrationSettingEnabled,
             boolean isUpSettingEnabled, int upCandle, float pricePer, float pricePerPre, float tradePer, float tradePerPre,
             boolean isDownSettingEnabled, int downCandle, float downPricePer, float downPricePerPre, float downTradePer, float downTradePerPre) {
         SettingFragment fragment = new SettingFragment();
         Bundle args = new Bundle();
+
+        args.putInt(ARG_VIBRATION, vibrationSettingEnabled);
+
         args.putBoolean(ARG_UP_SETTING, isUpSettingEnabled);
         args.putInt(ARG_UP_CANDLE, upCandle);
         args.putFloat(ARG_PRICE_PER, pricePer);
@@ -90,6 +97,8 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
+            mIsVibration = getArguments().getInt(ARG_VIBRATION);
+
             mIsUpSetting = getArguments().getBoolean(ARG_UP_SETTING);
             mUpCandle = getArguments().getInt(ARG_UP_CANDLE);
             mPricePer = getArguments().getFloat(ARG_PRICE_PER);
@@ -398,19 +407,19 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
         });
 
         final ViewGroup vibrationLayout = v.findViewById(R.id.vibrate_setting);
-        disableEnableControls(vibrationLayout, mIsVibration);
+        disableEnableControls(vibrationLayout, mIsVibration != Const.VIBRATION_DISABLED);
 
         Switch vibrateSetting = v.findViewById(R.id.vibrate_setting_switch);
         vibrateSetting.setEnabled(true);
-        vibrateSetting.setChecked(mIsVibration);
+        vibrateSetting.setChecked(mIsVibration != Const.VIBRATION_DISABLED);
         vibrateSetting.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                mIsVibration = isChecked;
+                mIsVibration = isChecked ? 0 : Const.VIBRATION_DISABLED;
                 disableEnableControls(vibrationLayout, isChecked);
                 buttonView.setEnabled(true);
 
-                mListener.onVibrationSelected(0);
+                mListener.onVibrationSelected(mIsVibration);
             }
         });
 

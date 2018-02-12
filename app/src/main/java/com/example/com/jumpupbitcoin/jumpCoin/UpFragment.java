@@ -1,8 +1,8 @@
 package com.example.com.jumpupbitcoin.jumpCoin;
 
+import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,14 +10,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.TextView;
 
-import com.example.com.jumpupbitcoin.Client;
+import com.example.com.jumpupbitcoin.Const;
 import com.example.com.jumpupbitcoin.R;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class UpFragment extends Fragment {
@@ -26,21 +26,19 @@ public class UpFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    private OnFragmentInteractionListener mListener;
-
     myAdapter Adapter;
     myAdapter2 Adapter2;
 
     ListView listview;
     ListView listview2;
+
     private ArrayList<String> mAlarmReg;
     private ArrayList<String> mLogList;
-
-    private HashMap<Integer, String> map = new HashMap<>();
 
     public UpFragment() {
         // Required empty public constructor
     }
+
     public static UpFragment newInstance(ArrayList<String> alarmReg, ArrayList<String> logList) {
         UpFragment fragment = new UpFragment();
         Bundle args = new Bundle();
@@ -57,7 +55,47 @@ public class UpFragment extends Fragment {
             mAlarmReg = getArguments().getStringArrayList(ARG_PARAM1);
             mLogList = getArguments().getStringArrayList(ARG_PARAM2);
         }
-        addMap();
+    }
+
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        Log.w(this.getClass().getSimpleName(), "onCreateView()");
+        Adapter = new UpFragment.myAdapter();
+        Adapter2 = new UpFragment.myAdapter2(getContext());
+        View v = inflater.inflate(R.layout.fragment_up, container, false);
+        listview = (ListView) v.findViewById(R.id.uplist);
+        listview.setAdapter(Adapter);
+
+        listview2 = (ListView) v.findViewById(R.id.logList);
+        listview2.setAdapter(Adapter2);
+
+        Button btn_log_del = (Button) v.findViewById(R.id.btn_log_delete);
+        btn_log_del.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mLogList.clear();
+            }
+        });
+
+        return v;
+    }
+
+    public void refresh(ArrayList<String> alarmReg, ArrayList<String> logList) {
+        //mAlarmReg.addAll(alarmReg);
+        //mLogList.addAll(logList);
+
+        mAlarmReg = alarmReg;
+        mLogList = logList;
+
+        Adapter.notifyDataSetChanged();
+        Adapter2.notifyDataSetChanged();
+    }
+
+    public List<String> getAlarmReg() {
+        return mAlarmReg;
     }
 
     class myAdapter extends BaseAdapter {
@@ -77,11 +115,15 @@ public class UpFragment extends Fragment {
         }
 
         @Override
-        public View getView(int i, View convertView, ViewGroup parent) {
+        public View getView(int position, View convertView, ViewGroup parent) {
             UpListView view = new UpListView(getContext());
-            if (!mAlarmReg.get(i).isEmpty()) {
-                String[] coin_arr = mAlarmReg.get(i).split("_");
-                view.setName(map.get(Integer.parseInt(coin_arr[0])));
+            if (mAlarmReg.size() <= position) {
+                return view;
+            }
+
+            if (!mAlarmReg.get(position).isEmpty()) {
+                String[] coin_arr = mAlarmReg.get(position).split("_");
+                view.setName(Const.sCoinNames.get(Integer.parseInt(coin_arr[0])));
                 view.setPrice(Integer.parseInt(coin_arr[2]));
                 view.setPer(coin_arr[1]);
                 view.setImage(Integer.parseInt(coin_arr[0]));
@@ -91,6 +133,14 @@ public class UpFragment extends Fragment {
     }
 
     class myAdapter2 extends BaseAdapter {
+        private LayoutInflater mInflater;
+
+        private ViewHolder viewHolder;
+
+        myAdapter2(Context context) {
+            mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        }
+
         @Override
         public int getCount() {
             return mLogList.size();
@@ -106,132 +156,61 @@ public class UpFragment extends Fragment {
             return i;
         }
 
+        @SuppressLint("DefaultLocale")
         @Override
-        public View getView(int i, View convertView, ViewGroup parent) {
-            LogUpView view = new LogUpView(getContext());
-            int a = mLogList.size();
-            if (!mLogList.get(i).isEmpty()) {
-                a = --a - i;
-                String[] coin_arr = mLogList.get(a).split("_");
-                view.setName(map.get(Integer.parseInt(coin_arr[0])));
-                view.setPrice(Integer.valueOf(coin_arr[2]));
-                view.setPer(coin_arr[1]);
-                view.setDate(coin_arr[3]);
-                view.setImage(Integer.parseInt(coin_arr[0]));
+        public View getView(int position, View convertView, ViewGroup parent) {
+            if (convertView == null) {
+                convertView = mInflater.inflate(R.layout.log_up_coin, parent, false);
+
+                viewHolder = new ViewHolder();
+                viewHolder.name_Text = (TextView) convertView.findViewById(R.id.name_coin_txt2);
+                viewHolder.price_Text = (TextView) convertView.findViewById(R.id.price_coin_txt2);
+                viewHolder.up_per_Text = (TextView) convertView.findViewById(R.id.up_per_txt2);
+                viewHolder.date_Text = (TextView) convertView.findViewById(R.id.date_coin_txt);
+                viewHolder.image_coin = (ImageView) convertView.findViewById(R.id.image_coin1);
+
+                convertView.setTag(viewHolder);
+            } else {
+                viewHolder = (ViewHolder) convertView.getTag();
             }
-            return view;
-        }
-    }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        Log.w(this.getClass().getSimpleName(), "onCreateView()");
-        Adapter = new UpFragment.myAdapter();
-        Adapter2 = new UpFragment.myAdapter2();
-        View v = inflater.inflate(R.layout.fragment_up, container, false);
-        listview = (ListView) v.findViewById(R.id.uplist);
-        listview.setAdapter(Adapter);
-
-        listview2 = (ListView) v.findViewById(R.id.logList);
-        listview2.setAdapter(Adapter2);
-
-        Button btn_log_del = (Button) v.findViewById(R.id.btn_log_delete);
-        btn_log_del.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mLogList.clear();
+            if (mLogList.size() <= position || mLogList.get(position).isEmpty()) {
+                Log.i("UpFragment", "getView error");
+                return convertView;
             }
-        });
 
-        return v;
-    }
+            if (!mLogList.get(position).isEmpty()) {
+                int sizeOfLogList = mLogList.size();
+                sizeOfLogList = --sizeOfLogList - position;
+                String[] coin_arr = mLogList.get(sizeOfLogList).split("_");
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+                final int posOfView = Integer.parseInt(coin_arr[0]);
+                viewHolder.name_Text.setText(Const.sCoinNames.get(posOfView));
+
+                int price;
+                try {
+                    price = Integer.valueOf(coin_arr[2]);
+                } catch (NumberFormatException e) {
+                    price = 0;
+                    e.printStackTrace();
+                }
+                viewHolder.price_Text.setText(String.format("%,d원", price));
+                viewHolder.up_per_Text.setText(coin_arr[1] + "%");
+
+                final String data = coin_arr[3];
+                viewHolder.date_Text.setText(data);
+                viewHolder.image_coin.setImageResource(Const.sCoinImages[posOfView]);
+            }
+
+            return convertView;
         }
-    }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            //Toast.makeText(context, "Up Fragment Attached", Toast.LENGTH_SHORT).show();
+        private class ViewHolder {
+            TextView name_Text;
+            TextView price_Text;
+            TextView up_per_Text;
+            TextView date_Text;
+            ImageView image_coin;
         }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
-
-    public void refresh(ArrayList<String> alarmReg, ArrayList<String> logList) {
-        //mAlarmReg.addAll(alarmReg);
-        //mLogList.addAll(logList);
-
-        mAlarmReg=alarmReg;
-        mLogList=logList;
-
-        Adapter.notifyDataSetChanged();
-        Adapter2.notifyDataSetChanged();
-    }
-
-    private void addMap() {
-        map.put(0, "비트코인");
-        map.put(1, "에이다");
-        map.put(2, "리플");
-        map.put(3, "스테이터스네트워크토큰");
-        map.put(4, "퀀텀");
-        map.put(5, "이더리움");
-        map.put(6, "머큐리");
-        map.put(7, "네오");
-        map.put(8, "스팀달러");
-        map.put(9, "스팀");
-        map.put(10, "스텔라루멘");
-        map.put(11, "아인스타이늄");
-        map.put(12, "비트코인 골드");
-        map.put(13, "아더");
-        map.put(14, "뉴이코미무브먼트");
-        map.put(15, "블록틱스");
-        map.put(16, "파워렛저");
-        map.put(17, "비트코인캐시");
-        map.put(18, "코모도");
-        map.put(19, "스트라티스");
-        map.put(20, "이더리움클래식");
-        map.put(21, "오미세고");
-        map.put(22, "그리스톨코인");
-        map.put(23, "스토리지");
-        map.put(24, "어거");
-        map.put(25, "웨이브");
-        map.put(26, "아크");
-        map.put(27, "모네로");
-        map.put(28, "라이트코인");
-        map.put(29, "리스크");
-        map.put(30, "버트코인");
-        map.put(31, "피벡스");
-        map.put(32, "메탈");
-        map.put(33, "대쉬");
-        map.put(34, "지캐시");
     }
 }

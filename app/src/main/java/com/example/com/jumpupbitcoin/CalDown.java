@@ -166,8 +166,8 @@ public class CalDown {
     private void duple_check_method(int i, List<String> ary_down_per, String[] temp_now_price) {
         if (!duple_check_map.containsKey(i)) {
             //long[] pattern = {100, 300, 100, 500, 100, 500};
-            long[] pattern = {100, 300};
-            MainActivity.mVibrator.vibrate(pattern, -1);
+//            long[] pattern = {100, 300};
+//            MainActivity.mVibrator.vibrate(pattern, -1);
             mDownData.alarm_reg.add(i + "_" + ary_down_per.get(i) + "_" + temp_now_price[i]);
             duple_check_map.put(i, mSettingData.mDownCandle);   // 분봉으로 값 넣기
         } else {

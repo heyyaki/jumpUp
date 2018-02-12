@@ -380,7 +380,7 @@ public class Client extends AsyncTask<Void, Void, Void> {
     private void duple_check_method(int i, List<String> ary_up_per, String[] temp_now_price) {
         if (!duple_check_map.containsKey(i)) {
             long[] pattern = {100, 300, 100, 500, 100, 500};
-            MainActivity.mVibrator.vibrate(pattern, -1);
+//            MainActivity.mVibrator.vibrate(pattern, -1);
             alarm_reg.add(i + "-" + ary_up_per.get(i) + "-" + temp_now_price[i]);
             duple_check_map.put(i, bunbong);   // 분봉으로 값 넣기
         } else {

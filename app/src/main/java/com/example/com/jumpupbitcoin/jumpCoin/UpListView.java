@@ -6,6 +6,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.com.jumpupbitcoin.Const;
 import com.example.com.jumpupbitcoin.R;
 
 /**
@@ -18,7 +19,6 @@ public class UpListView extends LinearLayout {
     TextView price_Text;
     TextView up_per_Text;
     ImageView image_coin;
-    Integer[] images;
 
     public UpListView(Context context) {
         super(context);
@@ -28,10 +28,6 @@ public class UpListView extends LinearLayout {
         price_Text = (TextView) findViewById(R.id.price_coin_txt);
         up_per_Text = (TextView) findViewById(R.id.up_per_txt);
         image_coin = (ImageView) findViewById(R.id.image_coin1);
-        images = new Integer[]{R.drawable.btc, R.drawable.ada, R.drawable.xrp, R.drawable.snt, R.drawable.qtum, R.drawable.eth, R.drawable.mer, R.drawable.neo, R.drawable.sbd, R.drawable.steem,
-                R.drawable.xlm, R.drawable.emc, R.drawable.btg, R.drawable.ardr, R.drawable.xem, R.drawable.tix, R.drawable.powr, R.drawable.bcc, R.drawable.kmd, R.drawable.strat,
-                R.drawable.etc, R.drawable.omg, R.drawable.grs, R.drawable.storj, R.drawable.rep, R.drawable.waves, R.drawable.ark, R.drawable.xmr, R.drawable.ltc, R.drawable.lsk,
-                R.drawable.vtc, R.drawable.pivx, R.drawable.mtl, R.drawable.dash, R.drawable.zec};
     }
 
     private void inflation_init(Context context) {
@@ -52,7 +48,7 @@ public class UpListView extends LinearLayout {
     }
 
     public void setImage(int num) {
-        image_coin.setImageResource(images[num]);
+        image_coin.setImageResource(Const.sCoinImages[num]);
     }
 
 }

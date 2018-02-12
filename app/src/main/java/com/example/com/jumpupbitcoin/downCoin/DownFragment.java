@@ -16,6 +16,7 @@ import com.example.com.jumpupbitcoin.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class DownFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
@@ -38,6 +39,7 @@ public class DownFragment extends Fragment {
     public DownFragment() {
         // Required empty public constructor
     }
+
     public static DownFragment newInstance(ArrayList<String> alarmReg, ArrayList<String> logList) {
         DownFragment fragment = new DownFragment();
         Bundle args = new Bundle();
@@ -57,6 +59,10 @@ public class DownFragment extends Fragment {
         addMap();
     }
 
+    public List<String> getAlarmReg() {
+        return mAlarmReg;
+    }
+
     class myAdapter extends BaseAdapter {
         @Override
         public int getCount() {
@@ -74,10 +80,14 @@ public class DownFragment extends Fragment {
         }
 
         @Override
-        public View getView(int i, View convertView, ViewGroup parent) {
+        public View getView(int position, View convertView, ViewGroup parent) {
             DownListView view = new DownListView(getContext());
-            if (!mAlarmReg.get(i).isEmpty()) {
-                String[] coin_arr = mAlarmReg.get(i).split("_");
+            if (mAlarmReg.size() <= position) {
+                return view;
+            }
+
+            if (!mAlarmReg.get(position).isEmpty()) {
+                String[] coin_arr = mAlarmReg.get(position).split("_");
                 view.setName(map.get(Integer.parseInt(coin_arr[0])));
                 view.setPrice(Integer.parseInt(coin_arr[2]));
                 view.setPer(coin_arr[1]);
@@ -187,8 +197,8 @@ public class DownFragment extends Fragment {
         //mAlarmReg.addAll(alarmReg);
         //mLogList.addAll(logList);
 
-        mAlarmReg=alarmReg;
-        mLogList=logList;
+        mAlarmReg = alarmReg;
+        mLogList = logList;
 
         Adapter.notifyDataSetChanged();
         Adapter2.notifyDataSetChanged();

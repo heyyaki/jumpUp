@@ -15,10 +15,10 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.com.jumpupbitcoin.Const;
 import com.example.com.jumpupbitcoin.R;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class HomeFragment extends Fragment {
@@ -26,7 +26,6 @@ public class HomeFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    private HashMap<Integer, String> map = new HashMap<>();
 
     private myAdapter mAdapter;
     private View mListViewLayout, mNoItemLayout;
@@ -53,8 +52,6 @@ public class HomeFragment extends Fragment {
             mPriceList = getArguments().getStringArrayList(ARG_PARAM1);
             mPerList = getArguments().getStringArrayList(ARG_PARAM2);
         }
-
-        addMap();
     }
 
     @Override
@@ -156,7 +153,7 @@ public class HomeFragment extends Fragment {
                 return convertView;
             }
 
-            viewHolder.name_Text.setText(map.get(position));
+            viewHolder.name_Text.setText(Const.sCoinNames.get(position));
 
             int price;
             try {
@@ -172,10 +169,13 @@ public class HomeFragment extends Fragment {
             if (Float.parseFloat(per) < 0) {
                 viewHolder.price_Text.setTextColor(getContext().getColor(R.color.blue));
                 viewHolder.per_Text.setTextColor(getContext().getColor(R.color.blue));
+            } else {
+                viewHolder.price_Text.setTextColor(getContext().getColor(R.color.red));
+                viewHolder.per_Text.setTextColor(getContext().getColor(R.color.red));
             }
             viewHolder.per_Text.setText(per + "%");
 
-            viewHolder.image_coin.setImageResource(mImages[position]);
+            viewHolder.image_coin.setImageResource(Const.sCoinImages[position]);
             return convertView;
         }
 
@@ -208,48 +208,5 @@ public class HomeFragment extends Fragment {
         mPriceList = (ArrayList<String>) priceList;
 
         mAdapter.notifyDataSetChanged();
-    }
-
-    private Integer[] mImages = new Integer[]{R.drawable.btc, R.drawable.ada, R.drawable.xrp, R.drawable.snt, R.drawable.qtum, R.drawable.eth, R.drawable.mer, R.drawable.neo, R.drawable.sbd, R.drawable.steem,
-            R.drawable.xlm, R.drawable.emc, R.drawable.btg, R.drawable.ardr, R.drawable.xem, R.drawable.tix, R.drawable.powr, R.drawable.bcc, R.drawable.kmd, R.drawable.strat,
-            R.drawable.etc, R.drawable.omg, R.drawable.grs, R.drawable.storj, R.drawable.rep, R.drawable.waves, R.drawable.ark, R.drawable.xmr, R.drawable.ltc, R.drawable.lsk,
-            R.drawable.vtc, R.drawable.pivx, R.drawable.mtl, R.drawable.dash, R.drawable.zec};
-
-    private void addMap() {
-        map.put(0, "비트코인");
-        map.put(1, "에이다");
-        map.put(2, "리플");
-        map.put(3, "스테이터스네트워크토큰");
-        map.put(4, "퀀텀");
-        map.put(5, "이더리움");
-        map.put(6, "머큐리");
-        map.put(7, "네오");
-        map.put(8, "스팀달러");
-        map.put(9, "스팀");
-        map.put(10, "스텔라루멘");
-        map.put(11, "아인스타이늄");
-        map.put(12, "비트코인 골드");
-        map.put(13, "아더");
-        map.put(14, "뉴이코미무브먼트");
-        map.put(15, "블록틱스");
-        map.put(16, "파워렛저");
-        map.put(17, "비트코인캐시");
-        map.put(18, "코모도");
-        map.put(19, "스트라티스");
-        map.put(20, "이더리움클래식");
-        map.put(21, "오미세고");
-        map.put(22, "그리스톨코인");
-        map.put(23, "스토리지");
-        map.put(24, "어거");
-        map.put(25, "웨이브");
-        map.put(26, "아크");
-        map.put(27, "모네로");
-        map.put(28, "라이트코인");
-        map.put(29, "리스크");
-        map.put(30, "버트코인");
-        map.put(31, "피벡스");
-        map.put(32, "메탈");
-        map.put(33, "대쉬");
-        map.put(34, "지캐시");
     }
 }

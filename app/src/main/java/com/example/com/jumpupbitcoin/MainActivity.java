@@ -31,6 +31,7 @@ import com.google.android.gms.ads.InterstitialAd;
 import org.jsoup.nodes.Document;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -44,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
 
     private long pressedTime;
     public static int frag_num = 0;
-    public static Vibrator mVibrator;
+    public Vibrator mVibrator;
 
     private BackService mService;
     private boolean mIsBound = false;
@@ -148,6 +149,8 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
     }
 
     private void initSettingData() {
+        mSettingData.mVibration = SharedPreferencesManager.getVibration(getApplicationContext());
+
         mSettingData.mIsUpSettingEnabled = SharedPreferencesManager.getUpSettingEnabled(getApplicationContext());
         mSettingData.mUpCandle = SharedPreferencesManager.getUpCandle(getApplicationContext());
         mSettingData.price_per = SharedPreferencesManager.getPricePer(getApplicationContext());
@@ -248,6 +251,13 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
                     mCalJump.setOnChangedDataLister(new CalJump.onChangeData() {
                         @Override
                         public void onDataChanged(List<String> alarmReg, List<String> logList) {
+                            Log.d("MainActivity", "onDataChanged(jump), size of alarmReg : " + alarmReg.size() + ", size of logList : " + upFragment.getAlarmReg().size()+ ", vib : " + mSettingData.mVibration);
+
+                            if (mSettingData.mVibration != Const.VIBRATION_DISABLED && !equalLists(alarmReg, upFragment.getAlarmReg())) {
+                                Log.d("MainActivity", "onDataChanged(jump), vibrate!!!");
+                                mVibrator.vibrate(Const.vibPattern, -1);
+                            }
+
                             if (!upFragment.isDetached()) {
                                 upFragment.refresh((ArrayList<String>) alarmReg, (ArrayList<String>) logList);
                             }
@@ -264,6 +274,13 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
                     mCalDown.setOnChangedDataLister(new CalDown.onChangeData() {
                         @Override
                         public void onDataChanged(List<String> alarmReg, List<String> logList) {
+                            Log.d("MainActivity", "onDataChanged(down), size of alarmReg : " + alarmReg.size() + ", size of logList : " + downFragment.getAlarmReg().size() + ", vib : " + mSettingData.mVibration);
+
+                            if (mSettingData.mVibration != Const.VIBRATION_DISABLED && !equalLists(alarmReg, downFragment.getAlarmReg())) {
+                                Log.d("MainActivity", "onDataChanged(down), vibrate!!!");
+                                mVibrator.vibrate(Const.vibPattern, -1);
+                            }
+
                             if (!downFragment.isDetached()) {
                                 downFragment.refresh((ArrayList<String>) alarmReg, (ArrayList<String>) logList);
                             }
@@ -280,6 +297,7 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
 
                 case R.id.navigation_notifications:
                     setTitle("설정");
+                    final int vibrationSettingEnabled = mSettingData.mVibration;
                     final boolean isUpSettingEnabled = mSettingData.mIsUpSettingEnabled;
                     final int upCandle = mSettingData.mUpCandle;
                     final float pricePer = mSettingData.price_per;
@@ -295,6 +313,7 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
                     final float downTradePerPre = mSettingData.down_trade_per_pre;
 
                     SettingFragment settingFragment = SettingFragment.newInstance(
+                            vibrationSettingEnabled,
                             isUpSettingEnabled, upCandle, pricePer, pricePerPre, tradePer, tradePerPre,
                             isDownSettingEnabled, downCandle, downPricePer, downPricePerPre, downTradePer, downTradePerPre);
                     fragmentManager.beginTransaction().replace(R.id.content, settingFragment, settingFragment.getTag()).commitAllowingStateLoss();
@@ -304,6 +323,17 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
             return false;
         }
     };
+
+    private boolean equalLists(List<String> a, List<String> b) {
+        if (a == null && b == null) return true;
+        if ((a == null && b != null) || (a != null && b == null) || (a.size() != b.size())) {
+            return false;
+        }
+
+        Collections.sort(a);
+        Collections.sort(b);
+        return a.equals(b);
+    }
 
     protected void onDestroy() {
         super.onDestroy();
