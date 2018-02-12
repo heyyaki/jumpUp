@@ -1,4 +1,4 @@
-package com.example.com.jumpupbitcoin.downCoin;
+package ga.zua.coin.jumpupbitcoin.jumpCoin;
 
 import android.annotation.SuppressLint;
 import android.app.Fragment;
@@ -14,31 +14,31 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.com.jumpupbitcoin.Const;
-import com.example.com.jumpupbitcoin.R;
+import ga.zua.coin.jumpupbitcoin.Const;
+import ga.zua.coin.jumpupbitcoin.R;
+
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class DownFragment extends Fragment {
-
+public class UpFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
-    private DownFragmentListener mListener;
 
     AlarmRegAdapter mAlarmRegAdapter;
     LogAdapter mLogAdapter;
 
     ListView mAlarmRegListView, mLogListView;
+    private UpFragmentListener mListener;
+
     private ArrayList<String> mAlarmReg, mLogList;
 
-    public DownFragment() {
+    public UpFragment() {
         // Required empty public constructor
     }
 
-    public static DownFragment newInstance(ArrayList<String> alarmReg, ArrayList<String> logList) {
-        DownFragment fragment = new DownFragment();
+    public static UpFragment newInstance(ArrayList<String> alarmReg, ArrayList<String> logList) {
+        UpFragment fragment = new UpFragment();
         Bundle args = new Bundle();
         args.putStringArrayList(ARG_PARAM1, alarmReg);
         args.putStringArrayList(ARG_PARAM2, logList);
@@ -55,6 +55,7 @@ public class DownFragment extends Fragment {
         }
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -62,22 +63,23 @@ public class DownFragment extends Fragment {
         Log.w(this.getClass().getSimpleName(), "onCreateView()");
         mAlarmRegAdapter = new AlarmRegAdapter(getContext());
         mLogAdapter = new LogAdapter(getContext());
-        View v = inflater.inflate(R.layout.fragment_down, container, false);
-        mAlarmRegListView = (ListView) v.findViewById(R.id.downlist);
+        View v = inflater.inflate(R.layout.fragment_up, container, false);
+        mAlarmRegListView = (ListView) v.findViewById(R.id.uplist);
         mAlarmRegListView.setAdapter(mAlarmRegAdapter);
 
-        mLogListView = (ListView) v.findViewById(R.id.logDownList);
+        mLogListView = (ListView) v.findViewById(R.id.logList);
         mLogListView.setAdapter(mLogAdapter);
 
         setListViewHeight(v);
 
-        Button btn_log_del = (Button) v.findViewById(R.id.btn_log_down_delete);
+        Button btn_log_del = (Button) v.findViewById(R.id.btn_log_delete);
         btn_log_del.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mListener != null) {
-                    mListener.onClearDownLogData();
+                    mListener.onClearUpLogData();
                 }
+
                 mLogList.clear();
                 mLogAdapter.notifyDataSetChanged();
             }
@@ -87,7 +89,7 @@ public class DownFragment extends Fragment {
     }
 
     private void setListViewHeight(View root) {
-        View view = root.findViewById(R.id.fragment_down_layout);
+        View view = root.findViewById(R.id.fragment_up_layout);
         view.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
 
         final int height = view.getMeasuredHeight() - getResources().getDimensionPixelSize(R.dimen.setting_item_margin) * 3;
@@ -100,11 +102,14 @@ public class DownFragment extends Fragment {
         mLogListView.requestLayout();
     }
 
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof DownFragmentListener) {
-            mListener = (DownFragmentListener) context;
+        if (context instanceof UpFragmentListener) {
+            mListener = (UpFragmentListener) context;
+        } else {
+            //Toast.makeText(context, "Up Fragment Attached", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -114,8 +119,9 @@ public class DownFragment extends Fragment {
         mListener = null;
     }
 
-    public interface DownFragmentListener {
-        void onClearDownLogData();
+    public interface UpFragmentListener {
+
+        void onClearUpLogData();
     }
 
     public void refresh(List<String> alarmReg, List<String> logList) {
@@ -126,9 +132,7 @@ public class DownFragment extends Fragment {
         mLogAdapter.notifyDataSetChanged();
     }
 
-
     class AlarmRegAdapter extends BaseAdapter {
-
         private final LayoutInflater mInflater;
 
         private ViewHolder viewHolder;
@@ -155,13 +159,13 @@ public class DownFragment extends Fragment {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             if (convertView == null) {
-                convertView = mInflater.inflate(R.layout.down_per, parent, false);
+                convertView = mInflater.inflate(R.layout.up_per, parent, false);
 
                 viewHolder = new ViewHolder();
-                viewHolder.name_Text = (TextView) convertView.findViewById(R.id.name_coin_down_txt);
-                viewHolder.price_Text = (TextView) convertView.findViewById(R.id.price_coin_down_txt);
-                viewHolder.down_per_Text = (TextView) convertView.findViewById(R.id.down_per_txt);
-                viewHolder.image_coin = (ImageView) convertView.findViewById(R.id.image_coin_down);
+                viewHolder.name_Text = (TextView) convertView.findViewById(R.id.name_coin_txt);
+                viewHolder.price_Text = (TextView) convertView.findViewById(R.id.price_coin_txt);
+                viewHolder.down_per_Text = (TextView) convertView.findViewById(R.id.up_per_txt);
+                viewHolder.image_coin = (ImageView) convertView.findViewById(R.id.image_coin1);
 
                 convertView.setTag(viewHolder);
             } else {
@@ -176,8 +180,8 @@ public class DownFragment extends Fragment {
                 String[] coin_arr = mAlarmReg.get(position).split("_");
                 viewHolder.name_Text.setText(Const.sCoinNames.get(Integer.parseInt(coin_arr[0])));
                 viewHolder.price_Text.setText(String.format("%,d원", Integer.parseInt(coin_arr[2]), 3));
-                viewHolder.price_Text.setTextColor(getContext().getColor(R.color.blue));
-                viewHolder.down_per_Text.setTextColor(getContext().getColor(R.color.blue));
+                viewHolder.price_Text.setTextColor(getContext().getColor(R.color.red));
+                viewHolder.down_per_Text.setTextColor(getContext().getColor(R.color.red));
                 viewHolder.down_per_Text.setText(coin_arr[1] + "%");
                 viewHolder.image_coin.setImageResource(Const.sCoinImages[Integer.parseInt(coin_arr[0])]);
             }
@@ -221,14 +225,14 @@ public class DownFragment extends Fragment {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             if (convertView == null) {
-                convertView = mInflater.inflate(R.layout.log_down_coin, parent, false);
+                convertView = mInflater.inflate(R.layout.log_up_coin, parent, false);
 
                 viewHolder = new ViewHolder();
-                viewHolder.name_Text = (TextView) convertView.findViewById(R.id.name_coin_down_txt2);
-                viewHolder.price_Text = (TextView) convertView.findViewById(R.id.price_coin_down_txt2);
-                viewHolder.up_per_Text = (TextView) convertView.findViewById(R.id.up_per_down_txt2);
-                viewHolder.date_Text = (TextView) convertView.findViewById(R.id.date_coin_down_txt2);
-                viewHolder.image_coin = (ImageView) convertView.findViewById(R.id.image_coin_down2);
+                viewHolder.name_Text = (TextView) convertView.findViewById(R.id.name_coin_txt2);
+                viewHolder.price_Text = (TextView) convertView.findViewById(R.id.price_coin_txt2);
+                viewHolder.up_per_Text = (TextView) convertView.findViewById(R.id.up_per_txt2);
+                viewHolder.date_Text = (TextView) convertView.findViewById(R.id.date_coin_txt);
+                viewHolder.image_coin = (ImageView) convertView.findViewById(R.id.image_coin1);
 
                 convertView.setTag(viewHolder);
             } else {
@@ -236,7 +240,7 @@ public class DownFragment extends Fragment {
             }
 
             if (mLogList.size() <= position || mLogList.get(position).isEmpty()) {
-                Log.i("DownFragment", "getView error");
+                Log.i("UpFragment", "getView error");
                 return convertView;
             }
 

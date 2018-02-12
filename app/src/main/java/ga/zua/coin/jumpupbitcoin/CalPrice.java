@@ -1,6 +1,6 @@
-package com.example.com.jumpupbitcoin;
+package ga.zua.coin.jumpupbitcoin;
 
-import com.example.com.jumpupbitcoin.priceInfo.PriceData;
+import ga.zua.coin.jumpupbitcoin.priceInfo.PriceData;
 
 import java.text.DecimalFormat;
 import java.util.List;

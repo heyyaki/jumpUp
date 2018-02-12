@@ -1,6 +1,5 @@
-package com.example.com.jumpupbitcoin;
+package ga.zua.coin.jumpupbitcoin;
 
-import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 

@@ -1,4 +1,4 @@
-package com.example.com.jumpupbitcoin.priceInfo;
+package ga.zua.coin.jumpupbitcoin.priceInfo;
 
 import java.util.ArrayList;
 import java.util.List;

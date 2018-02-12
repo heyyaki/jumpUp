@@ -1,12 +1,14 @@
-package com.example.com.jumpupbitcoin;
+package ga.zua.coin.jumpupbitcoin;
 
 import java.util.HashMap;
+import ga.zua.coin.jumpupbitcoin.R;
+
 
 public class Const {
 
     public static final int VIBRATION_DISABLED = -1;
 
-    public static long[] vibPattern = {100, 300};
+    public static long[] vibPattern = {100, 300, 100, 500};
 
     public static Integer[] sCoinImages = new Integer[]{R.drawable.btc, R.drawable.ada, R.drawable.xrp, R.drawable.snt, R.drawable.qtum, R.drawable.eth, R.drawable.mer, R.drawable.neo, R.drawable.sbd, R.drawable.steem,
             R.drawable.xlm, R.drawable.emc, R.drawable.btg, R.drawable.ardr, R.drawable.xem, R.drawable.tix, R.drawable.powr, R.drawable.bcc, R.drawable.kmd, R.drawable.strat,

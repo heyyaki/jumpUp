@@ -1,4 +1,4 @@
-package com.example.com.jumpupbitcoin.coinSchedule;
+package ga.zua.coin.jumpupbitcoin.coinSchedule;
 
 import android.app.Fragment;
 import android.content.Context;
@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.example.com.jumpupbitcoin.R;
+import ga.zua.coin.jumpupbitcoin.R;
 
 
 /**

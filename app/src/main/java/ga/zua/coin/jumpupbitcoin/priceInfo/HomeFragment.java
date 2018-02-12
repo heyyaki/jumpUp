@@ -1,4 +1,4 @@
-package com.example.com.jumpupbitcoin.priceInfo;
+package ga.zua.coin.jumpupbitcoin.priceInfo;
 
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
@@ -15,9 +15,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.com.jumpupbitcoin.Const;
-import com.example.com.jumpupbitcoin.R;
-
+import ga.zua.coin.jumpupbitcoin.Const;
+import ga.zua.coin.jumpupbitcoin.R;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -1,12 +1,12 @@
-package com.example.com.jumpupbitcoin;
+package ga.zua.coin.jumpupbitcoin;
 
-import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -20,12 +20,17 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.example.com.jumpupbitcoin.coinSchedule.CoinSchedule;
-import com.example.com.jumpupbitcoin.downCoin.DownFragment;
-import com.example.com.jumpupbitcoin.jumpCoin.UpFragment;
-import com.example.com.jumpupbitcoin.priceInfo.HomeFragment;
-import com.example.com.jumpupbitcoin.setting.SettingData;
-import com.example.com.jumpupbitcoin.setting.SettingFragment;
+import ga.zua.coin.jumpupbitcoin.coinSchedule.CoinSchedule;
+import ga.zua.coin.jumpupbitcoin.downCoin.DownFragment;
+import ga.zua.coin.jumpupbitcoin.jumpCoin.UpFragment;
+import ga.zua.coin.jumpupbitcoin.priceInfo.HomeFragment;
+import ga.zua.coin.jumpupbitcoin.setting.SettingData;
+import ga.zua.coin.jumpupbitcoin.setting.SettingFragment;
+
+import com.fsn.cauly.CaulyAdInfo;
+import com.fsn.cauly.CaulyAdInfoBuilder;
+import com.fsn.cauly.CaulyCloseAd;
+import com.fsn.cauly.CaulyCloseAdListener;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
@@ -37,7 +42,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class MainActivity extends AppCompatActivity implements SettingFragment.OnSettingFragment, DownFragment.DownFragmentListener, UpFragment.UpFragmentListener {
+public class MainActivity extends AppCompatActivity implements SettingFragment.OnSettingFragment, DownFragment.DownFragmentListener, UpFragment.UpFragmentListener, CaulyCloseAdListener {
     private String TAG = "MainActivity";
 
     private SettingData mSettingData = new SettingData();
@@ -54,6 +59,9 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
 
     private BackService mService;
     private boolean mIsBound = false;
+
+    private static final String APP_CODE = "hY6BdBKU"; // 광고 요청을 코드
+    CaulyCloseAd mCloseAd ;
 
     private ServiceConnection mConnection = new ServiceConnection() {
         @Override
@@ -215,6 +223,15 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
 
         MobileAds.initialize(this, "ca-app-pub-9946826173060023~4419923481");
         getAD();
+
+        //CloseAd 초기화
+        CaulyAdInfo closeAdInfo = new CaulyAdInfoBuilder(APP_CODE).build();
+        mCloseAd = new CaulyCloseAd();
+        mCloseAd.setButtonText("취소", "종료");
+        mCloseAd.setDescriptionText("종료하시겠습니까?");
+        mCloseAd.setAdInfo(closeAdInfo);
+        mCloseAd.setCloseAdListener(this); // CaulyCloseAdListener 등록
+
     }
 
 
@@ -255,20 +272,29 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
     @Override
     public void onBackPressed() {
         if (pressedTime == 0) {
-            Toast.makeText(MainActivity.this, " 한 번 더 누르면 종료됩니다.", Toast.LENGTH_LONG).show();
+            //Toast.makeText(MainActivity.this, " 한 번 더 누르면 종료됩니다.", Toast.LENGTH_LONG).show();
             pressedTime = System.currentTimeMillis();
-        } else {
-            int seconds = (int) (System.currentTimeMillis() - pressedTime);
-
-            if (seconds > 2000) {
-                Toast.makeText(MainActivity.this, " 한 번 더 누르면 종료됩니다.", Toast.LENGTH_LONG).show();
-                pressedTime = 0;
-            } else {
-                super.onBackPressed();
-                stopService();
-                finish(); // app 종료 시키기
+            if (mCloseAd.isModuleLoaded())
+            {
+                mCloseAd.show(this);
+            }
+            else
+            {
+                showDefaultClosePopup();
             }
         }
+//        else {
+//            int seconds = (int) (System.currentTimeMillis() - pressedTime);
+//
+//            if (seconds > 2000) {
+//                Toast.makeText(MainActivity.this, " 한 번 더 누르면 종료됩니다.", Toast.LENGTH_LONG).show();
+//                pressedTime = 0;
+//            } else {
+//                super.onBackPressed();
+//                stopService();
+//                finish(); // app 종료 시키기
+//            }
+//        }
     }
 
     private void getAD() {
@@ -432,4 +458,58 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
         mCalDown.clearLogData();
     }
 
+
+    // Cauly 종료 광고
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mCloseAd != null)
+            mCloseAd.resume(this);
+    }
+
+    private void showDefaultClosePopup()
+    {
+        new AlertDialog.Builder(this).setTitle("").setMessage("종료 하시겠습니까?")
+                .setPositiveButton("예", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                })
+                .setNegativeButton("아니요",null)
+                .show();
+    }
+
+    @Override
+    public void onReceiveCloseAd(CaulyCloseAd caulyCloseAd, boolean b) {
+
+    }
+
+    @Override
+    public void onShowedCloseAd(CaulyCloseAd caulyCloseAd, boolean b) {
+
+    }
+
+    @Override
+    public void onFailedToReceiveCloseAd(CaulyCloseAd caulyCloseAd, int i, String s) {
+
+    }
+
+    @Override
+    public void onLeftClicked(CaulyCloseAd caulyCloseAd) {
+
+    }
+
+    @Override
+    public void onRightClicked(CaulyCloseAd caulyCloseAd) {
+        moveTaskToBack(true);
+        stopService();
+        finish(); // app 종료 시키기
+    }
+
+    @Override
+    public void onLeaveCloseAd(CaulyCloseAd caulyCloseAd) {
+
+    }
 }

@@ -3,7 +3,7 @@
     android:id="@+id/fragment_up_layout"
     style="@style/basic_background"
     android:orientation="vertical"
-    tools:context="com.example.com.jumpupbitcoin.jumpCoin.UpFragment">
+    tools:context="com.example.com.jumpupbitcoin.ga.example.com.jumpupbitcoin.jumpCoin.UpFragment">
 
     <LinearLayout
         style="@style/setting_item_backgroud"

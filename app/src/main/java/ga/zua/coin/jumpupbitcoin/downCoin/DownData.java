@@ -1,4 +1,4 @@
-package com.example.com.jumpupbitcoin.downCoin;
+package ga.zua.coin.jumpupbitcoin.downCoin;
 
 import java.util.ArrayList;
 import java.util.HashMap;

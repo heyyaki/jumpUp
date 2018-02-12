@@ -1,9 +1,9 @@
-package com.example.com.jumpupbitcoin;
+package ga.zua.coin.jumpupbitcoin;
 
 import android.util.Log;
 
-import com.example.com.jumpupbitcoin.jumpCoin.JumpData;
-import com.example.com.jumpupbitcoin.setting.SettingData;
+import ga.zua.coin.jumpupbitcoin.jumpCoin.JumpData;
+import ga.zua.coin.jumpupbitcoin.setting.SettingData;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;

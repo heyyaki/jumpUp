@@ -1,4 +1,4 @@
-package com.example.com.jumpupbitcoin;
+package ga.zua.coin.jumpupbitcoin;
 
 import android.app.Activity;
 import android.content.Intent;

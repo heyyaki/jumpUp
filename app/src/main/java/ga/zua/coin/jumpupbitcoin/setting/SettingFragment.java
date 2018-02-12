@@ -1,4 +1,4 @@
-package com.example.com.jumpupbitcoin.setting;
+package ga.zua.coin.jumpupbitcoin.setting;
 
 import android.app.Fragment;
 import android.content.Context;
@@ -17,8 +17,9 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Switch;
 
-import com.example.com.jumpupbitcoin.Const;
-import com.example.com.jumpupbitcoin.R;
+import ga.zua.coin.jumpupbitcoin.Const;
+import ga.zua.coin.jumpupbitcoin.R;
+
 
 import java.util.ArrayList;
 

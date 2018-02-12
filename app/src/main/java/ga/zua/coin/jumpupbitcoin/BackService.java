@@ -1,4 +1,4 @@
-package com.example.com.jumpupbitcoin;
+package ga.zua.coin.jumpupbitcoin;
 
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -10,6 +10,8 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import java.util.ArrayList;
+import ga.zua.coin.jumpupbitcoin.R;
+
 import java.util.HashMap;
 import java.util.List;
 

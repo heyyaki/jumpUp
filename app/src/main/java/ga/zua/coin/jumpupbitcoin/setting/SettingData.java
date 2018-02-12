@@ -1,4 +1,4 @@
-package com.example.com.jumpupbitcoin.setting;
+package ga.zua.coin.jumpupbitcoin.setting;
 
 public class SettingData {
 
