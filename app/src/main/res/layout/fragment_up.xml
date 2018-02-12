@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0.4"
+        android:minHeight="300dp"
         android:orientation="vertical">
 
         <TextView
@@ -21,8 +22,7 @@
         <ListView
             android:id="@+id/uplist"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="300dp" />
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
     <LinearLayout
@@ -30,6 +30,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0.6"
+        android:minHeight="300dp"
         android:orientation="vertical">
 
         <RelativeLayout
@@ -57,7 +58,6 @@
         <ListView
             android:id="@+id/logList"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="300dp" />
+            android:layout_height="wrap_content" />
     </LinearLayout>
 </LinearLayout>

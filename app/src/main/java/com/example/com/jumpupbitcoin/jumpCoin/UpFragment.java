@@ -3,11 +3,14 @@ package com.example.com.jumpupbitcoin.jumpCoin;
 import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.content.Context;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -72,6 +75,8 @@ public class UpFragment extends Fragment {
         listview2 = (ListView) v.findViewById(R.id.logList);
         listview2.setAdapter(Adapter2);
 
+//        setListViewHeight();
+
         Button btn_log_del = (Button) v.findViewById(R.id.btn_log_delete);
         btn_log_del.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,6 +87,24 @@ public class UpFragment extends Fragment {
 
         return v;
     }
+//
+//    private void setListViewHeight() {
+//        WindowManager windowManager = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
+//        Display display = windowManager.getDefaultDisplay();
+//        Point size = new Point();
+//        display.getSize(size);
+//        final int height = size.y;
+//
+//        ViewGroup.LayoutParams params = listview.getLayoutParams();
+//        params.height = height / 2;
+//        listview.setLayoutParams(params);
+//        listview.requestLayout();
+//
+//        params = listview2.getLayoutParams();
+//        params.height = height / 2;
+//        listview2.setLayoutParams(params);
+//        listview2.requestLayout();
+//    }
 
     public void refresh(ArrayList<String> alarmReg, ArrayList<String> logList) {
         //mAlarmReg.addAll(alarmReg);
