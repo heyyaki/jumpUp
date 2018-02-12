@@ -1,7 +1,6 @@
 package com.example.com.jumpupbitcoin;
 
-import android.animation.ArgbEvaluator;
-import android.animation.ValueAnimator;
+import android.app.FragmentManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -17,7 +16,6 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.com.jumpupbitcoin.coinSchedule.CoinSchedule;
@@ -206,7 +204,7 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            android.app.FragmentManager manager = getFragmentManager();
+            final FragmentManager fragmentManager = getFragmentManager();
 
             switch (item.getItemId()) {
                 case R.id.navigation_home:
@@ -216,30 +214,27 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
                     final ArrayList<String> perList = (ArrayList<String>) mCalPrice.getPer();
 
                     final HomeFragment homeFragment = HomeFragment.newInstance(priceList, perList);
-                    manager.beginTransaction().replace(R.id.content, homeFragment, homeFragment.getTag()).commitAllowingStateLoss();
+                    fragmentManager.beginTransaction().replace(R.id.content, homeFragment, homeFragment.getTag()).commitAllowingStateLoss();
                     frag_num = 1;
-                    initSettingData();
-
                     mCalPrice.setOnChangedDataLister(new CalPrice.onChangeData() {
                         @Override
-                        public void onDataChanged(List<String> priceList, List<String> perList) {
-                            if (homeFragment.isVisible()) {
-                                final TextView test_clock = (TextView) findViewById(R.id.textClock);
-                                int colorFrom = getResources().getColor(R.color.weakblack);
-                                int colorTo = getResources().getColor(R.color.black);
-                                final ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
-                                colorAnimation.setDuration(1000); //You can manage the time of the blink with this parameter
-                                colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                                    @Override
-                                    public void onAnimationUpdate(ValueAnimator animator) {
-                                        test_clock.setBackgroundColor((int) animator.getAnimatedValue());
-                                    }
-                                });
-
-//                                colorAnimation.start();
-
-//                                homeFragment.refresh((ArrayList<String>) priceList, (ArrayList<String>) perList);
+                        public void onDataChanged(final List<String> priceList, final List<String> perList) {
+                            if (!homeFragment.isVisible()) {
+                                return;
                             }
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    homeFragment.blinkAnimateTextClock();
+
+                                    if (priceList.size() == 0 || perList.size() == 0 || priceList.size() != perList.size()) {
+                                        homeFragment.showNoItemView();
+                                    } else {
+                                        homeFragment.refreshListView(priceList, perList);
+                                    }
+                                }
+                            });
                         }
                     });
                     return true;
@@ -247,7 +242,7 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
                 case R.id.navigation_dashboard:
                     setTitle("급등 코인");
                     final UpFragment upFragment = UpFragment.newInstance(((ArrayList<String>) mCalJump.getAlarmReg()), (ArrayList<String>) mCalJump.getLogList());
-                    manager.beginTransaction().replace(R.id.content, upFragment, upFragment.getTag()).commitAllowingStateLoss();
+                    fragmentManager.beginTransaction().replace(R.id.content, upFragment, upFragment.getTag()).commitAllowingStateLoss();
                     frag_num = 2;
 
                     mCalJump.setOnChangedDataLister(new CalJump.onChangeData() {
@@ -263,7 +258,7 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
                 case R.id.navigation_dashboard_down:
                     setTitle("급락 코인");
                     final DownFragment downFragment = DownFragment.newInstance(((ArrayList<String>) mCalDown.getAlarmReg()), (ArrayList<String>) mCalDown.getLogList());
-                    manager.beginTransaction().replace(R.id.content, downFragment, downFragment.getTag()).commitAllowingStateLoss();
+                    fragmentManager.beginTransaction().replace(R.id.content, downFragment, downFragment.getTag()).commitAllowingStateLoss();
                     frag_num = 3;
 
                     mCalDown.setOnChangedDataLister(new CalDown.onChangeData() {
@@ -279,7 +274,7 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
                 case R.id.navigation_schedule:
                     setTitle("코인 일정");
                     CoinSchedule coin_shcedule_fragment = new CoinSchedule();
-                    manager.beginTransaction().replace(R.id.content, coin_shcedule_fragment, coin_shcedule_fragment.getTag()).commitAllowingStateLoss();
+                    fragmentManager.beginTransaction().replace(R.id.content, coin_shcedule_fragment, coin_shcedule_fragment.getTag()).commitAllowingStateLoss();
                     frag_num = 4;
                     return true;
 
@@ -302,7 +297,7 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
                     SettingFragment settingFragment = SettingFragment.newInstance(
                             isUpSettingEnabled, upCandle, pricePer, pricePerPre, tradePer, tradePerPre,
                             isDownSettingEnabled, downCandle, downPricePer, downPricePerPre, downTradePer, downTradePerPre);
-                    manager.beginTransaction().replace(R.id.content, settingFragment, settingFragment.getTag()).commitAllowingStateLoss();
+                    fragmentManager.beginTransaction().replace(R.id.content, settingFragment, settingFragment.getTag()).commitAllowingStateLoss();
                     frag_num = 5;
                     return true;
             }

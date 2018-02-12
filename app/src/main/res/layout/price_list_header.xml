@@ -6,34 +6,22 @@
 
     <TextView
         android:id="@+id/name_coin_txt"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_marginStart="16dp"
-        android:layout_toEndOf="@+id/image_coin1"
-        android:gravity="center_vertical|start"
-        android:text="코인 이름"
-        android:textColor="@color/textColor"
-        android:textSize="16dp" />
+        style="@style/home_list_header_text"
+        android:layout_marginStart="26dp"
+        android:text="코인 이름" />
 
     <TextView
         android:id="@+id/price_coin_txt"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        style="@style/home_list_header_text"
+        android:layout_marginEnd="16dp"
         android:layout_toStartOf="@+id/start_per_txt"
-        android:gravity="center_vertical|end"
-        android:text="현재가"
-        android:textColor="@color/textColor"
-        android:textSize="16dp" />
+        android:text="현재가" />
 
     <TextView
         android:id="@+id/start_per_txt"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        style="@style/home_list_header_text"
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="8dp"
-        android:gravity="center_vertical|end"
-        android:text="전일대비"
-        android:textColor="@color/textColor"
-        android:textSize="16dp" />
+        android:text="전일대비" />
 </RelativeLayout>

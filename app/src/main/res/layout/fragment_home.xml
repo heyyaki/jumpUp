@@ -5,6 +5,7 @@
     tools:context="com.example.com.jumpupbitcoin.priceInfo.HomeFragment">
 
     <LinearLayout
+        android:id="@+id/homefragment_listview_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -23,6 +24,20 @@
             android:id="@+id/price_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/homefragment_no_item_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <TextView
+            style="@style/title_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="아이템을 불러오는 중입니다.." />
     </LinearLayout>
 
 </FrameLayout>
