@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -456,9 +455,6 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
                 mListener.onDownSettingEnabled(isChecked);
             }
         });
-
-
-        Log.d("MY_LOG", "mIsDownSetting : " + mIsDownSetting + ", mIsUpSetting : " + mIsUpSetting);
         return v;
     }
 
@@ -538,41 +534,31 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         final String text = parent.getItemAtPosition(position).toString();
         final int spinnerId = parent.getId();
-        Log.d("MY_LOG", "onItemSelected : " + text);
 
         switch (spinnerId) {
             case R.id.up_pre_price_spinner:
                 mEditTxt.setText(text);
-                Log.d("MY_LOG", "text : " + text);
-//                mListener.onUpPrePriceEditted(value);
                 break;
             case R.id.up_pre_pre_price_spinner:
                 mEditTxt2.setText(text);
-//                mListener.onUpPrePrePriceEditted(value);
                 break;
             case R.id.up_pre_trade:
                 mEditTxt3.setText(text);
-//                mListener.onUpPreTradeEditted(value);
                 break;
             case R.id.up_pre_pre_trade:
                 mEditTxt4.setText(text);
-//                mListener.onUpPrePreTradeEditted(value);
                 break;
             case R.id.down_pre_price_spinner:
                 mEditTxt11.setText(text);
-//                mListener.onDownPrePriceEditted(value);
                 break;
             case R.id.down_pre_pre_price_spinner:
                 mEditTxt12.setText(text);
-//                mListener.onDownPrePrePriceEditted(value);
                 break;
             case R.id.down_pre_trade:
                 mEditTxt13.setText(text);
-//                mListener.onDownPreTradeEditted(value);
                 break;
             case R.id.down_pre_pre_trade:
                 mEditTxt14.setText(text);
-//                mListener.onDownPrePreTradeEditted(value);
                 break;
             default:
                 return;

@@ -3,14 +3,18 @@ package com.example.com.jumpupbitcoin.jumpCoin;
 import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.content.Context;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -21,19 +25,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UpFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    myAdapter Adapter;
-    myAdapter2 Adapter2;
+    AlarmRegAdapter mAlarmRegAdapter;
+    LogAdapter mLogAdapter;
 
-    ListView listview, listview2;
+    ListView mAlarmRegListView, mLogListView;
     private UpFragmentListener mListener;
 
-    private ArrayList<String> mAlarmReg;
-    private ArrayList<String> mLogList;
+    private ArrayList<String> mAlarmReg, mLogList;
 
     public UpFragment() {
         // Required empty public constructor
@@ -63,16 +64,16 @@ public class UpFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         Log.w(this.getClass().getSimpleName(), "onCreateView()");
-        Adapter = new UpFragment.myAdapter();
-        Adapter2 = new UpFragment.myAdapter2(getContext());
+        mAlarmRegAdapter = new AlarmRegAdapter(getContext());
+        mLogAdapter = new LogAdapter(getContext());
         View v = inflater.inflate(R.layout.fragment_up, container, false);
-        listview = (ListView) v.findViewById(R.id.uplist);
-        listview.setAdapter(Adapter);
+        mAlarmRegListView = (ListView) v.findViewById(R.id.uplist);
+        mAlarmRegListView.setAdapter(mAlarmRegAdapter);
 
-        listview2 = (ListView) v.findViewById(R.id.logList);
-        listview2.setAdapter(Adapter2);
+        mLogListView = (ListView) v.findViewById(R.id.logList);
+        mLogListView.setAdapter(mLogAdapter);
 
-//        setListViewHeight();
+        setListViewHeight(v);
 
         Button btn_log_del = (Button) v.findViewById(R.id.btn_log_delete);
         btn_log_del.setOnClickListener(new View.OnClickListener() {
@@ -83,11 +84,25 @@ public class UpFragment extends Fragment {
                 }
 
                 mLogList.clear();
-                Adapter2.notifyDataSetChanged();
+                mLogAdapter.notifyDataSetChanged();
             }
         });
 
         return v;
+    }
+
+    private void setListViewHeight(View root) {
+        View view = root.findViewById(R.id.fragment_up_layout);
+        view.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+
+        final int height = view.getMeasuredHeight() - getResources().getDimensionPixelSize(R.dimen.setting_item_margin) * 3;
+        Log.d("MY_LOG", "height : " + height);
+
+        mAlarmRegListView.getLayoutParams().height = height;
+        mAlarmRegListView.requestLayout();
+
+        mLogListView.getLayoutParams().height = height;
+        mLogListView.requestLayout();
     }
 
 
@@ -113,21 +128,22 @@ public class UpFragment extends Fragment {
     }
 
     public void refresh(List<String> alarmReg, List<String> logList) {
-        //mAlarmReg.addAll(alarmReg);
-        //mLogList.addAll(logList);
-
         mAlarmReg = (ArrayList<String>) alarmReg;
         mLogList = (ArrayList<String>) logList;
 
-        Adapter.notifyDataSetChanged();
-        Adapter2.notifyDataSetChanged();
+        mAlarmRegAdapter.notifyDataSetChanged();
+        mLogAdapter.notifyDataSetChanged();
     }
 
-    public List<String> getAlarmReg() {
-        return mAlarmReg;
-    }
+    class AlarmRegAdapter extends BaseAdapter {
+        private final LayoutInflater mInflater;
 
-    class myAdapter extends BaseAdapter {
+        private ViewHolder viewHolder;
+
+        AlarmRegAdapter(Context context) {
+            mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        }
+
         @Override
         public int getCount() {
             return mAlarmReg.size();
@@ -145,28 +161,51 @@ public class UpFragment extends Fragment {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            UpListView view = new UpListView(getContext());
+            if (convertView == null) {
+                convertView = mInflater.inflate(R.layout.up_per, parent, false);
+
+                viewHolder = new ViewHolder();
+                viewHolder.name_Text = (TextView) convertView.findViewById(R.id.name_coin_txt);
+                viewHolder.price_Text = (TextView) convertView.findViewById(R.id.price_coin_txt);
+                viewHolder.down_per_Text = (TextView) convertView.findViewById(R.id.up_per_txt);
+                viewHolder.image_coin = (ImageView) convertView.findViewById(R.id.image_coin1);
+
+                convertView.setTag(viewHolder);
+            } else {
+                viewHolder = (ViewHolder) convertView.getTag();
+            }
+
             if (mAlarmReg.size() <= position) {
-                return view;
+                return convertView;
             }
 
             if (!mAlarmReg.get(position).isEmpty()) {
                 String[] coin_arr = mAlarmReg.get(position).split("_");
-                view.setName(Const.sCoinNames.get(Integer.parseInt(coin_arr[0])));
-                view.setPrice(Integer.parseInt(coin_arr[2]));
-                view.setPer(coin_arr[1]);
-                view.setImage(Integer.parseInt(coin_arr[0]));
+                viewHolder.name_Text.setText(Const.sCoinNames.get(Integer.parseInt(coin_arr[0])));
+                viewHolder.price_Text.setText(String.format("%,d원", Integer.parseInt(coin_arr[2]), 3));
+                viewHolder.price_Text.setTextColor(getContext().getColor(R.color.red));
+                viewHolder.down_per_Text.setTextColor(getContext().getColor(R.color.red));
+                viewHolder.down_per_Text.setText(coin_arr[1] + "%");
+                viewHolder.image_coin.setImageResource(Const.sCoinImages[Integer.parseInt(coin_arr[0])]);
             }
-            return view;
+
+            return convertView;
+        }
+
+        private class ViewHolder {
+            TextView name_Text;
+            TextView price_Text;
+            TextView down_per_Text;
+            ImageView image_coin;
         }
     }
 
-    class myAdapter2 extends BaseAdapter {
+    class LogAdapter extends BaseAdapter {
         private LayoutInflater mInflater;
 
         private ViewHolder viewHolder;
 
-        myAdapter2(Context context) {
+        LogAdapter(Context context) {
             mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
 

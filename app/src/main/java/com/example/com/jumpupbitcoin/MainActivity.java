@@ -378,7 +378,6 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
 
     @Override
     public void onDownSettingEnabled(boolean isEnabled) {
-        Log.d("MY_LOG", "onDownSettingEnabled : " + isEnabled);
         SharedPreferencesManager.setDownSettingEnabled(getApplicationContext(), isEnabled);
         mSettingData.mIsDownSettingEnabled = isEnabled;
     }

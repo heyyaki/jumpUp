@@ -1,5 +1,6 @@
 package com.example.com.jumpupbitcoin.downCoin;
 
+import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
@@ -9,31 +10,28 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
+import com.example.com.jumpupbitcoin.Const;
 import com.example.com.jumpupbitcoin.R;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class DownFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
     private DownFragmentListener mListener;
 
-    myAdapter Adapter;
-    myAdapter2 Adapter2;
+    AlarmRegAdapter mAlarmRegAdapter;
+    LogAdapter mLogAdapter;
 
-    ListView listview;
-    ListView listview2;
-    private ArrayList<String> mAlarmReg;
-    private ArrayList<String> mLogList;
-
-    private HashMap<Integer, String> map = new HashMap<>();
+    ListView mAlarmRegListView, mLogListView;
+    private ArrayList<String> mAlarmReg, mLogList;
 
     public DownFragment() {
         // Required empty public constructor
@@ -55,78 +53,6 @@ public class DownFragment extends Fragment {
             mAlarmReg = getArguments().getStringArrayList(ARG_PARAM1);
             mLogList = getArguments().getStringArrayList(ARG_PARAM2);
         }
-        addMap();
-    }
-
-    public List<String> getAlarmReg() {
-        return mAlarmReg;
-    }
-
-    class myAdapter extends BaseAdapter {
-        @Override
-        public int getCount() {
-            return mAlarmReg.size();
-        }
-
-        @Override
-        public Object getItem(int i) {
-            return mAlarmReg.get(i);
-        }
-
-        @Override
-        public long getItemId(int i) {
-            return i;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            DownListView view = new DownListView(getContext());
-            if (mAlarmReg.size() <= position) {
-                return view;
-            }
-
-            if (!mAlarmReg.get(position).isEmpty()) {
-                String[] coin_arr = mAlarmReg.get(position).split("_");
-                view.setName(map.get(Integer.parseInt(coin_arr[0])));
-                view.setPrice(Integer.parseInt(coin_arr[2]));
-                view.setPer(coin_arr[1]);
-                view.setImage(Integer.parseInt(coin_arr[0]));
-            }
-            return view;
-        }
-    }
-
-    class myAdapter2 extends BaseAdapter {
-        @Override
-        public int getCount() {
-            return mLogList.size();
-        }
-
-        @Override
-        public Object getItem(int i) {
-            return mLogList.get(i);
-        }
-
-        @Override
-        public long getItemId(int i) {
-            return i;
-        }
-
-        @Override
-        public View getView(int i, View convertView, ViewGroup parent) {
-            LogDownView view = new LogDownView(getContext());
-            int a = mLogList.size();
-            if (!mLogList.get(i).isEmpty()) {
-                a = --a - i;
-                String[] coin_arr = mLogList.get(a).split("_");
-                view.setName(map.get(Integer.parseInt(coin_arr[0])));
-                view.setPrice(Integer.valueOf(coin_arr[2]));
-                view.setPer(coin_arr[1]);
-                view.setDate(coin_arr[3]);
-                view.setImage(Integer.parseInt(coin_arr[0]));
-            }
-            return view;
-        }
     }
 
     @Override
@@ -134,14 +60,16 @@ public class DownFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         Log.w(this.getClass().getSimpleName(), "onCreateView()");
-        Adapter = new DownFragment.myAdapter();
-        Adapter2 = new DownFragment.myAdapter2();
+        mAlarmRegAdapter = new AlarmRegAdapter(getContext());
+        mLogAdapter = new LogAdapter(getContext());
         View v = inflater.inflate(R.layout.fragment_down, container, false);
-        listview = (ListView) v.findViewById(R.id.downlist);
-        listview.setAdapter(Adapter);
+        mAlarmRegListView = (ListView) v.findViewById(R.id.downlist);
+        mAlarmRegListView.setAdapter(mAlarmRegAdapter);
 
-        listview2 = (ListView) v.findViewById(R.id.logDownList);
-        listview2.setAdapter(Adapter2);
+        mLogListView = (ListView) v.findViewById(R.id.logDownList);
+        mLogListView.setAdapter(mLogAdapter);
+
+        setListViewHeight(v);
 
         Button btn_log_del = (Button) v.findViewById(R.id.btn_log_down_delete);
         btn_log_del.setOnClickListener(new View.OnClickListener() {
@@ -151,11 +79,25 @@ public class DownFragment extends Fragment {
                     mListener.onClearDownLogData();
                 }
                 mLogList.clear();
-                Adapter2.notifyDataSetChanged();
+                mLogAdapter.notifyDataSetChanged();
             }
         });
 
         return v;
+    }
+
+    private void setListViewHeight(View root) {
+        View view = root.findViewById(R.id.fragment_down_layout);
+        view.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+
+        final int height = view.getMeasuredHeight() - getResources().getDimensionPixelSize(R.dimen.setting_item_margin) * 3;
+        Log.d("MY_LOG", "height : " + height);
+
+        mAlarmRegListView.getLayoutParams().height = height;
+        mAlarmRegListView.requestLayout();
+
+        mLogListView.getLayoutParams().height = height;
+        mLogListView.requestLayout();
     }
 
     @Override
@@ -163,8 +105,6 @@ public class DownFragment extends Fragment {
         super.onAttach(context);
         if (context instanceof DownFragmentListener) {
             mListener = (DownFragmentListener) context;
-        } else {
-            //Toast.makeText(context, "Up Fragment Attached", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -182,45 +122,156 @@ public class DownFragment extends Fragment {
         mAlarmReg = (ArrayList<String>) alarmReg;
         mLogList = (ArrayList<String>) logList;
 
-        Adapter.notifyDataSetChanged();
-        Adapter2.notifyDataSetChanged();
+        mAlarmRegAdapter.notifyDataSetChanged();
+        mLogAdapter.notifyDataSetChanged();
     }
 
-    private void addMap() {
-        map.put(0, "비트코인");
-        map.put(1, "에이다");
-        map.put(2, "리플");
-        map.put(3, "스테이터스네트워크토큰");
-        map.put(4, "퀀텀");
-        map.put(5, "이더리움");
-        map.put(6, "머큐리");
-        map.put(7, "네오");
-        map.put(8, "스팀달러");
-        map.put(9, "스팀");
-        map.put(10, "스텔라루멘");
-        map.put(11, "아인스타이늄");
-        map.put(12, "비트코인 골드");
-        map.put(13, "아더");
-        map.put(14, "뉴이코미무브먼트");
-        map.put(15, "블록틱스");
-        map.put(16, "파워렛저");
-        map.put(17, "비트코인캐시");
-        map.put(18, "코모도");
-        map.put(19, "스트라티스");
-        map.put(20, "이더리움클래식");
-        map.put(21, "오미세고");
-        map.put(22, "그리스톨코인");
-        map.put(23, "스토리지");
-        map.put(24, "어거");
-        map.put(25, "웨이브");
-        map.put(26, "아크");
-        map.put(27, "모네로");
-        map.put(28, "라이트코인");
-        map.put(29, "리스크");
-        map.put(30, "버트코인");
-        map.put(31, "피벡스");
-        map.put(32, "메탈");
-        map.put(33, "대쉬");
-        map.put(34, "지캐시");
+
+    class AlarmRegAdapter extends BaseAdapter {
+
+        private final LayoutInflater mInflater;
+
+        private ViewHolder viewHolder;
+
+        AlarmRegAdapter(Context context) {
+            mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        }
+
+        @Override
+        public int getCount() {
+            return mAlarmReg.size();
+        }
+
+        @Override
+        public Object getItem(int i) {
+            return mAlarmReg.get(i);
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return i;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            if (convertView == null) {
+                convertView = mInflater.inflate(R.layout.down_per, parent, false);
+
+                viewHolder = new ViewHolder();
+                viewHolder.name_Text = (TextView) convertView.findViewById(R.id.name_coin_down_txt);
+                viewHolder.price_Text = (TextView) convertView.findViewById(R.id.price_coin_down_txt);
+                viewHolder.down_per_Text = (TextView) convertView.findViewById(R.id.down_per_txt);
+                viewHolder.image_coin = (ImageView) convertView.findViewById(R.id.image_coin_down);
+
+                convertView.setTag(viewHolder);
+            } else {
+                viewHolder = (ViewHolder) convertView.getTag();
+            }
+
+            if (mAlarmReg.size() <= position) {
+                return convertView;
+            }
+
+            if (!mAlarmReg.get(position).isEmpty()) {
+                String[] coin_arr = mAlarmReg.get(position).split("_");
+                viewHolder.name_Text.setText(Const.sCoinNames.get(Integer.parseInt(coin_arr[0])));
+                viewHolder.price_Text.setText(String.format("%,d원", Integer.parseInt(coin_arr[2]), 3));
+                viewHolder.price_Text.setTextColor(getContext().getColor(R.color.blue));
+                viewHolder.down_per_Text.setTextColor(getContext().getColor(R.color.blue));
+                viewHolder.down_per_Text.setText(coin_arr[1] + "%");
+                viewHolder.image_coin.setImageResource(Const.sCoinImages[Integer.parseInt(coin_arr[0])]);
+            }
+
+            return convertView;
+        }
+
+        private class ViewHolder {
+            TextView name_Text;
+            TextView price_Text;
+            TextView down_per_Text;
+            ImageView image_coin;
+        }
+    }
+
+    class LogAdapter extends BaseAdapter {
+        private LayoutInflater mInflater;
+
+        private ViewHolder viewHolder;
+
+        LogAdapter(Context context) {
+            mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        }
+
+        @Override
+        public int getCount() {
+            return mLogList.size();
+        }
+
+        @Override
+        public Object getItem(int i) {
+            return mLogList.get(i);
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return i;
+        }
+
+        @SuppressLint("DefaultLocale")
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            if (convertView == null) {
+                convertView = mInflater.inflate(R.layout.log_down_coin, parent, false);
+
+                viewHolder = new ViewHolder();
+                viewHolder.name_Text = (TextView) convertView.findViewById(R.id.name_coin_down_txt2);
+                viewHolder.price_Text = (TextView) convertView.findViewById(R.id.price_coin_down_txt2);
+                viewHolder.up_per_Text = (TextView) convertView.findViewById(R.id.up_per_down_txt2);
+                viewHolder.date_Text = (TextView) convertView.findViewById(R.id.date_coin_down_txt2);
+                viewHolder.image_coin = (ImageView) convertView.findViewById(R.id.image_coin_down2);
+
+                convertView.setTag(viewHolder);
+            } else {
+                viewHolder = (ViewHolder) convertView.getTag();
+            }
+
+            if (mLogList.size() <= position || mLogList.get(position).isEmpty()) {
+                Log.i("DownFragment", "getView error");
+                return convertView;
+            }
+
+            if (!mLogList.get(position).isEmpty()) {
+                int sizeOfLogList = mLogList.size();
+                sizeOfLogList = --sizeOfLogList - position;
+                String[] coin_arr = mLogList.get(sizeOfLogList).split("_");
+
+                final int posOfView = Integer.parseInt(coin_arr[0]);
+                viewHolder.name_Text.setText(Const.sCoinNames.get(posOfView));
+
+                int price;
+                try {
+                    price = Integer.valueOf(coin_arr[2]);
+                } catch (NumberFormatException e) {
+                    price = 0;
+                    e.printStackTrace();
+                }
+                viewHolder.price_Text.setText(String.format("%,d원", price));
+                viewHolder.up_per_Text.setText(coin_arr[1] + "%");
+
+                final String data = coin_arr[3];
+                viewHolder.date_Text.setText(data);
+                viewHolder.image_coin.setImageResource(Const.sCoinImages[posOfView]);
+            }
+
+            return convertView;
+        }
+
+        private class ViewHolder {
+            TextView name_Text;
+            TextView price_Text;
+            TextView up_per_Text;
+            TextView date_Text;
+            ImageView image_coin;
+        }
     }
 }

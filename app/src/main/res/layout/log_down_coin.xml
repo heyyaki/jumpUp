@@ -27,11 +27,11 @@
         android:id="@+id/price_coin_down_txt2"
         style="@style/list_coin_price"
         android:layout_toStartOf="@+id/up_per_down_txt2"
-        android:textColor="@color/red" />
+        android:textColor="@color/blue" />
 
     <TextView
         android:id="@+id/up_per_down_txt2"
         style="@style/list_coin_per"
         android:layout_alignParentEnd="true"
-        android:textColor="@color/red" />
+        android:textColor="@color/blue" />
 </RelativeLayout>
