@@ -72,9 +72,9 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
                         // 급등계산 모듈
                         Document document = (Document) msg.obj;
 
-                        if (mSettingData.mIsUpSettingEnabled || mSettingData.price_per==-1)
+                        if (mSettingData.mIsUpSettingEnabled && mSettingData.price_per!=-1)
                             mCalJump.upCatch(document);
-                        if (mSettingData.mIsDownSettingEnabled || mSettingData.down_price_per==-1)
+                        if (mSettingData.mIsDownSettingEnabled && mSettingData.down_price_per!=-1)
                             mCalDown.downCatch(document);
                     }
                 }
