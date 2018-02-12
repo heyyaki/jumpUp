@@ -3,7 +3,6 @@ package com.example.com.jumpupbitcoin;
 import android.util.Log;
 
 import com.example.com.jumpupbitcoin.downCoin.DownData;
-import com.example.com.jumpupbitcoin.jumpCoin.JumpData;
 import com.example.com.jumpupbitcoin.setting.SettingData;
 
 import org.jsoup.nodes.Document;
@@ -22,12 +21,14 @@ public class CalDown {
 
     private DownData mDownData = new DownData();
     private SettingData mSettingData = new SettingData();
-    private float tradePer;
-    private float tradePerPre;
     private Map<Integer, Integer> duple_check_map = new HashMap<>();
 
+    public CalDown(SettingData settingData) {
+        mSettingData = settingData;
+    }
+
     public void downCatch(Document doc2) {
-        int switch_minite = mSettingData.bunbong;
+        int switch_minite = mSettingData.mDownCandle;
         int num_get_price = 1;
 
         mDownData.alarm_reg.clear();
@@ -111,44 +112,37 @@ public class CalDown {
                     ary_up_trade_per.set(i, form.format((Float.parseFloat(temp_now_trade[i]) / Float.parseFloat(temp_trade[i])) * 100 - 100));
                     ary_up_trade_per_pre.add(i, form.format((Float.parseFloat(temp_trade[i]) / Float.parseFloat(temp_trade_pre[i])) * 100 - 100));
                 }
-            // price_per = -1일때로 처리하기!
-                if (mSettingData.down_price_per_pre == -1 && mSettingData.down_trade_per == -1 && mSettingData.down_trade_per_pre == -1){
+                // price_per = -1일때로 처리하기!
+                if (mSettingData.down_price_per_pre == -1 && mSettingData.down_trade_per == -1 && mSettingData.down_trade_per_pre == -1) {
                     if (Float.parseFloat(ary_up_per.get(i)) < -mSettingData.down_price_per) {
                         duple_check_method(i, ary_up_per, temp_now_price);
                     }
-                }
-                else if (mSettingData.down_price_per_pre == -1 && mSettingData.down_trade_per == -1 && mSettingData.down_trade_per_pre != -1){
+                } else if (mSettingData.down_price_per_pre == -1 && mSettingData.down_trade_per == -1 && mSettingData.down_trade_per_pre != -1) {
                     if (Float.parseFloat(ary_up_per.get(i)) < -mSettingData.down_price_per && Float.parseFloat(ary_up_trade_per_pre.get(i)) > mSettingData.down_trade_per_pre) {
                         duple_check_method(i, ary_up_per, temp_now_price);
                     }
-                }
-                else if (mSettingData.down_price_per_pre == -1 && mSettingData.down_trade_per != -1 && mSettingData.down_trade_per_pre == -1){
+                } else if (mSettingData.down_price_per_pre == -1 && mSettingData.down_trade_per != -1 && mSettingData.down_trade_per_pre == -1) {
                     if (Float.parseFloat(ary_up_per.get(i)) < -mSettingData.down_price_per && Float.parseFloat(ary_up_trade_per.get(i)) > mSettingData.down_trade_per) {
                         duple_check_method(i, ary_up_per, temp_now_price);
                     }
-                }
-                else if (mSettingData.down_price_per_pre == -1 && mSettingData.down_trade_per != -1 && mSettingData.down_trade_per_pre != -1){
+                } else if (mSettingData.down_price_per_pre == -1 && mSettingData.down_trade_per != -1 && mSettingData.down_trade_per_pre != -1) {
                     if (Float.parseFloat(ary_up_per.get(i)) < -mSettingData.down_price_per && Float.parseFloat(ary_up_trade_per.get(i)) > mSettingData.down_trade_per && Float.parseFloat(ary_up_trade_per_pre.get(i)) > mSettingData.down_trade_per_pre) {
                         duple_check_method(i, ary_up_per, temp_now_price);
                     }
-                }
-                else if (mSettingData.down_price_per_pre != -1 && mSettingData.down_trade_per == -1 && mSettingData.down_trade_per_pre == -1){
+                } else if (mSettingData.down_price_per_pre != -1 && mSettingData.down_trade_per == -1 && mSettingData.down_trade_per_pre == -1) {
                     if (Float.parseFloat(ary_up_per.get(i)) < -mSettingData.down_price_per && Float.parseFloat(ary_up_per_pre.get(i)) < -mSettingData.down_price_per_pre) {
                         duple_check_method(i, ary_up_per, temp_now_price);
                     }
-                }
-                else if (mSettingData.down_price_per_pre != -1 && mSettingData.down_trade_per == -1 && mSettingData.down_trade_per_pre != -1){
+                } else if (mSettingData.down_price_per_pre != -1 && mSettingData.down_trade_per == -1 && mSettingData.down_trade_per_pre != -1) {
                     if (Float.parseFloat(ary_up_per.get(i)) < -mSettingData.down_price_per && Float.parseFloat(ary_up_per_pre.get(i)) < -mSettingData.down_price_per_pre && Float.parseFloat(ary_up_trade_per_pre.get(i)) > mSettingData.down_trade_per_pre) {
                         duple_check_method(i, ary_up_per, temp_now_price);
                     }
-                }
-                else if (mSettingData.down_price_per_pre != -1 && mSettingData.down_trade_per != -1 && mSettingData.down_trade_per_pre == -1){
-                    if (Float.parseFloat(ary_up_per.get(i)) < -mSettingData.down_price_per && Float.parseFloat(ary_up_per_pre.get(i)) < -mSettingData.down_price_per_pre  && Float.parseFloat(ary_up_trade_per.get(i)) > mSettingData.down_trade_per) {
+                } else if (mSettingData.down_price_per_pre != -1 && mSettingData.down_trade_per != -1 && mSettingData.down_trade_per_pre == -1) {
+                    if (Float.parseFloat(ary_up_per.get(i)) < -mSettingData.down_price_per && Float.parseFloat(ary_up_per_pre.get(i)) < -mSettingData.down_price_per_pre && Float.parseFloat(ary_up_trade_per.get(i)) > mSettingData.down_trade_per) {
                         duple_check_method(i, ary_up_per, temp_now_price);
                     }
-                }
-                else if (mSettingData.down_price_per_pre != -1 && mSettingData.down_trade_per != -1 && mSettingData.down_trade_per_pre != -1){
-                    if (Float.parseFloat(ary_up_per.get(i)) < -mSettingData.down_price_per && Float.parseFloat(ary_up_per_pre.get(i)) < -mSettingData.down_price_per_pre  && Float.parseFloat(ary_up_trade_per.get(i)) > mSettingData.down_trade_per && Float.parseFloat(ary_up_trade_per_pre.get(i)) > mSettingData.down_trade_per_pre) {
+                } else if (mSettingData.down_price_per_pre != -1 && mSettingData.down_trade_per != -1 && mSettingData.down_trade_per_pre != -1) {
+                    if (Float.parseFloat(ary_up_per.get(i)) < -mSettingData.down_price_per && Float.parseFloat(ary_up_per_pre.get(i)) < -mSettingData.down_price_per_pre && Float.parseFloat(ary_up_trade_per.get(i)) > mSettingData.down_trade_per && Float.parseFloat(ary_up_trade_per_pre.get(i)) > mSettingData.down_trade_per_pre) {
                         duple_check_method(i, ary_up_per, temp_now_price);
                     }
                 }
@@ -163,8 +157,7 @@ public class CalDown {
             }
 
             mChangeData.onDataChanged(mDownData.alarm_reg, mDownData.log_list);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             Log.d("Exception", String.valueOf(e));
         }
@@ -176,7 +169,7 @@ public class CalDown {
             MainActivity.mVibrator.vibrate(pattern, -1);
             Log.d("Down duple_check_method", String.valueOf(duple_check_map));
             mDownData.alarm_reg.add(i + "_" + ary_down_per.get(i) + "_" + temp_now_price[i]);
-            duple_check_map.put(i, mSettingData.bunbong);   // 분봉으로 값 넣기
+            duple_check_map.put(i, mSettingData.mDownCandle);   // 분봉으로 값 넣기
         } else {
             int a = duple_check_map.get(i);
             duple_check_map.put(i, --a);
@@ -198,24 +191,10 @@ public class CalDown {
         return mDownData.log_list;
     }
 
-    public void setBunBong(int bunBong) { mSettingData.bunbong = bunBong; }
-
-    public void setDownPricePer(float downPricePer) { mSettingData.down_price_per= downPricePer; }
-
-    public void setDownPricePerPer(float downPricePerPer) {
-        mSettingData.down_price_per_pre= downPricePerPer;
-    }
-
-    public void setDownTradePer(float downTradePer) {
-        mSettingData.down_trade_per = downTradePer;
-    }
-
-    public void setDownTradePerPre(float downTradePerPre) {
-        mSettingData.down_trade_per_pre = downTradePerPre;
-    }
 
     private onChangeData mChangeData;
-    public void setOnChangedDataLister(onChangeData changeData){
+
+    public void setOnChangedDataLister(onChangeData changeData) {
         mChangeData = changeData;
     }
 

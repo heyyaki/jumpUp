@@ -8,4 +8,69 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="title_text">
+        <item name="android:textColor">@color/title_selector</item>
+        <item name="android:textSize">18dp</item>
+        <item name="android:gravity">start|center_horizontal</item>
+        <item name="android:padding">8dp</item>
+    </style>
+
+    <style name="sub_title_text">
+        <item name="android:textColor">@color/sub_title_selector</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:gravity">start|center_horizontal</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="description_text">
+        <item name="android:textColor">@color/description_selector</item>
+        <item name="android:textSize">14dp</item>
+        <item name="android:gravity">start|center_horizontal</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_alignParentStart">true</item>
+    </style>
+
+    <style name="setting_edittext">
+        <item name="android:layout_width">80dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:inputType">numberDecimal</item>
+        <item name="android:gravity">end</item>
+    </style>
+
+    <style name="setting_spinner">
+        <item name="android:layout_width">35dp</item>
+        <item name="android:layout_height">35dp</item>
+        <item name="android:layout_alignParentEnd">true</item>
+        <item name="android:background">@drawable/s_way1</item>
+        <item name="android:backgroundTint">@color/spinner_selector</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:paddingStart">30dp</item>
+        <item name="android:paddingEnd">30dp</item>
+        <item name="android:layout_centerInParent">true</item>
+    </style>
+
+    <style name="basic_background">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_marginBottom">56dp</item>
+        <item name="android:background">#DDDDDD</item>
+    </style>
+
+    <style name="setting_item_backgroud">
+        <item name="android:background">#ffffff</item>
+        <item name="android:layout_margin">8dp</item>
+        <item name="android:padding">8dp</item>
+    </style>
+
+    <style name="setting_divider">
+        <item name="android:background">#d3d3d3</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:layout_margin">8dp</item>
+    </style>
 </resources>
+

@@ -10,6 +10,8 @@ import android.os.Message;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.example.com.jumpupbitcoin.setting.SettingData;
+
 import org.jsoup.nodes.Document;
 
 
@@ -17,15 +19,18 @@ public class BackService extends Service {
 
     public static NotificationCompat.Builder builder;
 
+
     @Override
     public IBinder onBind(Intent intent) {
         return null;
     }
+
     @Override
     public void onCreate() {
         super.onCreate();
 
     }
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         builder = new NotificationCompat.Builder(this);
@@ -40,7 +45,7 @@ public class BackService extends Service {
         Notification notification = builder.build();
         startForeground(1, notification);
 
-        Log.d("Back Service","onStartCommand");
+        Log.d("Back Service", "onStartCommand");
 
         mJumpThread = new Thread(new CrawlringJump(mJumpHandler));
         mJumpThread.start();
@@ -54,8 +59,9 @@ public class BackService extends Service {
     private Thread mJumpThread;
     private Thread mPriceThread;
 
-    public static CalJump mCalJump = new CalJump();
-    public static CalDown mCalDown = new CalDown();
+    private static SettingData mSettingData = new SettingData();
+    public static CalJump mCalJump = new CalJump(mSettingData);
+    public static CalDown mCalDown = new CalDown(mSettingData);
     public static CalPrice mCalPrice = new CalPrice();
 
     final private Handler mJumpHandler = new Handler() {
@@ -71,14 +77,13 @@ public class BackService extends Service {
                 Document document = (Document) msg.obj;
 
                 // TODO 분봉 넣어야댐
-                mCalJump.upCatch(document);
-                mCalDown.downCatch(document);
+//                mCalJump.upCatch(document);
+//                mCalDown.downCatch(document);
             }
         }
     };
 
-
-    final private Handler mPriceHandler = new Handler() {
+    final private static Handler mPriceHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -93,30 +98,61 @@ public class BackService extends Service {
         }
     };
 
-//    private void pre_Setting(){
-//        final int bunbong = SharedPreferencesManager.getBunBong(getApplicationContext());
-//        final float pricePer = SharedPreferencesManager.getPricePer(getApplicationContext());
-//        final float pricePerPre = SharedPreferencesManager.getPricePerPre(getApplicationContext());
-//        final float tradePer = SharedPreferencesManager.getTradePer(getApplicationContext());
-//        final float tradePerPre = SharedPreferencesManager.getTradePerPre(getApplicationContext());
-//
-//        final float downPricePer = SharedPreferencesManager.getDownPricePer(getApplicationContext());
-//        final float downPricePerPre = SharedPreferencesManager.getDownPricePerPre(getApplicationContext());
-//        final float downTradePer = SharedPreferencesManager.getDownTradePer(getApplicationContext());
-//        final float downTradePerPre = SharedPreferencesManager.getDownTradePerPre(getApplicationContext());
-//
-//        mCalJump.setBunBong(bunbong);
-//        mCalJump.setPricePer(pricePer);
-//        mCalJump.setPricePerPer(pricePerPre);
-//        mCalJump.setTradePer(tradePer);
-//        mCalJump.setTradePerPre(tradePerPre);
-//
-//        mCalDown.setBunBong(bunbong);
-//        mCalDown.setDownPricePer(downPricePer);
-//        mCalDown.setDownPricePerPer(downPricePerPre);
-//        mCalDown.setDownTradePer(downTradePer);
-//        mCalDown.setDownTradePerPre(downTradePerPre);
-//    }
+    public static SettingData getSettingData() {
+        return mSettingData;
+    }
+
+    public static void setVibration(int vibration) {
+        mSettingData.vibration = vibration;
+    }
+
+    public static void setUpSetting(boolean upSetting) {
+        mSettingData.mUpSettingEnabled = upSetting;
+    }
+
+    public static void setUpCandle(int candle) {
+        mSettingData.mUpCandle = candle;
+    }
+
+    public static void setPricePer(float pricePer) {
+        mSettingData.price_per = pricePer;
+    }
+
+    public static void setPricePerPer(float pricePerPer) {
+        mSettingData.price_per_pre = pricePerPer;
+    }
+
+    public static void setTradePer(float tradePer) {
+        mSettingData.trade_per = tradePer;
+    }
+
+    public static void setTradePerPre(float tradePerPre) {
+        mSettingData.trade_per_pre = tradePerPre;
+    }
+
+    public static void setDownSetting(boolean downSetting) {
+        mSettingData.mDownSettingEnabled = downSetting;
+    }
+
+    public static void setDownCandle(int candle) {
+        mSettingData.mDownCandle = candle;
+    }
+
+    public static void setDownPricePer(float downPricePer) {
+        mSettingData.down_price_per = downPricePer;
+    }
+
+    public static void setDownPricePerPer(float downPricePerPer) {
+        mSettingData.down_price_per_pre = downPricePerPer;
+    }
+
+    public static void setDownTradePer(float downTradePer) {
+        mSettingData.down_trade_per = downTradePer;
+    }
+
+    public static void setDownTradePerPre(float downTradePerPre) {
+        mSettingData.down_trade_per_pre = downTradePerPre;
+    }
 
     @Override
     public void onDestroy() {
@@ -125,6 +161,5 @@ public class BackService extends Service {
         Log.d("Thread Interrup", "Thread EXIT");
         mJumpThread.interrupt();
         mPriceThread.interrupt();
-
     }
 }
