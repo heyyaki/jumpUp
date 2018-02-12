@@ -1,10 +1,12 @@
 package com.example.com.jumpupbitcoin;
 
+import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -216,6 +218,8 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
 //        MobileAds.initialize(this, "ca-app-pub-9946826173060023~4419923481");
 //        getAD();
     }
+
+
 
     public void startService() {
         Intent service = new Intent(this, BackService.class);
@@ -429,4 +433,5 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
     public void onClearDownLogData() {
         mCalDown.clearLogData();
     }
+
 }
