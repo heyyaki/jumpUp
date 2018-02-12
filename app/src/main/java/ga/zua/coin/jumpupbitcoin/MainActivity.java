@@ -271,18 +271,18 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
 
     @Override
     public void onBackPressed() {
-        if (pressedTime == 0) {
-            //Toast.makeText(MainActivity.this, " 한 번 더 누르면 종료됩니다.", Toast.LENGTH_LONG).show();
-            pressedTime = System.currentTimeMillis();
-            if (mCloseAd.isModuleLoaded())
-            {
-                mCloseAd.show(this);
-            }
-            else
-            {
-                showDefaultClosePopup();
-            }
+//        if (pressedTime == 0) {
+        //Toast.makeText(MainActivity.this, " 한 번 더 누르면 종료됩니다.", Toast.LENGTH_LONG).show();
+        pressedTime = System.currentTimeMillis();
+        if (mCloseAd.isModuleLoaded())
+        {
+            mCloseAd.show(this);
         }
+        else
+        {
+            showDefaultClosePopup();
+        }
+//        }
 //        else {
 //            int seconds = (int) (System.currentTimeMillis() - pressedTime);
 //
@@ -474,6 +474,7 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
                 .setPositiveButton("예", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        stopService();
                         finish();
                     }
                 })
