@@ -1,15 +1,9 @@
 package com.example.com.jumpupbitcoin;
 
-import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
-
-import com.example.com.jumpupbitcoin.setting.SettingData;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 import java.io.IOException;
 
@@ -19,27 +13,28 @@ public class CrawlringJump implements Runnable {
     //private final String url_up_coin = "http://122.40.239.103:8080/crawlring/up_coin.html";
     private final int SLEEP_TIME = 30 * 1000;
 
-    private Handler mHandler;
+    private JumpDataReceiver mCallback = null;
 
-    private SettingData mSettingData;
+    public void registerOnReciveJumpData(JumpDataReceiver callback) {
+        mCallback = callback;
+    }
 
-    CrawlringJump(Handler handler, SettingData settingData) {
-        mHandler = handler;
-        mSettingData = settingData;
+    public interface JumpDataReceiver {
+        void onReceiveJumpData(Message msg);
+
+        boolean isUpSettingEnabled();
+
+        boolean isDownSettingEnabled();
     }
 
     @Override
     public void run() {
         try {
             while (true) {
-                if (!mSettingData.mUpSettingEnabled && !mSettingData.mDownSettingEnabled) {
-                }
-                else{
-                    // TODO 데이터 초기화 요청
-                    Log.d("mUpSettingEnabled", String.valueOf(mSettingData.mUpSettingEnabled));
-                    Log.d("mDownSettingEnabled", String.valueOf(mSettingData.mDownSettingEnabled));
-                    Message msg = Message.obtain(mHandler, 0);
-                    mHandler.sendMessage(msg);
+                if (mCallback != null && !mCallback.isDownSettingEnabled() && !mCallback.isUpSettingEnabled()) {
+                    Message msg = Message.obtain();
+                    msg.what = 0;
+                    mCallback.onReceiveJumpData(msg);
 
                     Document doc2 = null;
                     try {
@@ -48,16 +43,15 @@ public class CrawlringJump implements Runnable {
                         e.printStackTrace();
                     }
 
-                    // TODO 급등계산 모듈
-                    Message msg2 = Message.obtain(mHandler, 1, doc2);
+                    Message msg2 = Message.obtain();
+                    msg2.what = 1;
                     msg2.obj = doc2;
+                    mCallback.onReceiveJumpData(msg2);
 
-                    mHandler.sendMessage(msg2);
                     Thread.sleep(SLEEP_TIME);
                 }
             }
-        }
-        catch (InterruptedException e) {
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }

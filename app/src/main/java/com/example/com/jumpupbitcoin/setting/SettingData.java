@@ -3,10 +3,10 @@ package com.example.com.jumpupbitcoin.setting;
 public class SettingData {
 
     // 전체 설정
-    public int vibration;
+    public int mVibration;
 
     // 급등 검색식 설정
-    public boolean mUpSettingEnabled;
+    public boolean mIsUpSettingEnabled;
     public int mUpCandle;
     public float price_per;
     public float price_per_pre;
@@ -14,7 +14,7 @@ public class SettingData {
     public float trade_per_pre;
 
     // 급락 검색식 설정
-    public boolean mDownSettingEnabled;
+    public boolean mIsDownSettingEnabled;
     public int mDownCandle;
     public float down_price_per;
     public float down_price_per_pre;

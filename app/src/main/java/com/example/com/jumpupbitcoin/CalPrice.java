@@ -46,7 +46,6 @@ public class CalPrice {
             }
         }
 
-
         mChangeData.onDataChanged(mPriceData.ary_price, mPriceData.ary_start_per);
     }
 

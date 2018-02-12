@@ -197,7 +197,7 @@ public class CalJump {
     }
 
     public boolean getUpSettingEnabled() {
-        return mSettingData.mUpSettingEnabled;
+        return mSettingData.mIsUpSettingEnabled;
     }
 
 
