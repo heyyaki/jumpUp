@@ -255,7 +255,7 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
 
         mEditTxt4 = (EditText) v.findViewById(R.id.editText4);
         mEditTxt4.setText(mTradePerPre == DISABLED_VALUE ? getResources().getString(R.string.disable) : String.valueOf(mTradePerPre));
-        spinner3.setSelection(mTradePerPre == DISABLED_VALUE ? 0 : 1, false);
+        spinner4.setSelection(mTradePerPre == DISABLED_VALUE ? 0 : 1, false);
 
         mEditTxt4.addTextChangedListener(new TextWatcher() {
             @Override

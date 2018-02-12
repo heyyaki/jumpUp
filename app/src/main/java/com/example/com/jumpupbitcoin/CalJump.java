@@ -67,7 +67,7 @@ public class CalJump {
         }
 
         Log.d("str_Swtich_minite", str_switch_minite);
-        //Log.d("str_switch_trade", str_switch_trade);
+        Log.d("str_switch_trade", str_switch_trade);
         up_per_Calc(str_switch_minite, str_switch_trade);
     }
 
