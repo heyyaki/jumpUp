@@ -1,10 +1,12 @@
 package com.example.com.jumpupbitcoin;
 
+import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -124,6 +126,8 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         navigation.setSelectedItemId(R.id.navigation_home);
 
+        CheckAppFirstExecute();     // APP 최초 실행 체크
+
         initSettingData();
 
         mVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
@@ -216,6 +220,8 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
 //        MobileAds.initialize(this, "ca-app-pub-9946826173060023~4419923481");
 //        getAD();
     }
+
+
 
     public void startService() {
         Intent service = new Intent(this, BackService.class);
@@ -428,5 +434,37 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
     @Override
     public void onClearDownLogData() {
         mCalDown.clearLogData();
+    }
+
+    // 앱 최초 실행 체크
+    public void CheckAppFirstExecute(){
+        SharedPreferences pref = getSharedPreferences("isFirst", Activity.MODE_PRIVATE);
+        boolean first = pref.getBoolean("isFirst", false);
+        if(first==false){
+            Log.d("Is first Time?", "first");
+            SharedPreferences.Editor editor = pref.edit();
+            editor.putBoolean("isFirst",true);
+            editor.commit();
+            firstSettingData();
+        }else {
+            Log.d("Is first Time?", "not first");
+        }
+    }
+    // 앱 최초 실행 후 디폴트 값 설정
+    private void firstSettingData() {
+        onUpSettingEnabled(true);
+        onUpCandleButtonClicked(6);
+        onUpPrePriceEditted(2);
+        onUpPrePrePriceEditted(-1);
+        onUpPreTradeEditted(-1);
+        onUpPrePreTradeEditted(-1);
+
+        onDownSettingEnabled(false);
+        onDownCandleButtonClicked(6);
+        onDownPrePriceEditted(-1);
+        onDownPrePrePriceEditted(-1);
+        onDownPreTradeEditted(-1);
+        onDownPrePreTradeEditted(-1);
+
     }
 }
