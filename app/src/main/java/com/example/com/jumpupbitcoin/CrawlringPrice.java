@@ -29,7 +29,6 @@ public class CrawlringPrice implements Runnable {
     public void run() {
         try {
             while (true) {
-                Log.d("MY_LOG", "CrawlringPrice");
 
                 if (mCallback != null) {
                     Document doc = null;
