@@ -64,7 +64,7 @@ public class SharedPreferencesManager {
     }
 
     public static float getPricePer(Context context) {
-        return getSharedPreferences(context).getFloat(UP_PRICE_PER, 2f);
+        return getSharedPreferences(context).getFloat(UP_PRICE_PER, 1f);
     }
 
     public static void setPricePer(Context context, float pricePer) {
