@@ -165,7 +165,7 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
         // 등락률
         mEditTxt = (EditText) v.findViewById(R.id.editText);
         mEditTxt.setText(mPricePer == DISABLED_VALUE ? getResources().getString(R.string.disable) : String.valueOf(mPricePer));
-        spinner.setSelection(mPricePer == DISABLED_VALUE ? 0 : 1, false);
+        spinner.setSelection(mPricePer == DISABLED_VALUE ? 0 : 5, false);
 
         mEditTxt.addTextChangedListener(new TextWatcher() {
             @Override
@@ -196,7 +196,7 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
 
         mEditTxt2 = (EditText) v.findViewById(R.id.editText2);
         mEditTxt2.setText(mPricePerPre == DISABLED_VALUE ? getResources().getString(R.string.disable) : String.valueOf(mPricePerPre));
-        spinner2.setSelection(mPricePerPre == DISABLED_VALUE ? 0 : 1, false);
+        spinner2.setSelection(mPricePerPre == DISABLED_VALUE ? 0 : 5, false);
 
         mEditTxt2.addTextChangedListener(new TextWatcher() {
             @Override
@@ -226,7 +226,7 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
 
         mEditTxt3 = (EditText) v.findViewById(R.id.editText3);
         mEditTxt3.setText(mTradePer == DISABLED_VALUE ? getResources().getString(R.string.disable) : String.valueOf(mTradePer));
-        spinner3.setSelection(mTradePer == DISABLED_VALUE ? 0 : 1, false);
+        spinner3.setSelection(mTradePer == DISABLED_VALUE ? 0 : 5, false);
 
         mEditTxt3.addTextChangedListener(new TextWatcher() {
             @Override
@@ -256,7 +256,7 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
 
         mEditTxt4 = (EditText) v.findViewById(R.id.editText4);
         mEditTxt4.setText(mTradePerPre == DISABLED_VALUE ? getResources().getString(R.string.disable) : String.valueOf(mTradePerPre));
-        spinner4.setSelection(mTradePerPre == DISABLED_VALUE ? 0 : 1, false);
+        spinner4.setSelection(mTradePerPre == DISABLED_VALUE ? 0 : 5, false);
 
         mEditTxt4.addTextChangedListener(new TextWatcher() {
             @Override
@@ -287,7 +287,7 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
         // 등락률
         mEditTxt11 = (EditText) v.findViewById(R.id.editText11);
         mEditTxt11.setText(mDownPricePer == DISABLED_VALUE ? getResources().getString(R.string.disable) : String.valueOf(mDownPricePer));
-        spinner11.setSelection(mDownPricePer == DISABLED_VALUE ? 0 : 1, false);
+        spinner11.setSelection(mDownPricePer == DISABLED_VALUE ? 0 : 5, false);
 
         mEditTxt11.addTextChangedListener(new TextWatcher() {
             @Override
@@ -317,7 +317,7 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
 
         mEditTxt12 = (EditText) v.findViewById(R.id.editText12);
         mEditTxt12.setText(mDownPricePerPre == DISABLED_VALUE ? getResources().getString(R.string.disable) : String.valueOf(mDownPricePerPre));
-        spinner12.setSelection(mDownPricePerPre == DISABLED_VALUE ? 0 : 1, false);
+        spinner12.setSelection(mDownPricePerPre == DISABLED_VALUE ? 0 : 5, false);
 
         mEditTxt12.addTextChangedListener(new TextWatcher() {
             @Override
@@ -347,7 +347,7 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
 
         mEditTxt13 = (EditText) v.findViewById(R.id.editText13);
         mEditTxt13.setText(mDownTradePer == DISABLED_VALUE ? getResources().getString(R.string.disable) : String.valueOf(mDownTradePer));
-        spinner13.setSelection(mDownTradePer == DISABLED_VALUE ? 0 : 1, false);
+        spinner13.setSelection(mDownTradePer == DISABLED_VALUE ? 0 : 5, false);
 
         mEditTxt13.addTextChangedListener(new TextWatcher() {
             @Override
@@ -377,7 +377,7 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
 
         mEditTxt14 = (EditText) v.findViewById(R.id.editText14);
         mEditTxt14.setText(mDownTradePerPre == DISABLED_VALUE ? getResources().getString(R.string.disable) : String.valueOf(mDownTradePerPre));
-        spinner14.setSelection(mDownTradePerPre == DISABLED_VALUE ? 0 : 1, false);
+        spinner14.setSelection(mDownTradePerPre == DISABLED_VALUE ? 0 : 5, false);
         mEditTxt14.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

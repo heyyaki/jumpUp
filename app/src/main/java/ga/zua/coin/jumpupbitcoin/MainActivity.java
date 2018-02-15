@@ -231,6 +231,7 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
         mCloseAd.setDescriptionText("종료하시겠습니까?");
         mCloseAd.setAdInfo(closeAdInfo);
         mCloseAd.setCloseAdListener(this); // CaulyCloseAdListener 등록
+        mCloseAd.disableBackKey();
 
     }
 
