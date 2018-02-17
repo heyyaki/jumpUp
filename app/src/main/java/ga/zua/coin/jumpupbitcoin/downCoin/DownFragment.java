@@ -3,11 +3,15 @@ package ga.zua.coin.jumpupbitcoin.downCoin;
 import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -81,6 +85,19 @@ public class DownFragment extends Fragment {
                 }
                 mLogList.clear();
                 mLogAdapter.notifyDataSetChanged();
+            }
+        });
+
+        mAlarmRegListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                getPackageList();
+            }
+        });
+        mLogListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                getPackageList();
             }
         });
 
@@ -274,5 +291,32 @@ public class DownFragment extends Fragment {
             TextView date_Text;
             ImageView image_coin;
         }
+    }
+
+    public boolean getPackageList() {
+        boolean isExist = false;
+
+        PackageManager pkgMgr = getActivity().getPackageManager();
+        List<ResolveInfo> mApps;
+        Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
+        mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+        mApps = pkgMgr.queryIntentActivities(mainIntent, 0);
+
+        try {
+            for (int i = 0; i < mApps.size(); i++) {
+                if(mApps.get(i).activityInfo.packageName.startsWith("com.dunamu.exchange")){
+                    isExist = true;
+                    Intent intent = getActivity().getPackageManager().getLaunchIntentForPackage("com.dunamu.exchange");
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    break;
+                }
+            }
+        }
+        catch (Exception e) {
+            isExist = false;
+        }
+
+        return isExist;
     }
 }

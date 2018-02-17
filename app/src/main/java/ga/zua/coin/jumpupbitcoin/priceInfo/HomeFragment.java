@@ -21,7 +21,6 @@ import android.widget.TextView;
 
 import ga.zua.coin.jumpupbitcoin.Const;
 import ga.zua.coin.jumpupbitcoin.R;
-import ga.zua.coin.jumpupbitcoin.setting.Getpakage;
 
 import java.util.ArrayList;
 import java.util.List;
