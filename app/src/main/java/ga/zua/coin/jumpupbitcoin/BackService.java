@@ -97,10 +97,10 @@ public class BackService extends Service {
                     String[] coin_arr = temp.split("_");
                     alarm_coin.add(Const.sCoinNames.get(Integer.parseInt(coin_arr[0])) + "       " + coin_arr[1] + "%");
                 }
-                if (updown) {
+                if(updown){
                     inboxStyle.setBigContentTitle("급등 코인 " + alarmReg.size() + "개");
                     inboxStyle.setSummaryText("검색된 급등 코인이 존재합니다");
-                } else {
+                }else{
                     inboxStyle.setBigContentTitle("급락 코인 " + alarmReg.size() + "개");
                     inboxStyle.setSummaryText("검색된 급락 코인이 존재합니다");
                 }

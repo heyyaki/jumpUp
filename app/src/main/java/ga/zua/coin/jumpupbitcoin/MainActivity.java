@@ -60,6 +60,9 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
     private BackService mService;
     private boolean mIsBound = false;
 
+    public static int mUpMinCandle;
+    public static int mDownMinCandle;
+
     private static final String APP_CODE = "hY6BdBKU"; // 광고 요청을 코드
     CaulyCloseAd mCloseAd ;
 
@@ -67,6 +70,8 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             Log.d(TAG, "onServiceConnected");
+            mUpMinCandle = mSettingData.mUpCandle;
+            mDownMinCandle = mSettingData.mDownCandle;
 
             BackService.aidlServiceBinder binder = (BackService.aidlServiceBinder) service;
             mService = binder.getService();
@@ -80,12 +85,15 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
                     } else if (msg.what == 1) {
                         // 급등계산 모듈
                         Document document = (Document) msg.obj;
-
                         if (mSettingData.mIsUpSettingEnabled && mSettingData.price_per!=-1)
                             mCalJump.upCatch(document);
+
+                    } else if (msg.what == 2) {
+                        Document document = (Document) msg.obj;
                         if (mSettingData.mIsDownSettingEnabled && mSettingData.down_price_per!=-1)
                             mCalDown.downCatch(document);
                     }
+
                 }
 
                 @Override
@@ -385,6 +393,7 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
     public void onUpCandleButtonClicked(int candle) {
         SharedPreferencesManager.setUpCandle(getApplicationContext(), candle);
         mSettingData.mUpCandle = candle;
+        mUpMinCandle=candle;
     }
 
     @Override
@@ -421,6 +430,7 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
     public void onDownCandleButtonClicked(int candle) {
         SharedPreferencesManager.setDownCandle(getApplicationContext(), candle);
         mSettingData.mDownCandle = candle;
+        mDownMinCandle=candle;
     }
 
     @Override

@@ -11,7 +11,7 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 
 public class CrawlringPrice implements Runnable {
-    final String url = "http://13.125.173.93:8080/crawlring/index.html";
+    final String url = "http://jumpupcoin.hopto.org:8080/crawlring/index.html";
     private final int SLEEP_TIME = 5 * 1000;
 
     private PriceDataReceiver mCallback = null;
@@ -46,7 +46,7 @@ public class CrawlringPrice implements Runnable {
                         mCallback.onReceivePriceData(msg);
                     }
 
-                    Elements start_price = doc.select("div.start_price");
+                    Elements start_price = doc.select("div.now_per");
                     for (Element e : start_price) {
                         //Log.d("start_price", e.text());
                         // TODO 현재 퍼센트 분석모듈
