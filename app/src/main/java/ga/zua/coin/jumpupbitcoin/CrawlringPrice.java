@@ -32,28 +32,28 @@ public class CrawlringPrice implements Runnable {
                     Document doc = null;
                     try {
                         doc = Jsoup.connect(url).get();
+
+                        Elements now_doc_price = doc.select("div.now_price");
+                        for (Element e : now_doc_price) {
+                            Log.d("now_price", e.text());
+                            // TODO 현재가격 분석모듈
+                            Message msg = Message.obtain();
+                            msg.what = 0;
+                            msg.obj = e.text();
+                            mCallback.onReceivePriceData(msg);
+                        }
+
+                        Elements start_price = doc.select("div.now_per");
+                        for (Element e : start_price) {
+                            //Log.d("start_price", e.text());
+                            // TODO 현재 퍼센트 분석모듈
+                            Message msg = Message.obtain();
+                            msg.what = 1;
+                            msg.obj = e.text();
+                            mCallback.onReceivePriceData(msg);
+                        }
                     } catch (IOException e) {
                         e.printStackTrace();
-                    }
-
-                    Elements now_doc_price = doc.select("div.now_price");
-                    for (Element e : now_doc_price) {
-                        Log.d("now_price", e.text());
-                        // TODO 현재가격 분석모듈
-                        Message msg = Message.obtain();
-                        msg.what = 0;
-                        msg.obj = e.text();
-                        mCallback.onReceivePriceData(msg);
-                    }
-
-                    Elements start_price = doc.select("div.now_per");
-                    for (Element e : start_price) {
-                        //Log.d("start_price", e.text());
-                        // TODO 현재 퍼센트 분석모듈
-                        Message msg = Message.obtain();
-                        msg.what = 1;
-                        msg.obj = e.text();
-                        mCallback.onReceivePriceData(msg);
                     }
                     Thread.sleep(SLEEP_TIME);
                 }

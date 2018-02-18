@@ -48,26 +48,24 @@ public class CrawlringJump implements Runnable {
                     Document doc2 = null;
                     try {
                         doc2 = Jsoup.connect(url_up_coin).get();
+                        Message msg2 = Message.obtain();
+                        msg2.what = 1;
+                        msg2.obj = doc2;
+                        mCallback.onReceiveJumpData(msg2);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-
-                    Message msg2 = Message.obtain();
-                    msg2.what = 1;
-                    msg2.obj = doc2;
-                    mCallback.onReceiveJumpData(msg2);
 
                     try {
                         doc2 = Jsoup.connect(url_down_coin).get();
-                    } catch (IOException e) {
+                        Message msg3 = Message.obtain();
+                        msg3.what = 2;
+                        msg3.obj = doc2;
+                        mCallback.onReceiveJumpData(msg3);
+                    }
+                    catch (IOException e) {
                         e.printStackTrace();
                     }
-
-                    Message msg3 = Message.obtain();
-                    msg3.what = 2;
-                    msg3.obj = doc2;
-                    mCallback.onReceiveJumpData(msg3);
-
 
                     Thread.sleep(SLEEP_TIME);
                 }
