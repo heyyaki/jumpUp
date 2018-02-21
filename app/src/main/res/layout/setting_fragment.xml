@@ -322,7 +322,7 @@
             <TextView
                 android:id="@+id/textView19"
                 style="@style/sub_title_text"
-                android:text="거래량 등락률" />
+                android:text="거래량 상승률" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -331,7 +331,7 @@
                 <TextView
                     android:id="@+id/textView20"
                     style="@style/description_text"
-                    android:text="1봉전 종가\n대비현재 거래 등락률(%)" />
+                    android:text="1봉전 종가\n대비현재 거래 상승률(%)" />
 
                 <EditText
                     android:id="@+id/editText13"
@@ -351,7 +351,7 @@
                 <TextView
                     android:id="@+id/textView22"
                     style="@style/description_text"
-                    android:text="2봉전 종가대비\n1봉전 거래 등락률(%)" />
+                    android:text="2봉전 종가대비\n1봉전 거래 상승률(%)" />
 
                 <EditText
                     android:id="@+id/editText14"
