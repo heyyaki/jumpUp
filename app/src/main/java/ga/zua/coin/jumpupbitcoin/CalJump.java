@@ -68,12 +68,12 @@ public class CalJump {
         for (Element e : ele_per_pre_trade) {
             coin_per_pre_trade = e.text();
         }
-        up_per_Calc(coin_price, coin_per, coin_per_pre, coin_per_trade, coin_per_pre_trade);
+        up_per_condition(coin_price, coin_per, coin_per_pre, coin_per_trade, coin_per_pre_trade);
+        Log.d("CalJump_string",coin_price);
     }
 
 
-    private void up_per_Calc(String coin_price,String coin_per,String coin_per_pre,String coin_per_trade,String coin_per_pre_trade) {
-
+    private void up_per_condition(String coin_price,String coin_per,String coin_per_pre,String coin_per_trade,String coin_per_pre_trade) {
         String filter_str = "";
         String[] filter_word = {" ", "\\[", "\\]"};
         for (int i = 0; i < filter_word.length; i++) {
@@ -161,9 +161,10 @@ public class CalJump {
         if (duple_check_map.containsKey(i)) {
             int a = duple_check_map.get(i);
             duple_check_map.put(i, --a);
-            if (duple_check_map.get(i) == 1 || duple_check_map.get(i) == 0) {
+            if (duple_check_map.get(i) == 0) {
                 duple_check_map.remove(i);
             }
+
         }
     }
 

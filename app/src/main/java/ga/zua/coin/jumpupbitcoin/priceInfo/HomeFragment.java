@@ -29,22 +29,26 @@ public class HomeFragment extends Fragment {
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_PARAM3 = "param3";
+    private static final String ARG_PARAM4 = "param4";
 
 
     private myAdapter mAdapter;
     private View mListViewLayout, mNoItemLayout;
 
-    private ArrayList<String> mPriceList, mPerList;
+    private ArrayList<String> mPriceList, mPerList, mTradeList, mPremeumList;
 
     public HomeFragment() {
         // Required empty public constructor
     }
 
-    public static HomeFragment newInstance(ArrayList<String> priceList, ArrayList<String> perList) {
+    public static HomeFragment newInstance(ArrayList<String> priceList, ArrayList<String> perList, ArrayList<String> tradeList, ArrayList<String> premeumList) {
         HomeFragment fragment = new HomeFragment();
         Bundle args = new Bundle();
         args.putStringArrayList(ARG_PARAM1, priceList);
         args.putStringArrayList(ARG_PARAM2, perList);
+        args.putStringArrayList(ARG_PARAM3, tradeList);
+        args.putStringArrayList(ARG_PARAM4, premeumList);
         fragment.setArguments(args);
         return fragment;
     }
@@ -55,6 +59,8 @@ public class HomeFragment extends Fragment {
         if (getArguments() != null) {
             mPriceList = getArguments().getStringArrayList(ARG_PARAM1);
             mPerList = getArguments().getStringArrayList(ARG_PARAM2);
+            mTradeList = getArguments().getStringArrayList(ARG_PARAM3);
+            mPremeumList = getArguments().getStringArrayList(ARG_PARAM4);
         }
     }
 
@@ -74,7 +80,7 @@ public class HomeFragment extends Fragment {
         mListViewLayout = v.findViewById(R.id.homefragment_listview_layout);
         mNoItemLayout = v.findViewById(R.id.homefragment_no_item_layout);
 
-        if (mPerList.size() == 0 || mPriceList.size() == 0) {
+        if (mPerList.size() == 0 || mPriceList.size() == 0 || mTradeList.size() == 0 || mPremeumList.size() == 0) {
             showNoItemView();
         }
 
@@ -152,6 +158,8 @@ public class HomeFragment extends Fragment {
                 viewHolder.name_Text = (TextView) convertView.findViewById(R.id.name_coin_txt);
                 viewHolder.price_Text = (TextView) convertView.findViewById(R.id.price_coin_txt);
                 viewHolder.per_Text = (TextView) convertView.findViewById(R.id.start_per_txt);
+                viewHolder.trade_Text = (TextView) convertView.findViewById(R.id.trade_price_txt);
+                viewHolder.premeum_Text = (TextView) convertView.findViewById(R.id.k_premeum_txt);
                 viewHolder.image_coin = (ImageView) convertView.findViewById(R.id.image_coin1);
 
                 convertView.setTag(viewHolder);
@@ -159,7 +167,7 @@ public class HomeFragment extends Fragment {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
 
-            if (mPerList.size() <= position || mPriceList.size() <= position) {
+            if (mPerList.size() <= position || mPriceList.size() <= position || mTradeList.size() <= position || mPremeumList.size() <= position) {
                 Log.i("HomeFragment", "getView error");
                 return convertView;
             }
@@ -177,6 +185,15 @@ public class HomeFragment extends Fragment {
             viewHolder.price_Text.setText(String.format("%,d원", price));
 
             String per = mPerList.get(position);
+            String premeum = mPremeumList.get(position);
+            int trade;
+            try {
+                trade = Integer.valueOf(mTradeList.get(position));
+            }catch(NumberFormatException e){
+                trade = 0;
+                e.printStackTrace();
+            }
+
             if (Float.parseFloat(per) < 0) {
                 viewHolder.price_Text.setTextColor(getContext().getColor(R.color.blue));
                 viewHolder.per_Text.setTextColor(getContext().getColor(R.color.blue));
@@ -185,6 +202,8 @@ public class HomeFragment extends Fragment {
                 viewHolder.per_Text.setTextColor(getContext().getColor(R.color.red));
             }
             viewHolder.per_Text.setText(per + "%");
+            viewHolder.trade_Text.setText(String.format("%,d백만", trade));
+            viewHolder.premeum_Text.setText("K-프리미엄: "+premeum + "%");
 
             viewHolder.image_coin.setImageResource(Const.sCoinImages[position]);
             return convertView;
@@ -194,6 +213,8 @@ public class HomeFragment extends Fragment {
             TextView name_Text;
             TextView price_Text;
             TextView per_Text;
+            TextView trade_Text;
+            TextView premeum_Text;
             ImageView image_coin;
         }
     }
@@ -209,7 +230,7 @@ public class HomeFragment extends Fragment {
         super.onResume();
     }
 
-    public void refreshListView(List<String> priceList, List<String> perList) {
+    public void refreshListView(List<String> priceList, List<String> perList, List<String> tradeList, List<String> premeumList) {
         if (mListViewLayout != null && mNoItemLayout != null) {
             mListViewLayout.setVisibility(View.VISIBLE);
             mNoItemLayout.setVisibility(View.GONE);
@@ -217,6 +238,8 @@ public class HomeFragment extends Fragment {
 
         mPerList = (ArrayList<String>) perList;
         mPriceList = (ArrayList<String>) priceList;
+        mTradeList = (ArrayList<String>) tradeList;
+        mPremeumList = (ArrayList<String>) premeumList;
 
         mAdapter.notifyDataSetChanged();
     }

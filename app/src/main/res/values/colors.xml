@@ -12,8 +12,8 @@
     <color name="descriptionTextColor">#dd5b5b5b</color>
     <color name="descriptionTextColorDim">#665b5b5b</color>
 
-    <color name="red">#df0000</color>
-    <color name="blue">#3636f0</color>
+    <color name="red">#f14141</color>
+    <color name="blue">#4e4eed</color>
     <color name="green">#FF00DD5C</color>
     <color name="weakblack">#777777</color>
     <color name="black">#222222</color>

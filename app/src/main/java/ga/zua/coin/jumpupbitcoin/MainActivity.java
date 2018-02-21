@@ -50,6 +50,9 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
     public CalDown mCalDown = new CalDown(mSettingData);
     public CalPrice mCalPrice = new CalPrice();
 
+    private CrawlringPrice mCrawlringPrice = new CrawlringPrice();
+    private Thread mPriceThread;
+
     private DownFragment mDownFragment;
     private UpFragment mUpFragment;
     private HomeFragment mHomeFragment;
@@ -104,20 +107,6 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
                 @Override
                 public boolean isDownSettingEnabled() {
                     return mSettingData.mIsDownSettingEnabled;
-                }
-            });
-
-            mService.registerOnRecivePriceData(new CrawlringPrice.PriceDataReceiver() {
-                @Override
-                public void onReceivePriceData(Message msg) {
-                    if (msg.what == 0) {
-                        // 현재가격 분석모듈
-                        String now_price = (String) msg.obj;
-                        mCalPrice.Calc(now_price);
-                    } else if (msg.what == 1) {
-                        String start_coin = (String) msg.obj;
-                        mCalPrice.per_Calc(start_coin);
-                    }
                 }
             });
         }
@@ -199,8 +188,8 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
 
         mCalPrice.setOnChangedDataLister(new CalPrice.onChangeData() {
             @Override
-            public void onDataChanged(final List<String> priceList, final List<String> perList) {
-                Log.d("MainActivity", "onDataChanged price, priceList : " + priceList.toString() + ", perList : " + perList.toString());
+            public void onDataChanged(final List<String> priceList, final List<String> perList, final List<String> tradeList, final List<String> premeumList) {
+                Log.d("MainActivity", "onDataChanged price, priceList : " + priceList.toString() + ", perList : " + perList.toString() + ".tradeList : " + tradeList.toString() + ".tradeList : " + premeumList.toString());
 
                 if (mHomeFragment == null) {
                     Log.d("MainActivity", "onDataChanged price, mHomeFragment is null");
@@ -219,13 +208,32 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
 
                         mHomeFragment.blinkAnimateTextClock();
 
-                        if (priceList.size() == 0 || perList.size() == 0 || priceList.size() != perList.size()) {
+                        if (priceList.size() == 0 || perList.size() == 0 || tradeList.size() == 0 || premeumList.size() == 0 || priceList.size() != perList.size()) {
                             mHomeFragment.showNoItemView();
                         } else {
-                            mHomeFragment.refreshListView(priceList, perList);
+                            mHomeFragment.refreshListView(priceList, perList, tradeList, premeumList);
                         }
                     }
                 });
+            }
+        });
+        registerOnRecivePriceData(new CrawlringPrice.PriceDataReceiver() {
+            @Override
+            public void onReceivePriceData(Message msg) {
+                if (msg.what == 0) {
+                    // 현재가격 분석모듈
+                    String now_price = (String) msg.obj;
+                    mCalPrice.Calc(now_price);
+                } else if (msg.what == 1) {
+                    String start_coin = (String) msg.obj;
+                    mCalPrice.per_Calc(start_coin);
+                } else if (msg.what == 2) {
+                    String trade_price = (String) msg.obj;
+                    mCalPrice.trade_Calc(trade_price);
+                } else if (msg.what == 3) {
+                    String premeum_price = (String) msg.obj;
+                    mCalPrice.premeum_Calc(premeum_price);
+                }
             }
         });
 
@@ -242,8 +250,6 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
         mCloseAd.disableBackKey();
 
     }
-
-
 
     public void startService() {
         Intent service = new Intent(this, BackService.class);
@@ -280,8 +286,6 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
 
     @Override
     public void onBackPressed() {
-//        if (pressedTime == 0) {
-        //Toast.makeText(MainActivity.this, " 한 번 더 누르면 종료됩니다.", Toast.LENGTH_LONG).show();
         pressedTime = System.currentTimeMillis();
         if (mCloseAd.isModuleLoaded())
         {
@@ -291,19 +295,6 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
         {
             showDefaultClosePopup();
         }
-//        }
-//        else {
-//            int seconds = (int) (System.currentTimeMillis() - pressedTime);
-//
-//            if (seconds > 2000) {
-//                Toast.makeText(MainActivity.this, " 한 번 더 누르면 종료됩니다.", Toast.LENGTH_LONG).show();
-//                pressedTime = 0;
-//            } else {
-//                super.onBackPressed();
-//                stopService();
-//                finish(); // app 종료 시키기
-//            }
-//        }
     }
 
     private void getAD() {
@@ -332,12 +323,12 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
             switch (item.getItemId()) {
                 case R.id.navigation_home:
                     setTitle("현재 시세");
-
                     final ArrayList<String> priceList = (ArrayList<String>) mCalPrice.getPrice();
                     final ArrayList<String> perList = (ArrayList<String>) mCalPrice.getPer();
-                    mHomeFragment = HomeFragment.newInstance(priceList, perList);
+                    final ArrayList<String> tradeList = (ArrayList<String>) mCalPrice.getTrade();
+                    final ArrayList<String> premeumList = (ArrayList<String>) mCalPrice.getPremeum();
+                    mHomeFragment = HomeFragment.newInstance(priceList, perList, tradeList, premeumList);
                     fragmentManager.beginTransaction().replace(R.id.content, mHomeFragment, mHomeFragment.getTag()).commitAllowingStateLoss();
-
                     return true;
 
                 case R.id.navigation_dashboard:
@@ -370,6 +361,11 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
             return false;
         }
     };
+
+    public void registerOnRecivePriceData(CrawlringPrice.PriceDataReceiver callback) {
+        mCrawlringPrice.registerOnRecivePriceData(callback);
+    }
+
 
     protected void onDestroy() {
         super.onDestroy();
@@ -469,9 +465,6 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
         mCalDown.clearLogData();
     }
 
-
-    // Cauly 종료 광고
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -486,6 +479,7 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         stopService();
+                        mPriceThread.interrupt();
                         finish();
                     }
                 })
@@ -522,6 +516,20 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
 
     @Override
     public void onLeaveCloseAd(CaulyCloseAd caulyCloseAd) {
+    }
 
+    @Override
+    protected void onStop(){
+        Log.d(TAG, "Pause Button Touch");
+        mPriceThread.interrupt();
+        super.onStop();
+    }
+
+    @Override
+    protected void onStart(){
+        Log.d(TAG, "Start Button Touch");
+        mPriceThread = new Thread(mCrawlringPrice);
+        mPriceThread.start();
+        super.onStart();
     }
 }

@@ -83,8 +83,8 @@
     </style>
 
     <style name="list_coin_image">
-        <item name="android:layout_width">26dp</item>
-        <item name="android:layout_height">26dp</item>
+        <item name="android:layout_width">30dp</item>
+        <item name="android:layout_height">30dp</item>
         <item name="android:layout_marginStart">16dp</item>
     </style>
 
@@ -106,13 +106,23 @@
     </style>
 
     <style name="list_coin_per">
-        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_width">45dp</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:textColor">@color/textColor</item>
         <item name="android:textSize">14dp</item>
-        <item name="android:layout_marginEnd">16dp</item>
-        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginEnd">1dp</item>
+        <item name="android:layout_marginStart">8dp</item>
+    </style>
+
+    <style name="trade_price_txt">
+        <item name="android:layout_width">75dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:gravity">center_vertical|right</item>
+        <item name="android:textColor">@color/textColor</item>
+        <item name="android:textSize">13dp</item>
+        <item name="android:layout_marginEnd">8dp</item>
+        <item name="android:layout_marginStart">1dp</item>
     </style>
 
     <style name="SplashTheme" parent="@android:style/Theme.Light.NoTitleBar">

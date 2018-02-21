@@ -52,6 +52,26 @@ public class CrawlringPrice implements Runnable {
                             msg.obj = e.text();
                             mCallback.onReceivePriceData(msg);
                         }
+
+                        Elements trade_price = doc.select("div.trade_price");
+                        for (Element e : trade_price) {
+                            //Log.d("start_price", e.text());
+                            // TODO 현재 거래대금 분석모듈
+                            Message msg = Message.obtain();
+                            msg.what = 2;
+                            msg.obj = e.text();
+                            mCallback.onReceivePriceData(msg);
+                        }
+
+                        Elements k_premeum = doc.select("div.premedum_list");
+                        for (Element e : k_premeum) {
+                            //Log.d("start_price", e.text());
+                            // TODO 현재 김프 분석모듈
+                            Message msg = Message.obtain();
+                            msg.what = 3;
+                            msg.obj = e.text();
+                            mCallback.onReceivePriceData(msg);
+                        }
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

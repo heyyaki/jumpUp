@@ -23,7 +23,7 @@ public class BackService extends Service {
 
     private Thread mJumpThread, mPriceThread;
     private CrawlringJump mCrawlringJump = new CrawlringJump();
-    private CrawlringPrice mCrawlringPrice = new CrawlringPrice();
+//    private CrawlringPrice mCrawlringPrice = new CrawlringPrice();
 
     private HashMap<Integer, String> map = new HashMap<>();
 
@@ -40,9 +40,9 @@ public class BackService extends Service {
         mCrawlringJump.registerOnReciveJumpData(callback);
     }
 
-    public void registerOnRecivePriceData(CrawlringPrice.PriceDataReceiver callback) {
-        mCrawlringPrice.registerOnRecivePriceData(callback);
-    }
+//    public void registerOnRecivePriceData(CrawlringPrice.PriceDataReceiver callback) {
+//        mCrawlringPrice.registerOnRecivePriceData(callback);
+//    }
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -66,23 +66,18 @@ public class BackService extends Service {
         mJumpThread = new Thread(mCrawlringJump);
         mJumpThread.start();
 
-        mPriceThread = new Thread(mCrawlringPrice);
-        mPriceThread.start();
+//        mPriceThread = new Thread(mCrawlringPrice);
+//        mPriceThread.start();
 
         return super.onStartCommand(intent, flags, startId);
     }
 
-
-
     @Override
     public void onDestroy() {
         Log.d(TAG, "onDestroy service");
-
         super.onDestroy();
         mJumpThread.interrupt();
-        mPriceThread.interrupt();
     }
-
 
     public void notification(List<String> alarmReg, boolean updown){
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
@@ -93,7 +88,7 @@ public class BackService extends Service {
                 NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
                 ArrayList<String> alarm_coin = new ArrayList<String>();
                 for (String temp : alarmReg) {
-                    Log.d("alarmReg", temp);
+                    //Log.d("alarmReg", temp);
                     String[] coin_arr = temp.split("_");
                     alarm_coin.add(Const.sCoinNames.get(Integer.parseInt(coin_arr[0])) + "       " + coin_arr[1] + "%");
                 }
