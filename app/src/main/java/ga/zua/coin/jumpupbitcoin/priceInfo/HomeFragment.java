@@ -185,7 +185,13 @@ public class HomeFragment extends Fragment {
             viewHolder.price_Text.setText(String.format("%,d원", price));
 
             String per = mPerList.get(position);
-            String premeum = mPremeumList.get(position);
+            float premeum;
+            try {
+                premeum = Float.valueOf(mPremeumList.get(position));
+            }catch(NumberFormatException e){
+                premeum = 0;
+                e.printStackTrace();
+            }
             int trade;
             try {
                 trade = Integer.valueOf(mTradeList.get(position));
