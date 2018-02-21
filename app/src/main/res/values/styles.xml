@@ -101,6 +101,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_marginBottom">5dp</item>
         <item name="android:textColor">@color/textColor</item>
         <item name="android:textSize">14dp</item>
     </style>
@@ -112,6 +113,7 @@
         <item name="android:textColor">@color/textColor</item>
         <item name="android:textSize">14dp</item>
         <item name="android:layout_marginEnd">1dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
         <item name="android:layout_marginStart">8dp</item>
     </style>
 
@@ -122,7 +124,17 @@
         <item name="android:textColor">@color/textColor</item>
         <item name="android:textSize">13dp</item>
         <item name="android:layout_marginEnd">8dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
         <item name="android:layout_marginStart">1dp</item>
+    </style>
+
+    <style name="k_premeum_txt">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:layout_alignParentEnd">true</item>
+        <item name="android:layout_marginEnd">10dp</item>
+        <item name="android:textSize">12dp</item>
     </style>
 
     <style name="SplashTheme" parent="@android:style/Theme.Light.NoTitleBar">

@@ -203,7 +203,7 @@ public class HomeFragment extends Fragment {
             }
             viewHolder.per_Text.setText(per + "%");
             viewHolder.trade_Text.setText(String.format("%,d백만", trade));
-            viewHolder.premeum_Text.setText("K-프리미엄: "+premeum + "%");
+            viewHolder.premeum_Text.setText("K-프리미엄 "+premeum + "%");
 
             viewHolder.image_coin.setImageResource(Const.sCoinImages[position]);
             return convertView;
