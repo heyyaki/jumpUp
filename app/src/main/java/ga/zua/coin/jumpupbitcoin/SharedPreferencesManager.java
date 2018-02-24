@@ -2,6 +2,7 @@ package ga.zua.coin.jumpupbitcoin;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 public class SharedPreferencesManager {
 

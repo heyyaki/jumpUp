@@ -605,7 +605,7 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         Log.d("MY_LOG", "mSpinnerCounting : " + mSpinnerCounting + ", postion : " + position);
 
-        if (mSpinnerCounting++ < 8) {
+        if (mSpinnerCounting++ < 10) {
             return;
         }
 
@@ -683,6 +683,6 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
 
         void onDownPrePreTradeEditted(float prePreTrade);
 
-        void onDownTradePriceEditted(int TradePrice);
+        void onDownTradePriceEditted(int downTradePrice);
     }
 }

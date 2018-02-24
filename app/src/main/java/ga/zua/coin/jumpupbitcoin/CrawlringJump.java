@@ -34,10 +34,10 @@ public class CrawlringJump implements Runnable {
         try {
             while (true) {
 
-//                String url_up_coin = "http://jumpupcoin.hopto.org:8080/crawlring/coin_per"+MainActivity.mUpMinCandle+".html";
-//                String url_down_coin = "http://jumpupcoin.hopto.org:8080/crawlring/coin_per"+MainActivity.mDownMinCandle+".html";
-                String url_up_coin = "http://192.168.219.170:8080/crawlring/coin_per"+MainActivity.mUpMinCandle+".html";
-                String url_down_coin = "http://192.168.219.170:8080/crawlring/coin_per"+MainActivity.mDownMinCandle+".html";
+                String url_up_coin = "http://jumpupcoin.hopto.org:8080/crawlring/coin_per"+MainActivity.mUpMinCandle+".html";
+                String url_down_coin = "http://jumpupcoin.hopto.org:8080/crawlring/coin_per"+MainActivity.mDownMinCandle+".html";
+//                String url_up_coin = "http://192.168.219.170:8080/crawlring/coin_per"+MainActivity.mUpMinCandle+".html";
+//                String url_down_coin = "http://192.168.219.170:8080/crawlring/coin_per"+MainActivity.mDownMinCandle+".html";
 
                 if (mCallback != null && (mCallback.isDownSettingEnabled() || mCallback.isUpSettingEnabled())) {
                     Message msg = Message.obtain();

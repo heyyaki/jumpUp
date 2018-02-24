@@ -22,7 +22,7 @@ import ga.zua.coin.jumpupbitcoin.MainActivity;
 public class getMarketVersion extends AsyncTask<Void, Void, String>{
 
     String marketVersion, verSion;
-    boolean bool_version;
+    boolean bool_version=true;
 
 
     @Override
@@ -53,7 +53,6 @@ public class getMarketVersion extends AsyncTask<Void, Void, String>{
 
     @Override
     protected void onPostExecute(String result) {
-        bool_version=true;
         PackageInfo pi = null;
         try {
             pi = MainActivity.mContext.getPackageManager().getPackageInfo(MainActivity.mContext.getPackageName(), 0);

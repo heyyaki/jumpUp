@@ -133,10 +133,8 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
         setContentView(R.layout.activity_main);
 
         mContext=getApplicationContext();
+        // 앱 버전 체크
         mv = (getMarketVersion) new getMarketVersion().execute();
-        //앱 버전 체크!
-//        version_Check(mv.func_version_check());
-//        Log.d("func_version_check", String.valueOf(mv.func_version_check()));
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         BottomNavigationViewHelper.disableShiftMode(navigation);
@@ -463,9 +461,9 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
     }
 
     @Override
-    public void onDownTradePriceEditted(int tradePrice) {
-        SharedPreferencesManager.setDownTradePrice(getApplicationContext(), tradePrice);
-        mSettingData.down_trade_price = tradePrice;
+    public void onDownTradePriceEditted(int downTradePrice) {
+        SharedPreferencesManager.setDownTradePrice(getApplicationContext(), downTradePrice);
+        mSettingData.down_trade_price = downTradePrice;
     }
 
     // UpFragment Listener

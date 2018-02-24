@@ -11,8 +11,8 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 
 public class CrawlringPrice implements Runnable {
-    //final String url = "http://jumpupcoin.hopto.org:8080/crawlring/index.html";
-    final String url = "http://192.168.219.170:8080/crawlring/index.html";
+    final String url = "http://jumpupcoin.hopto.org:8080/crawlring/index.html";
+//    final String url = "http://192.168.219.170:8080/crawlring/index.html";
     private final int SLEEP_TIME = 5 * 1000;
 
     private PriceDataReceiver mCallback = null;
