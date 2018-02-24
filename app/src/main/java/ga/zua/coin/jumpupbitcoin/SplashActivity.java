@@ -28,8 +28,6 @@ public class SplashActivity extends Activity {
 
         MobileAds.initialize(this, "ca-app-pub-9946826173060023~4419923481");
 
-//        getAD();
-
         final InterstitialAd ad = new InterstitialAd(this);
         ad.setAdUnitId(getString(R.string.ad_id));
 
@@ -43,10 +41,12 @@ public class SplashActivity extends Activity {
                     ad.show();
                 }
             }
+
             @Override
             public void onAdFailedToLoad(int errorCode) {
                 startMainActivity();
             }
+
             @Override
             public void onAdClosed() {
                 startMainActivity();
@@ -67,43 +67,11 @@ public class SplashActivity extends Activity {
                 });
             }
         }, 5000);
-
-//        try {
-//            Thread.sleep(1000);
-//
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//        startActivity(new Intent(this, MainActivity.class));
-//        finish();
     }
-
-//    private void getAD() {
-//        final InterstitialAd ad = new InterstitialAd(this);
-//        ad.setAdUnitId(getString(R.string.ad_id));
-//
-//        ad.loadAd(new AdRequest.Builder().build());
-//
-//        ad.setAdListener(new AdListener() {
-//            @Override
-//            public void onAdLoaded() {
-//                if (!interstitialCanceled) {
-//                    waitTimer.cancel();
-//                    ad.show();
-//                }
-//            }
-//        });
-//    }
 
     private void startMainActivity() {
         startActivity(new Intent(this, MainActivity.class));
         finish();
     }
-
-//    @Override
-//    public void onBackPressed() {
-//        super.onBackPressed();
-//        startMainActivity();
-//    }
 
 }

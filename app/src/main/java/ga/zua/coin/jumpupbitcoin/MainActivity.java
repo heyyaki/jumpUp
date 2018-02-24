@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -26,6 +27,7 @@ import ga.zua.coin.jumpupbitcoin.jumpCoin.UpFragment;
 import ga.zua.coin.jumpupbitcoin.priceInfo.HomeFragment;
 import ga.zua.coin.jumpupbitcoin.setting.SettingData;
 import ga.zua.coin.jumpupbitcoin.setting.SettingFragment;
+import ga.zua.coin.jumpupbitcoin.setting.getMarketVersion;
 
 import com.fsn.cauly.CaulyAdInfo;
 import com.fsn.cauly.CaulyAdInfoBuilder;
@@ -44,6 +46,8 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements SettingFragment.OnSettingFragment, DownFragment.DownFragmentListener, UpFragment.UpFragmentListener, CaulyCloseAdListener {
     private String TAG = "MainActivity";
+
+    public static Context mContext;
 
     private SettingData mSettingData = new SettingData();
     public CalJump mCalJump = new CalJump(mSettingData);
@@ -125,6 +129,10 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mContext=getApplicationContext();
+        getMarketVersion mv = (getMarketVersion) new getMarketVersion().execute();
+        version_Check(mv.func_version_check());
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         BottomNavigationViewHelper.disableShiftMode(navigation);
@@ -475,6 +483,36 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
         super.onResume();
         if (mCloseAd != null)
             mCloseAd.resume(this);
+    }
+
+    private void version_Check(boolean version_check)
+    {
+        AlertDialog.Builder mDialog;
+        mDialog = new AlertDialog.Builder(this);
+        if (!version_check) {
+            mDialog.setMessage("업데이트 버전이 있습니다. \n최신 버전으로 업데이트 후 사용해주세요. \n감사합니다.")
+                    .setCancelable(false)
+                    .setPositiveButton("업데이트",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog,int id) {
+                                    Intent marketLaunch = new Intent(Intent.ACTION_VIEW);
+                                    marketLaunch.setData(Uri.parse("https://play.google.com/store/apps/details?id=ga.zua.coin.jumpupbitcoin"));
+                                    MainActivity.mContext.startActivity(marketLaunch);
+                                    finish();
+                                }
+                            })
+                    .setNegativeButton("종료",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog,int id) {
+                                    stopService();
+                                    finish();
+                                }
+                            });
+
+            AlertDialog alert = mDialog.create();
+            alert.setTitle("업데이트 안내");
+            alert.show();
+        }
     }
 
     private void showDefaultClosePopup()
