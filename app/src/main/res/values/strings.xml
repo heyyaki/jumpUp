@@ -36,4 +36,13 @@
         <item>200</item>
         <item>300</item>
     </string-array>
+
+    <string-array name="str_ary_trade_price">
+        <item>@string/disable</item>
+        <item>1000</item>
+        <item>5000</item>
+        <item>10000</item>
+        <item>30000</item>
+        <item>50000</item>
+    </string-array>
 </resources>

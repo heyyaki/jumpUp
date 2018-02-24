@@ -3,6 +3,7 @@ package ga.zua.coin.jumpupbitcoin;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -11,6 +12,8 @@ import com.google.android.gms.ads.MobileAds;
 
 import java.util.Timer;
 import java.util.TimerTask;
+
+import ga.zua.coin.jumpupbitcoin.setting.getMarketVersion;
 
 /**
  * Created by COM on 2018-02-12.
@@ -27,7 +30,7 @@ public class SplashActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         MobileAds.initialize(this, "ca-app-pub-9946826173060023~4419923481");
-
+        
         final InterstitialAd ad = new InterstitialAd(this);
         ad.setAdUnitId(getString(R.string.ad_id));
 
@@ -50,7 +53,6 @@ public class SplashActivity extends Activity {
             @Override
             public void onAdClosed() {
                 startMainActivity();
-
             }
         });
 

@@ -19,6 +19,8 @@ public class JumpData {
     public List<String> ary_up_trade_per = new ArrayList<String>();
     public List<String> ary_up_trade_per_pre = new ArrayList<String>();
 
+    public List<String> ary_up_trade_price = new ArrayList<String>();
+
     public HashMap<Integer, Integer> duple_check_map = new HashMap<Integer, Integer>();
 
     public void clearData() {

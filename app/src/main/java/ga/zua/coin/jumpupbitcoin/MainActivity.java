@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -48,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
     private String TAG = "MainActivity";
 
     public static Context mContext;
+    getMarketVersion mv;
 
     private SettingData mSettingData = new SettingData();
     public CalJump mCalJump = new CalJump(mSettingData);
@@ -131,8 +133,10 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
         setContentView(R.layout.activity_main);
 
         mContext=getApplicationContext();
-        getMarketVersion mv = (getMarketVersion) new getMarketVersion().execute();
-        version_Check(mv.func_version_check());
+        mv = (getMarketVersion) new getMarketVersion().execute();
+        //앱 버전 체크!
+//        version_Check(mv.func_version_check());
+//        Log.d("func_version_check", String.valueOf(mv.func_version_check()));
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         BottomNavigationViewHelper.disableShiftMode(navigation);
@@ -250,9 +254,6 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
             }
         });
 
-//        MobileAds.initialize(this, "ca-app-pub-9946826173060023~4419923481");
-//        getAD();
-
         //CloseAd 초기화
         CaulyAdInfo closeAdInfo = new CaulyAdInfoBuilder(APP_CODE).build();
         mCloseAd = new CaulyCloseAd();
@@ -288,6 +289,7 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
         mSettingData.price_per_pre = SharedPreferencesManager.getPricePerPre(getApplicationContext());
         mSettingData.trade_per = SharedPreferencesManager.getTradePer(getApplicationContext());
         mSettingData.trade_per_pre = SharedPreferencesManager.getTradePerPre(getApplicationContext());
+        mSettingData.trade_price = SharedPreferencesManager.getTradePrice(getApplicationContext());
 
         mSettingData.mIsDownSettingEnabled = SharedPreferencesManager.getDownSettingEnabled(getApplicationContext());
         mSettingData.mDownCandle = SharedPreferencesManager.getDownCandle(getApplicationContext());
@@ -295,6 +297,7 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
         mSettingData.down_price_per_pre = SharedPreferencesManager.getDownPricePerPre(getApplicationContext());
         mSettingData.down_trade_per = SharedPreferencesManager.getDownTradePer(getApplicationContext());
         mSettingData.down_trade_per_pre = SharedPreferencesManager.getDownTradePerPre(getApplicationContext());
+        mSettingData.down_trade_price = SharedPreferencesManager.getDownTradePrice(getApplicationContext());
     }
 
     @Override
@@ -308,22 +311,6 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
         {
             showDefaultClosePopup();
         }
-    }
-
-    private void getAD() {
-        final InterstitialAd ad = new InterstitialAd(this);
-        ad.setAdUnitId(getString(R.string.ad_id));
-
-        ad.loadAd(new AdRequest.Builder().build());
-
-        ad.setAdListener(new AdListener() {
-            @Override
-            public void onAdLoaded() {
-                if (ad.isLoaded()) {
-                    ad.show();
-                }
-            }
-        });
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -364,10 +351,13 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
 
                 case R.id.navigation_notifications:
                     setTitle("설정");
+                    // 앱 버전 확인 후 업데이트
+                    version_Check(mv.func_version_check());
+                    Log.d("func_version_check", String.valueOf(mv.func_version_check()));
                     SettingFragment settingFragment = SettingFragment.newInstance(
                             mSettingData.mVibration,
-                            mSettingData.mIsUpSettingEnabled, mSettingData.mUpCandle, mSettingData.price_per, mSettingData.price_per_pre, mSettingData.trade_per, mSettingData.trade_per_pre,
-                            mSettingData.mIsDownSettingEnabled, mSettingData.mDownCandle, mSettingData.down_price_per, mSettingData.down_price_per_pre, mSettingData.down_trade_per, mSettingData.down_trade_per_pre);
+                            mSettingData.mIsUpSettingEnabled, mSettingData.mUpCandle, mSettingData.price_per, mSettingData.price_per_pre, mSettingData.trade_per, mSettingData.trade_per_pre, mSettingData.trade_price,
+                            mSettingData.mIsDownSettingEnabled, mSettingData.mDownCandle, mSettingData.down_price_per, mSettingData.down_price_per_pre, mSettingData.down_trade_per, mSettingData.down_trade_per_pre, mSettingData.down_trade_price);
                     fragmentManager.beginTransaction().replace(R.id.content, settingFragment, settingFragment.getTag()).commitAllowingStateLoss();
                     return true;
             }
@@ -430,6 +420,12 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
     }
 
     @Override
+    public void onUpTradePriceEditted(int tradePrice) {
+        SharedPreferencesManager.setTradePrice(getApplicationContext(), tradePrice);
+        mSettingData.trade_price = tradePrice;
+    }
+
+    @Override
     public void onDownSettingEnabled(boolean isEnabled) {
         SharedPreferencesManager.setDownSettingEnabled(getApplicationContext(), isEnabled);
         mSettingData.mIsDownSettingEnabled = isEnabled;
@@ -464,6 +460,12 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
     public void onDownPrePreTradeEditted(float prePreTrade) {
         SharedPreferencesManager.setDownTradePerPre(getApplicationContext(), prePreTrade);
         mSettingData.down_trade_per_pre = prePreTrade;
+    }
+
+    @Override
+    public void onDownTradePriceEditted(int tradePrice) {
+        SharedPreferencesManager.setDownTradePrice(getApplicationContext(), tradePrice);
+        mSettingData.down_trade_price = tradePrice;
     }
 
     // UpFragment Listener

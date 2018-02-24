@@ -168,7 +168,7 @@
                     android:id="@+id/textView8"
                     style="@style/description_text"
                     android:layout_toStartOf="@+id/editText3"
-                    android:text="1봉전 종가대비\n현재 거래 등락률(%)" />
+                    android:text="1봉전 종가대비\n현재 거래 상승률(%)" />
 
                 <EditText
                     android:id="@+id/editText3"
@@ -186,9 +186,9 @@
                 android:layout_height="match_parent">
 
                 <TextView
-                    android:id="@+id/textView10"
+                    android:id="@+id/textView9"
                     style="@style/description_text"
-                    android:text="2봉전 종가대비\n1봉전 거래 등락률(%)" />
+                    android:text="2봉전 종가대비\n1봉전 거래 상승률(%)" />
 
                 <EditText
                     android:id="@+id/editText4"
@@ -199,6 +199,29 @@
                     android:id="@+id/up_pre_pre_trade"
                     style="@style/setting_spinner"
                     android:entries="@array/str_ary_trade" />
+            </RelativeLayout>
+
+            <View style="@style/setting_divider" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/up_trade_price_txt"
+                    style="@style/description_text"
+                    android:layout_marginTop="5dp"
+                    android:text="거래대금 조건값 이상(백만)" />
+
+                <EditText
+                    android:id="@+id/editText5"
+                    style="@style/setting_edittext"
+                    android:layout_toStartOf="@+id/up_trade_price_spinner" />
+
+                <Spinner
+                    android:id="@+id/up_trade_price_spinner"
+                    style="@style/setting_spinner"
+                    android:entries="@array/str_ary_trade_price" />
             </RelativeLayout>
         </LinearLayout>
 
@@ -363,6 +386,29 @@
                     style="@style/setting_spinner"
                     android:entries="@array/str_ary_trade" />
 
+            </RelativeLayout>
+
+            <View style="@style/setting_divider" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/down_trade_price_txt"
+                    style="@style/description_text"
+                    android:layout_marginTop="5dp"
+                    android:text="거래대금 조건값 이상(백만)" />
+
+                <EditText
+                    android:id="@+id/editText15"
+                    style="@style/setting_edittext"
+                    android:layout_toStartOf="@+id/down_trade_price_spinner" />
+
+                <Spinner
+                    android:id="@+id/down_trade_price_spinner"
+                    style="@style/setting_spinner"
+                    android:entries="@array/str_ary_trade_price" />
             </RelativeLayout>
         </LinearLayout>
     </LinearLayout>

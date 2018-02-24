@@ -43,6 +43,7 @@ public class CalJump {
         String coin_per_pre = "";
         String coin_per_trade = "";
         String coin_per_pre_trade = "";
+        String coin_trade_price = "";
 
         Elements ele_price = doc2.select("div.coin_price");
         for (Element e : ele_price) {
@@ -68,12 +69,17 @@ public class CalJump {
         for (Element e : ele_per_pre_trade) {
             coin_per_pre_trade = e.text();
         }
-        up_per_condition(coin_price, coin_per, coin_per_pre, coin_per_trade, coin_per_pre_trade);
+
+        Elements ele_trade_price = doc2.select("div.trade_price");
+        for (Element e : ele_trade_price) {
+            coin_trade_price = e.text();
+        }
+        up_per_condition(coin_price, coin_per, coin_per_pre, coin_per_trade, coin_per_pre_trade, coin_trade_price);
         Log.d("CalJump_string",coin_price);
     }
 
 
-    private void up_per_condition(String coin_price,String coin_per,String coin_per_pre,String coin_per_trade,String coin_per_pre_trade) {
+    private void up_per_condition(String coin_price,String coin_per,String coin_per_pre,String coin_per_trade,String coin_per_pre_trade, String coin_trade_price) {
         String filter_str = "";
         String[] filter_word = {" ", "\\[", "\\]"};
         for (int i = 0; i < filter_word.length; i++) {
@@ -87,6 +93,8 @@ public class CalJump {
             coin_per_trade = filter_str;
             filter_str = coin_per_pre_trade.replaceAll(filter_word[i], "");
             coin_per_pre_trade = filter_str;
+            filter_str = coin_trade_price.replaceAll(filter_word[i], "");
+            coin_trade_price = filter_str;
         }
 
         String[] coin_price_arr = coin_price.split(",");
@@ -94,48 +102,51 @@ public class CalJump {
         String[] coin_per_pre_arr = coin_per_pre.split(",");
         String[] coin_per_trade_arr = coin_per_trade.split(",");
         String[] coin_per_pre_trade_arr = coin_per_pre_trade.split(",");
+        String[] coin_trade_price_arr = coin_trade_price.split(",");
 
         try {
             for (int i = 0; i < coin_price_arr.length; i++) {
-                if (mSettingData.price_per_pre == -1 && mSettingData.trade_per == -1 && mSettingData.trade_per_pre == -1) {
-                    duple_check_method(i);
-                    if (Float.parseFloat(coin_per_arr[i]) > mSettingData.price_per) {
-                        alarm_check_method(i, coin_per_arr, coin_price_arr);
-                    }
-                } else if (mSettingData.price_per_pre == -1 && mSettingData.trade_per == -1 && mSettingData.trade_per_pre != -1) {
-                    duple_check_method(i);
-                    if (Float.parseFloat(coin_per_arr[i]) > mSettingData.price_per && Float.parseFloat(coin_per_pre_trade_arr[i]) > mSettingData.trade_per_pre) {
-                        alarm_check_method(i, coin_per_arr, coin_price_arr);
-                    }
-                } else if (mSettingData.price_per_pre == -1 && mSettingData.trade_per != -1 && mSettingData.trade_per_pre == -1) {
-                    duple_check_method(i);
-                    if (Float.parseFloat(coin_per_arr[i]) > mSettingData.price_per && Float.parseFloat(coin_per_trade_arr[i]) > mSettingData.trade_per) {
-                        alarm_check_method(i, coin_per_arr, coin_price_arr);
-                    }
-                } else if (mSettingData.price_per_pre == -1 && mSettingData.trade_per != -1 && mSettingData.trade_per_pre != -1) {
-                    duple_check_method(i);
-                    if (Float.parseFloat(coin_per_arr[i]) > mSettingData.price_per && Float.parseFloat(coin_per_trade_arr[i]) > mSettingData.trade_per && Float.parseFloat(coin_per_pre_trade_arr[i]) > mSettingData.trade_per_pre) {
-                        alarm_check_method(i, coin_per_arr, coin_price_arr);
-                    }
-                } else if (mSettingData.price_per_pre != -1 && mSettingData.trade_per == -1 && mSettingData.trade_per_pre == -1) {
-                    duple_check_method(i);
-                    if (Float.parseFloat(coin_per_arr[i]) > mSettingData.price_per && Float.parseFloat(coin_per_pre_arr[i]) > mSettingData.price_per_pre) {
-                        alarm_check_method(i, coin_per_arr, coin_price_arr);
-                    }
-                } else if (mSettingData.price_per_pre != -1 && mSettingData.trade_per == -1 && mSettingData.trade_per_pre != -1) {
-                    duple_check_method(i);
-                    if (Float.parseFloat(coin_per_arr[i]) > mSettingData.price_per && Float.parseFloat(coin_per_pre_arr[i]) > mSettingData.price_per_pre && Float.parseFloat(coin_per_pre_trade_arr[i]) > mSettingData.trade_per_pre) {
-                        alarm_check_method(i, coin_per_arr, coin_price_arr);
-                    }
-                } else if (mSettingData.price_per_pre != -1 && mSettingData.trade_per != -1 && mSettingData.trade_per_pre == -1) {
-                    duple_check_method(i);
-                    if (Float.parseFloat(coin_per_arr[i]) > mSettingData.price_per && Float.parseFloat(coin_per_pre_arr[i]) > mSettingData.price_per_pre && Float.parseFloat(coin_per_trade_arr[i]) > mSettingData.trade_per) {
-                        alarm_check_method(i, coin_per_arr, coin_price_arr);
-                    }
-                } else if (mSettingData.price_per_pre != -1 && mSettingData.trade_per != -1 && mSettingData.trade_per_pre != -1) {
-                    duple_check_method(i);
-                    if (Float.parseFloat(coin_per_arr[i]) > mSettingData.price_per && Float.parseFloat(coin_per_pre_arr[i]) > mSettingData.price_per_pre && Float.parseFloat(coin_per_trade_arr[i]) > mSettingData.trade_per && Float.parseFloat(coin_per_pre_trade_arr[i]) > mSettingData.trade_per_pre) {
-                        alarm_check_method(i, coin_per_arr, coin_price_arr);
+                if(Integer.parseInt(coin_trade_price_arr[i])>mSettingData.trade_price) {
+                    if (mSettingData.price_per_pre == -1 && mSettingData.trade_per == -1 && mSettingData.trade_per_pre == -1) {
+                        duple_check_method(i);
+                        if (Float.parseFloat(coin_per_arr[i]) > mSettingData.price_per) {
+                            alarm_check_method(i, coin_per_arr, coin_price_arr);
+                        }
+                    } else if (mSettingData.price_per_pre == -1 && mSettingData.trade_per == -1 && mSettingData.trade_per_pre != -1) {
+                        duple_check_method(i);
+                        if (Float.parseFloat(coin_per_arr[i]) > mSettingData.price_per && Float.parseFloat(coin_per_pre_trade_arr[i]) > mSettingData.trade_per_pre) {
+                            alarm_check_method(i, coin_per_arr, coin_price_arr);
+                        }
+                    } else if (mSettingData.price_per_pre == -1 && mSettingData.trade_per != -1 && mSettingData.trade_per_pre == -1) {
+                        duple_check_method(i);
+                        if (Float.parseFloat(coin_per_arr[i]) > mSettingData.price_per && Float.parseFloat(coin_per_trade_arr[i]) > mSettingData.trade_per) {
+                            alarm_check_method(i, coin_per_arr, coin_price_arr);
+                        }
+                    } else if (mSettingData.price_per_pre == -1 && mSettingData.trade_per != -1 && mSettingData.trade_per_pre != -1) {
+                        duple_check_method(i);
+                        if (Float.parseFloat(coin_per_arr[i]) > mSettingData.price_per && Float.parseFloat(coin_per_trade_arr[i]) > mSettingData.trade_per && Float.parseFloat(coin_per_pre_trade_arr[i]) > mSettingData.trade_per_pre) {
+                            alarm_check_method(i, coin_per_arr, coin_price_arr);
+                        }
+                    } else if (mSettingData.price_per_pre != -1 && mSettingData.trade_per == -1 && mSettingData.trade_per_pre == -1) {
+                        duple_check_method(i);
+                        if (Float.parseFloat(coin_per_arr[i]) > mSettingData.price_per && Float.parseFloat(coin_per_pre_arr[i]) > mSettingData.price_per_pre) {
+                            alarm_check_method(i, coin_per_arr, coin_price_arr);
+                        }
+                    } else if (mSettingData.price_per_pre != -1 && mSettingData.trade_per == -1 && mSettingData.trade_per_pre != -1) {
+                        duple_check_method(i);
+                        if (Float.parseFloat(coin_per_arr[i]) > mSettingData.price_per && Float.parseFloat(coin_per_pre_arr[i]) > mSettingData.price_per_pre && Float.parseFloat(coin_per_pre_trade_arr[i]) > mSettingData.trade_per_pre) {
+                            alarm_check_method(i, coin_per_arr, coin_price_arr);
+                        }
+                    } else if (mSettingData.price_per_pre != -1 && mSettingData.trade_per != -1 && mSettingData.trade_per_pre == -1) {
+                        duple_check_method(i);
+                        if (Float.parseFloat(coin_per_arr[i]) > mSettingData.price_per && Float.parseFloat(coin_per_pre_arr[i]) > mSettingData.price_per_pre && Float.parseFloat(coin_per_trade_arr[i]) > mSettingData.trade_per) {
+                            alarm_check_method(i, coin_per_arr, coin_price_arr);
+                        }
+                    } else if (mSettingData.price_per_pre != -1 && mSettingData.trade_per != -1 && mSettingData.trade_per_pre != -1) {
+                        duple_check_method(i);
+                        if (Float.parseFloat(coin_per_arr[i]) > mSettingData.price_per && Float.parseFloat(coin_per_pre_arr[i]) > mSettingData.price_per_pre && Float.parseFloat(coin_per_trade_arr[i]) > mSettingData.trade_per && Float.parseFloat(coin_per_pre_trade_arr[i]) > mSettingData.trade_per_pre) {
+                            alarm_check_method(i, coin_per_arr, coin_price_arr);
+                        }
                     }
                 }
             }

@@ -41,7 +41,6 @@ public class getMarketVersion extends AsyncTask<Void, Void, String>{
             for (Element v : Version) {
                 if (v.attr("itemprop").equals("softwareVersion")) {
                     marketVersion = v.text();
-                    Log.d("MarKet Packege Version", String.valueOf(marketVersion));
                 }
             }
             return marketVersion;
@@ -54,7 +53,7 @@ public class getMarketVersion extends AsyncTask<Void, Void, String>{
 
     @Override
     protected void onPostExecute(String result) {
-
+        bool_version=true;
         PackageInfo pi = null;
         try {
             pi = MainActivity.mContext.getPackageManager().getPackageInfo(MainActivity.mContext.getPackageName(), 0);
@@ -63,9 +62,10 @@ public class getMarketVersion extends AsyncTask<Void, Void, String>{
         }
         verSion = pi.versionName;
         marketVersion = result;
+//        Log.d("verSion", String.valueOf(verSion));
+//        Log.d("marketVersion", String.valueOf(marketVersion));
 
         bool_version=verSion.equals(marketVersion);
-
         super.onPostExecute(result);
     }
 

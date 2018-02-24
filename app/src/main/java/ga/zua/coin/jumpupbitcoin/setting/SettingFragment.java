@@ -32,6 +32,7 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
     private static final String ARG_PRICE_PER_PRE = "argument_pricePerPre";
     private static final String ARG_TRADE_PER = "argument_tradePer";
     private static final String ARG_TRADE_PER_PRE = "argument_tradePerPre";
+    private static final String ARG_TRADE_PRICE = "argument_tradePrice";
 
     private static final String ARG_DOWN_SETTING = "argument_down_setting";
     private static final String ARG_DOWN_CANDLE = "argument_down_candle";
@@ -39,11 +40,12 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
     private static final String ARG_DOWN_PRICE_PER_PRE = "argument_down_pricePerPre";
     private static final String ARG_DOWN_TRADE_PER = "argument_down_tradePer";
     private static final String ARG_DOWN_TRADE_PER_PRE = "argument_down_tradePerPre";
+    private static final String ARG_DOWN_TRADE_PRICE = "argument_down_tradePrice";
 
     private static final int DISABLED_VALUE = -1;
 
     private boolean mIsUpSetting, mIsDownSetting;
-    private int mIsVibration, mUpCandle, mDownCandle;
+    private int mIsVibration, mUpCandle, mDownCandle, mTradePrice, mDownTradePrice;
     private final static ArrayList<Integer> mCandleList = new ArrayList<>();
 
     static {
@@ -58,8 +60,8 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
     private float mPricePer, mPricePerPre, mTradePer, mTradePerPre;
     private float mDownPricePer, mDownPricePerPre, mDownTradePer, mDownTradePerPre;
 
-    private EditText mEditTxt, mEditTxt2, mEditTxt3, mEditTxt4;
-    private EditText mEditTxt11, mEditTxt12, mEditTxt13, mEditTxt14;
+    private EditText mEditTxt, mEditTxt2, mEditTxt3, mEditTxt4, mEditTxt5;
+    private EditText mEditTxt11, mEditTxt12, mEditTxt13, mEditTxt14, mEditTxt15;
 
     private OnSettingFragment mListener;
 
@@ -69,8 +71,8 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
 
     public static SettingFragment newInstance(
             int vibrationSettingEnabled,
-            boolean isUpSettingEnabled, int upCandle, float pricePer, float pricePerPre, float tradePer, float tradePerPre,
-            boolean isDownSettingEnabled, int downCandle, float downPricePer, float downPricePerPre, float downTradePer, float downTradePerPre) {
+            boolean isUpSettingEnabled, int upCandle, float pricePer, float pricePerPre, float tradePer, float tradePerPre, int tradePrice,
+            boolean isDownSettingEnabled, int downCandle, float downPricePer, float downPricePerPre, float downTradePer, float downTradePerPre, int downTradePrice) {
         SettingFragment fragment = new SettingFragment();
         Bundle args = new Bundle();
 
@@ -82,6 +84,7 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
         args.putFloat(ARG_PRICE_PER_PRE, pricePerPre);
         args.putFloat(ARG_TRADE_PER, tradePer);
         args.putFloat(ARG_TRADE_PER_PRE, tradePerPre);
+        args.putInt(ARG_TRADE_PRICE, tradePrice);
 
         args.putBoolean(ARG_DOWN_SETTING, isDownSettingEnabled);
         args.putInt(ARG_DOWN_CANDLE, downCandle);
@@ -89,6 +92,7 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
         args.putFloat(ARG_DOWN_PRICE_PER_PRE, downPricePerPre);
         args.putFloat(ARG_DOWN_TRADE_PER, downTradePer);
         args.putFloat(ARG_DOWN_TRADE_PER_PRE, downTradePerPre);
+        args.putInt(ARG_DOWN_TRADE_PRICE, downTradePrice);
         fragment.setArguments(args);
 
         return fragment;
@@ -106,6 +110,7 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
             mPricePerPre = getArguments().getFloat(ARG_PRICE_PER_PRE);
             mTradePer = getArguments().getFloat(ARG_TRADE_PER);
             mTradePerPre = getArguments().getFloat(ARG_TRADE_PER_PRE);
+            mTradePrice = getArguments().getInt(ARG_TRADE_PRICE);
 
             mIsDownSetting = getArguments().getBoolean(ARG_DOWN_SETTING);
             mDownCandle = getArguments().getInt(ARG_DOWN_CANDLE);
@@ -113,6 +118,7 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
             mDownPricePerPre = getArguments().getFloat(ARG_DOWN_PRICE_PER_PRE);
             mDownTradePer = getArguments().getFloat(ARG_DOWN_TRADE_PER);
             mDownTradePerPre = getArguments().getFloat(ARG_DOWN_TRADE_PER_PRE);
+            mDownTradePrice = getArguments().getInt(ARG_DOWN_TRADE_PRICE);
         }
     }
 
@@ -146,21 +152,25 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
         Spinner spinner2 = (Spinner) v.findViewById(R.id.up_pre_pre_price_spinner);
         Spinner spinner3 = (Spinner) v.findViewById(R.id.up_pre_trade);
         Spinner spinner4 = (Spinner) v.findViewById(R.id.up_pre_pre_trade);
+        Spinner spinner5 = (Spinner) v.findViewById(R.id.up_trade_price_spinner);
 
         spinner.setOnItemSelectedListener(this);
         spinner2.setOnItemSelectedListener(this);
         spinner3.setOnItemSelectedListener(this);
         spinner4.setOnItemSelectedListener(this);
+        spinner5.setOnItemSelectedListener(this);
 
         Spinner spinner11 = (Spinner) v.findViewById(R.id.down_pre_price_spinner);
         Spinner spinner12 = (Spinner) v.findViewById(R.id.down_pre_pre_price_spinner);
         Spinner spinner13 = (Spinner) v.findViewById(R.id.down_pre_trade);
         Spinner spinner14 = (Spinner) v.findViewById(R.id.down_pre_pre_trade);
+        Spinner spinner15 = (Spinner) v.findViewById(R.id.down_trade_price_spinner);
 
         spinner11.setOnItemSelectedListener(this);
         spinner12.setOnItemSelectedListener(this);
         spinner13.setOnItemSelectedListener(this);
         spinner14.setOnItemSelectedListener(this);
+        spinner15.setOnItemSelectedListener(this);
 
         // 등락률
         mEditTxt = (EditText) v.findViewById(R.id.editText);
@@ -284,6 +294,36 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
             }
         });
 
+        mEditTxt5 = (EditText) v.findViewById(R.id.editText5);
+        mEditTxt5.setText(mTradePrice == DISABLED_VALUE ? getResources().getString(R.string.disable) : String.valueOf(mTradePrice));
+        spinner5.setSelection(mTradePrice == DISABLED_VALUE ? 0 : 5, false);
+
+        mEditTxt5.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() == 0) {
+                    return;
+                }
+                try {
+                    mTradePrice = Integer.valueOf(s.toString());
+                } catch (NumberFormatException e) {
+                    mTradePrice = DISABLED_VALUE;
+                }
+
+                mListener.onUpTradePriceEditted(mTradePrice);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
         // 등락률
         mEditTxt11 = (EditText) v.findViewById(R.id.editText11);
         mEditTxt11.setText(mDownPricePer == DISABLED_VALUE ? getResources().getString(R.string.disable) : String.valueOf(mDownPricePer));
@@ -396,6 +436,35 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
                 }
 
                 mListener.onDownPrePreTradeEditted(mDownTradePerPre);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        mEditTxt15 = (EditText) v.findViewById(R.id.editText15);
+        mEditTxt15.setText(mDownTradePrice == DISABLED_VALUE ? getResources().getString(R.string.disable) : String.valueOf(mDownTradePrice));
+        spinner15.setSelection(mDownTradePrice == DISABLED_VALUE ? 0 : 5, false);
+        mEditTxt15.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() == 0) {
+                    return;
+                }
+                try {
+                    mDownTradePrice = Integer.valueOf(s.toString());
+                } catch (NumberFormatException e) {
+                    mDownTradePrice = DISABLED_VALUE;
+                }
+
+                mListener.onDownTradePriceEditted(mDownTradePrice);
             }
 
             @Override
@@ -556,6 +625,9 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
             case R.id.up_pre_pre_trade:
                 mEditTxt4.setText(text);
                 break;
+            case R.id.up_trade_price_spinner:
+                mEditTxt5.setText(text);
+                break;
             case R.id.down_pre_price_spinner:
                 mEditTxt11.setText(text);
                 break;
@@ -567,6 +639,9 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
                 break;
             case R.id.down_pre_pre_trade:
                 mEditTxt14.setText(text);
+                break;
+            case R.id.down_trade_price_spinner:
+                mEditTxt15.setText(text);
                 break;
             default:
                 return;
@@ -594,6 +669,8 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
 
         void onUpPrePreTradeEditted(float prePreTrade);
 
+        void onUpTradePriceEditted(int TradePrice);
+
         void onDownSettingEnabled(boolean isEnabled);
 
         void onDownCandleButtonClicked(int candle);
@@ -605,5 +682,7 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
         void onDownPreTradeEditted(float preTrade);
 
         void onDownPrePreTradeEditted(float prePreTrade);
+
+        void onDownTradePriceEditted(int TradePrice);
     }
 }

@@ -17,6 +17,7 @@ public class SharedPreferencesManager {
     private static final String UP_PRICE_PER_PRE = "upPricePerPre";
     private static final String UP_TRADE_PER = "upTradePer";
     private static final String UP_TRADE_PER_PRE = "upTradePerPre";
+    private static final String UP_TRADE_PRICE = "upTradePrice";
 
     // 급락
     private static final String DOWN_SETTING = "mDownSetting";
@@ -25,6 +26,7 @@ public class SharedPreferencesManager {
     private static final String DOWN_PRICE_PER_PRE = "downPricePerPre";
     private static final String DOWN_TRADE_PER = "downTradePer";
     private static final String DOWN_TRADE_PER_PRE = "downTradePerPre";
+    private static final String DOWN_TRADE_PRICE = "downTradePrice";
 
     private SharedPreferencesManager() {
     }
@@ -103,6 +105,16 @@ public class SharedPreferencesManager {
         editor.apply();
     }
 
+    public static int getTradePrice(Context context) {
+        return getSharedPreferences(context).getInt(UP_TRADE_PRICE, 100);
+    }
+
+    public static void setTradePrice(Context context, int tradePrice) {
+        final SharedPreferences.Editor editor = getSharedPreferences(context).edit();
+        editor.putInt(UP_TRADE_PRICE, tradePrice);
+        editor.apply();
+    }
+
     // 급락 설정값
     public static boolean getDownSettingEnabled(Context context) {
         return getSharedPreferences(context).getBoolean(DOWN_SETTING, false);
@@ -161,6 +173,16 @@ public class SharedPreferencesManager {
     public static void setDownTradePerPre(Context context, float downTradePerPre) {
         final SharedPreferences.Editor editor = getSharedPreferences(context).edit();
         editor.putFloat(DOWN_TRADE_PER_PRE, downTradePerPre);
+        editor.apply();
+    }
+
+    public static int getDownTradePrice(Context context) {
+        return getSharedPreferences(context).getInt(DOWN_TRADE_PRICE, 100);
+    }
+
+    public static void setDownTradePrice(Context context, int downTradePrice) {
+        final SharedPreferences.Editor editor = getSharedPreferences(context).edit();
+        editor.putInt(DOWN_TRADE_PRICE, downTradePrice);
         editor.apply();
     }
 
