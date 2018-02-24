@@ -137,86 +137,91 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
         mVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         startService();
 
-        mCalJump.setOnChangedDataLister(new CalJump.onChangeData() {
-            @Override
-            public void onDataChanged(final List<String> alarmReg, final List<String> logList) {
-                Log.d("MainActivity", "onDataChanged Up, alarmReg : " + alarmReg.toString() + ", logList : " + logList.toString());
-                mService.notification(alarmReg,true);
+        try {
+            mCalJump.setOnChangedDataLister(new CalJump.onChangeData() {
+                @Override
+                public void onDataChanged(final List<String> alarmReg, final List<String> logList) {
+                    Log.d("MainActivity", "onDataChanged Up, alarmReg : " + alarmReg.toString() + ", logList : " + logList.toString());
+                    mService.notification(alarmReg, true);
 
-                if (mUpFragment == null) {
-                    Log.d("MainActivity", "onDataChanged Up, mUpFragment is null");
-                    return;
-                }
-                if (!mUpFragment.isVisible()) {
-                    Log.d("MainActivity", "onDataChanged Up, !mUpFragment.isVisible()");
-                    return;
-                }
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Log.d("MainActivity", "onDataChanged Up, refresh GUI");
-                        mUpFragment.refresh(alarmReg, logList);
+                    if (mUpFragment == null) {
+                        Log.d("MainActivity", "onDataChanged Up, mUpFragment is null");
+                        return;
                     }
-                });
-            }
-        });
-
-        mCalDown.setOnChangedDataLister(new CalDown.onChangeData() {
-            @Override
-            public void onDataChanged(final List<String> alarmReg, final List<String> logList) {
-                Log.d("MainActivity", "onDataChanged Down, alarmReg : " + alarmReg.toString() + ", logList : " + logList.toString());
-                mService.notification(alarmReg, false);
-                if (mDownFragment == null) {
-                    Log.d("MainActivity", "onDataChanged Down, mDownFragment is null");
-                    return;
-                }
-                if (!mDownFragment.isVisible()) {
-                    Log.d("MainActivity", "onDataChanged Down, !mDownFragment.isVisible()");
-                    return;
-                }
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Log.d("MainActivity", "onDataChanged Down, refresh GUI");
-                        mDownFragment.refresh(alarmReg, logList);
+                    if (!mUpFragment.isVisible()) {
+                        Log.d("MainActivity", "onDataChanged Up, !mUpFragment.isVisible()");
+                        return;
                     }
-                });
-            }
-        });
 
-        mCalPrice.setOnChangedDataLister(new CalPrice.onChangeData() {
-            @Override
-            public void onDataChanged(final List<String> priceList, final List<String> perList, final List<String> tradeList, final List<String> premeumList) {
-                Log.d("MainActivity", "onDataChanged price, priceList : " + priceList.toString() + ", perList : " + perList.toString() + ".tradeList : " + tradeList.toString() + ".tradeList : " + premeumList.toString());
-
-                if (mHomeFragment == null) {
-                    Log.d("MainActivity", "onDataChanged price, mHomeFragment is null");
-                    return;
-                }
-
-                if (!mHomeFragment.isVisible()) {
-                    Log.d("MainActivity", "onDataChanged price, !mHomeFragment.isVisible()");
-                    return;
-                }
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Log.d("MainActivity", "onDataChanged price, refresh GUI");
-
-                        mHomeFragment.blinkAnimateTextClock();
-
-                        if (priceList.size() == 0 || perList.size() == 0 || tradeList.size() == 0 || premeumList.size() == 0 || priceList.size() != perList.size()) {
-                            mHomeFragment.showNoItemView();
-                        } else {
-                            mHomeFragment.refreshListView(priceList, perList, tradeList, premeumList);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Log.d("MainActivity", "onDataChanged Up, refresh GUI");
+                            mUpFragment.refresh(alarmReg, logList);
                         }
+                    });
+                }
+            });
+
+            mCalDown.setOnChangedDataLister(new CalDown.onChangeData() {
+                @Override
+                public void onDataChanged(final List<String> alarmReg, final List<String> logList) {
+                    Log.d("MainActivity", "onDataChanged Down, alarmReg : " + alarmReg.toString() + ", logList : " + logList.toString());
+                    mService.notification(alarmReg, false);
+                    if (mDownFragment == null) {
+                        Log.d("MainActivity", "onDataChanged Down, mDownFragment is null");
+                        return;
                     }
-                });
-            }
-        });
+                    if (!mDownFragment.isVisible()) {
+                        Log.d("MainActivity", "onDataChanged Down, !mDownFragment.isVisible()");
+                        return;
+                    }
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Log.d("MainActivity", "onDataChanged Down, refresh GUI");
+                            mDownFragment.refresh(alarmReg, logList);
+                        }
+                    });
+                }
+            });
+
+            mCalPrice.setOnChangedDataLister(new CalPrice.onChangeData() {
+                @Override
+                public void onDataChanged(final List<String> priceList, final List<String> perList, final List<String> tradeList, final List<String> premeumList) {
+                    Log.d("MainActivity", "onDataChanged price, priceList : " + priceList.toString() + ", perList : " + perList.toString() + ".tradeList : " + tradeList.toString() + ".tradeList : " + premeumList.toString());
+
+                    if (mHomeFragment == null) {
+                        Log.d("MainActivity", "onDataChanged price, mHomeFragment is null");
+                        return;
+                    }
+
+                    if (!mHomeFragment.isVisible()) {
+                        Log.d("MainActivity", "onDataChanged price, !mHomeFragment.isVisible()");
+                        return;
+                    }
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Log.d("MainActivity", "onDataChanged price, refresh GUI");
+
+                            mHomeFragment.blinkAnimateTextClock();
+
+                            if (priceList.size() == 0 || perList.size() == 0 || tradeList.size() == 0 || premeumList.size() == 0 || priceList.size() != perList.size()) {
+                                mHomeFragment.showNoItemView();
+                            } else {
+                                mHomeFragment.refreshListView(priceList, perList, tradeList, premeumList);
+                            }
+                        }
+                    });
+                }
+            });
+        }
+        catch (Exception e) {
+            Log.d("Exception", String.valueOf(e));
+        }
         registerOnRecivePriceData(new CrawlringPrice.PriceDataReceiver() {
             @Override
             public void onReceivePriceData(Message msg) {
@@ -237,8 +242,8 @@ public class MainActivity extends AppCompatActivity implements SettingFragment.O
             }
         });
 
-        MobileAds.initialize(this, "ca-app-pub-9946826173060023~4419923481");
-        getAD();
+//        MobileAds.initialize(this, "ca-app-pub-9946826173060023~4419923481");
+//        getAD();
 
         //CloseAd 초기화
         CaulyAdInfo closeAdInfo = new CaulyAdInfoBuilder(APP_CODE).build();
