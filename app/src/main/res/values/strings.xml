@@ -7,6 +7,19 @@
     <string name="ad_id">ca-app-pub-9946826173060023/6306778270</string>
     <string name="disable">비활성</string>
 
+    <string name="search_setting">급등 검색식 설정</string>
+    <string name="up_price">가격 상승률</string>
+    <string name="pre_price">1봉전 종가 대비 현재 가격 상승률 %1$.1f</string>
+    <string name="pre_pre_price">2봉전 종가 대비 1봉전 가격 상승률 %1$.1f</string>
+    <string name="pre_trade">1봉전 종가 대비 현재 거래량 상승률 %1$.1f</string>
+    <string name="pre_pre_trade">2봉전 종가 대비 1봉전 거래량 상승률 %1$.1f</string>
+
+    <string name="down_search_setting">급락 검색식 설정</string>
+    <string name="down_price">가격 급락률</string>
+    <string name="down_pre_price">1봉전 종가 대비 현재 가격 하락률 %1$.1f</string>
+    <string name="down_pre_pre_price">2봉전 종가 대비 1봉전 가격 하락률 %1$.1f</string>
+
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

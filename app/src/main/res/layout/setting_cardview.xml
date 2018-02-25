@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/setting_cardview_layout"
+    style="@style/setting_item_backgroud"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <Switch
+        android:id="@+id/up_setting_switch"
+        style="@style/title_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="급등 검색식 설정" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/candle_textview"
+            style="@style/sub_title_text"
+            android:layout_width="wrap_content"
+            android:layout_gravity="start"
+            android:text="분봉" />
+
+        <ga.zua.coin.jumpupbitcoin.setting.BubbleSeekBar
+            android:id="@+id/candle_seekbar"
+            style="@style/setting_seekbar"
+            android:layout_gravity="center_vertical|end"
+            app:bsb_always_show_bubble="false"
+            app:bsb_hide_bubble="true"
+            app:bsb_max="0"
+            app:bsb_min="15"
+            app:bsb_section_count="5"
+            app:bsb_section_text_position="below_section_mark"
+            app:bsb_seek_step_section="true" />
+
+    </LinearLayout>
+
+    <View style="@style/setting_divider" />
+
+    <TextView
+        android:id="@+id/rate_switch"
+        style="@style/sub_title_text"
+        android:text="가격 상승률" />
+
+    <RelativeLayout
+        android:id="@+id/rate_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/price1_textview"
+            style="@style/description_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:text="1봉전 종가 대비 현재 가격 상승률" />
+
+        <ga.zua.coin.jumpupbitcoin.setting.BubbleSeekBar
+            android:id="@+id/price1_seekbar"
+            style="@style/setting_seekbar"
+            android:layout_below="@id/price1_textview" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/price2_textview"
+            style="@style/description_text"
+            android:text="2봉전 종가 대비 1봉전 가격 상승률" />
+
+        <ga.zua.coin.jumpupbitcoin.setting.BubbleSeekBar
+            android:id="@+id/price2_seekbar"
+            style="@style/setting_seekbar"
+            android:layout_below="@id/price2_textview" />
+    </RelativeLayout>
+
+    <View style="@style/setting_divider" />
+
+    <TextView
+        android:id="@+id/trade_switch"
+        style="@style/sub_title_text"
+        android:text="거래량 상승률" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/trade1_textview"
+            style="@style/description_text"
+            android:text="1봉전 종가대비 현재 거래량 상승률(%)" />
+
+        <ga.zua.coin.jumpupbitcoin.setting.BubbleSeekBar
+            android:id="@+id/trade1_seekbar"
+            style="@style/setting_seekbar"
+            android:layout_below="@id/trade1_textview" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/trade2_textview"
+            style="@style/description_text"
+            android:text="2봉전 종가대비 1봉전 거래 등락률(%)" />
+
+        <ga.zua.coin.jumpupbitcoin.setting.BubbleSeekBar
+            android:id="@+id/trade2_seekbar"
+            style="@style/setting_seekbar"
+            android:layout_below="@id/trade2_textview" />
+    </RelativeLayout>
+
+    <View style="@style/setting_divider" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            style="@style/sub_title_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:text="최소 거래량(백만)" />
+
+        <EditText
+            android:id="@+id/trade_price_edittext"
+            style="@style/setting_edittext"
+            android:layout_toStartOf="@+id/trade_price_spinner"
+            android:hint="비활성"
+            android:imeOptions="actionDone" />
+
+        <ga.zua.coin.jumpupbitcoin.setting.CustomSpinner
+            android:id="@+id/trade_price_spinner"
+            style="@style/setting_spinner"
+            android:layout_alignParentEnd="true"
+            android:entries="@array/str_ary_trade_price" />
+
+    </RelativeLayout>
+</LinearLayout>

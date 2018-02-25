@@ -1,5 +1,4 @@
 <resources>
-
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
@@ -61,7 +60,7 @@
     </style>
 
     <style name="setting_item_backgroud">
-        <item name="android:background">#ffffff</item>
+        <item name="android:background">@drawable/layout_boundary</item>
         <item name="android:layout_margin">@dimen/setting_item_margin</item>
         <item name="android:padding">@dimen/setting_item_padding</item>
     </style>
@@ -135,6 +134,24 @@
         <item name="android:layout_alignParentEnd">true</item>
         <item name="android:layout_marginEnd">10dp</item>
         <item name="android:textSize">12dp</item>
+    </style>
+
+    <style name="setting_seekbar">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">12dp</item>
+        <item name="bsb_max">0</item>
+        <item name="bsb_min">20</item>
+        <item name="bsb_section_count">7</item>
+        <item name="bsb_section_text_position">bottom_sides</item>
+        <item name="bsb_show_progress_in_float">true</item>
+        <item name="bsb_show_section_text">true</item>
+        <item name="bsb_show_section_mark">true</item>
+        <item name="bsb_show_thumb_text">true</item>
+        <item name="bsb_track_size">2dp</item>
+        <item name="bsb_second_track_size">2dp</item>
+        <item name="bsb_thumb_radius">6dp</item>
+        <item name="bsb_thumb_radius_on_dragging">8dp</item>
     </style>
 
     <style name="SplashTheme" parent="@android:style/Theme.Light.NoTitleBar">
