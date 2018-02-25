@@ -3,7 +3,6 @@ package ga.zua.coin.jumpupbitcoin.setting;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.text.Editable;
 import android.text.TextWatcher;
