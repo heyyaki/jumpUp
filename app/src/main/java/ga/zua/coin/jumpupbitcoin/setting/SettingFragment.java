@@ -3,27 +3,28 @@ package ga.zua.coin.jumpupbitcoin.setting;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.TextView;
+
+import java.text.DecimalFormat;
+import java.util.ArrayList;
 
 import ga.zua.coin.jumpupbitcoin.Const;
 import ga.zua.coin.jumpupbitcoin.R;
 
-
-import java.util.ArrayList;
-
-public class SettingFragment extends Fragment implements RadioGroup.OnCheckedChangeListener, AdapterView.OnItemSelectedListener {
+public class SettingFragment extends Fragment {
     private static final String ARG_VIBRATION = "argument_vibration";
 
     private static final String ARG_UP_SETTING = "argument_up_setting";
@@ -60,8 +61,8 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
     private float mPricePer, mPricePerPre, mTradePer, mTradePerPre;
     private float mDownPricePer, mDownPricePerPre, mDownTradePer, mDownTradePerPre;
 
-    private EditText mEditTxt, mEditTxt2, mEditTxt3, mEditTxt4, mEditTxt5;
-    private EditText mEditTxt11, mEditTxt12, mEditTxt13, mEditTxt14, mEditTxt15;
+    private DecimalFormat decimalFormat = new DecimalFormat("#,###");
+    private String mTtradePriceResult;
 
     private OnSettingFragment mListener;
 
@@ -127,403 +128,303 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
                              Bundle savedInstanceState) {
 
         final View v = inflater.inflate(R.layout.setting_fragment, container, false);
+        vibrationControl(v);
+        makeSettingCardView(v.findViewById(R.id.up_setting),
+                mUpCandle, mPricePer, mPricePerPre,
+                mTradePer, mTradePerPre, mIsUpSetting, mTradePrice);
+        makeSettingCardView(v.findViewById(R.id.down_setting),
+                mDownCandle, mDownPricePer, mDownPricePerPre,
+                mDownTradePer, mDownTradePerPre, mIsDownSetting, mDownTradePrice);
+        return v;
+    }
 
-        // 급등 분봉
-        RadioGroup upGroup = (RadioGroup) v.findViewById(R.id.radioGroup1);
-        upGroup.setOnCheckedChangeListener(this);
+    private void makeSettingCardView(final View cardView, int candle, float pricePer, float pricePerPre, final float tradePer, float tradePerPre, boolean isSetting, int tradePrice) {
+        initCandleView(cardView, candle);
 
-        for (int i = 0; i < mCandleList.size(); i++) {
-            if (mCandleList.get(i).equals(mUpCandle)) {
-                ((RadioButton) upGroup.getChildAt(i)).setChecked(true);
+        final TextView mPrice1TextView, mPrice2TextView, mTrade1TextView, mTrade2TextView;
+        final BubbleSeekBar mPrice1SeekBar, mPrice2SeekBar, mTrade1SeekBar, mTrade2SeekBar;
+
+        mPrice1TextView = cardView.findViewById(R.id.price1_textview);
+        mPrice2TextView = cardView.findViewById(R.id.price2_textview);
+        mTrade1TextView = cardView.findViewById(R.id.trade1_textview);
+        mTrade2TextView = cardView.findViewById(R.id.trade2_textview);
+
+        mPrice1SeekBar = cardView.findViewById(R.id.price1_seekbar);
+        mPrice2SeekBar = cardView.findViewById(R.id.price2_seekbar);
+        mTrade1SeekBar = cardView.findViewById(R.id.trade1_seekbar);
+        mTrade2SeekBar = cardView.findViewById(R.id.trade2_seekbar);
+
+        final boolean isUpSetting = cardView.getId() == R.id.up_setting;
+        TextView settingSwitch = cardView.findViewById(R.id.up_setting_switch);
+        settingSwitch.setText(isUpSetting ? R.string.search_setting : R.string.down_search_setting);
+
+
+
+        initCardView(cardView, mPrice1TextView, mPrice1SeekBar, isUpSetting ? R.string.pre_price : R.string.down_pre_pre_price, pricePer);
+        initCardView(cardView, mPrice2TextView, mPrice2SeekBar, isUpSetting ? R.string.pre_pre_price : R.string.down_pre_pre_price, pricePerPre);
+        initCardView(cardView, mTrade1TextView, mTrade1SeekBar, R.string.pre_trade, tradePer);
+        initCardView(cardView, mTrade2TextView, mTrade2SeekBar, R.string.pre_pre_trade, tradePerPre);
+
+        final EditText editText = cardView.findViewById(R.id.trade_price_edittext);
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() == 0) {
+                    return;
+                }
+
+                int tradePrice = DISABLED_VALUE;
+                try {
+                    tradePrice = Integer.valueOf(s.toString());
+                } catch (NumberFormatException e) {
+                    tradePrice = DISABLED_VALUE;
+                }
+
+                if (cardView.getId() == R.id.up_setting) {
+                    mTradePrice = tradePrice;
+                    mListener.onUpTradePriceEditted(tradePrice);
+                } else {
+                    mDownTradePrice = tradePrice;
+                    mListener.onDownTradePriceEditted(tradePrice);
+                }
+
+                if (tradePrice == DISABLED_VALUE) {
+                    editText.setText("");
+                } else {
+//                    if (!TextUtils.isEmpty(s.toString()) && !s.toString().equals(mTtradePriceResult)) {
+//                        mTtradePriceResult = decimalFormat.format(Long.parseLong(s.toString().replaceAll(",", "")));
+//                        editText.setText(mTtradePriceResult);
+//                        editText.setSelection(mTtradePriceResult.length());
+//                    }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        editText.setText(String.valueOf(tradePrice));
+
+        CustomSpinner spinner = cardView.findViewById(R.id.trade_price_spinner);
+        spinner.setSelection(0, false);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position < 0 || position >= getResources().getStringArray(R.array.str_ary_trade_price).length) {
+                    return;
+                }
+
+                final String text = getResources().getStringArray(R.array.str_ary_trade_price)[position];
+                editText.setText(text);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        final Switch priceLayoutSwitch = cardView.findViewById(R.id.price_layout_switch);
+        priceLayoutSwitch.setText(isUpSetting ? R.string.up_price : R.string.down_price);
+        final ViewGroup price2Layout = cardView.findViewById(R.id.price2_layout);
+
+        priceLayoutSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Log.d("MY_LOG", "onCheckedChanged : " + isChecked);
+                disableEnableControls(price2Layout, isChecked);
+            }
+        });
+        priceLayoutSwitch.setChecked(true);
+
+        final Switch tradeLayoutSwitch = cardView.findViewById(R.id.trade_layout_switch);
+        final ViewGroup trade1Layout = cardView.findViewById(R.id.trade1_layout);
+        final ViewGroup trade2Layout = cardView.findViewById(R.id.trade2_layout);
+        tradeLayoutSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                disableEnableControls(trade1Layout, isChecked);
+                disableEnableControls(trade2Layout, isChecked);
+            }
+        });
+        tradeLayoutSwitch.setChecked(true);
+
+        settingLayoutControl((ViewGroup) cardView, isSetting);
+    }
+
+    private void initCandleView(final View cardView, int candle) {
+        final TextView textView = cardView.findViewById(R.id.candle_textview);
+        final BubbleSeekBar seekBar = cardView.findViewById(R.id.candle_seekbar);
+        textView.setText("분봉 : " + candle / 2f + " 분");
+
+        // key : position of seekbar, value :text
+        final SparseArray<Float> array = new SparseArray<>();
+        array.put(0, 0.5f);
+        array.put(3, 1f);
+        array.put(6, 3f);
+        array.put(9, 5f);
+        array.put(12, 10f);
+        array.put(15, 15f);
+
+        int value = 0;
+        for (int i = 0; i < array.size(); i++) {
+            if (Float.compare(array.valueAt(i), candle / 2f) == 0) {
+                value = i;
+                break;
             }
         }
 
-        // 급락 분봉
-        RadioGroup downGroup = (RadioGroup) v.findViewById(R.id.radioGroup1_down);
-        downGroup.setOnCheckedChangeListener(this);
-
-        for (int i = 0; i < mCandleList.size(); i++) {
-            if (mCandleList.get(i).equals(mDownCandle)) {
-                ((RadioButton) downGroup.getChildAt(i)).setChecked(true);
-            }
-        }
-
-        Spinner spinner = (Spinner) v.findViewById(R.id.up_pre_price_spinner);
-        Spinner spinner2 = (Spinner) v.findViewById(R.id.up_pre_pre_price_spinner);
-        Spinner spinner3 = (Spinner) v.findViewById(R.id.up_pre_trade);
-        Spinner spinner4 = (Spinner) v.findViewById(R.id.up_pre_pre_trade);
-        Spinner spinner5 = (Spinner) v.findViewById(R.id.up_trade_price_spinner);
-
-        spinner.setOnItemSelectedListener(this);
-        spinner2.setOnItemSelectedListener(this);
-        spinner3.setOnItemSelectedListener(this);
-        spinner4.setOnItemSelectedListener(this);
-        spinner5.setOnItemSelectedListener(this);
-
-        Spinner spinner11 = (Spinner) v.findViewById(R.id.down_pre_price_spinner);
-        Spinner spinner12 = (Spinner) v.findViewById(R.id.down_pre_pre_price_spinner);
-        Spinner spinner13 = (Spinner) v.findViewById(R.id.down_pre_trade);
-        Spinner spinner14 = (Spinner) v.findViewById(R.id.down_pre_pre_trade);
-        Spinner spinner15 = (Spinner) v.findViewById(R.id.down_trade_price_spinner);
-
-        spinner11.setOnItemSelectedListener(this);
-        spinner12.setOnItemSelectedListener(this);
-        spinner13.setOnItemSelectedListener(this);
-        spinner14.setOnItemSelectedListener(this);
-        spinner15.setOnItemSelectedListener(this);
-
-        // 등락률
-        mEditTxt = (EditText) v.findViewById(R.id.editText);
-        mEditTxt.setText(mPricePer == DISABLED_VALUE ? getResources().getString(R.string.disable) : String.valueOf(mPricePer));
-        spinner.setSelection(mPricePer == DISABLED_VALUE ? 0 : 5, false);
-
-        mEditTxt.addTextChangedListener(new TextWatcher() {
+        seekBar.setProgress(15 / (array.size() - 1) * value);
+        seekBar.setCustomSectionTextArray(new BubbleSeekBar.CustomSectionTextArray() {
+            @NonNull
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() == 0) {
-                    return;
-                }
-
-                try {
-                    mPricePer = Float.valueOf(s.toString());
-                } catch (NumberFormatException e) {
-                    mPricePer = DISABLED_VALUE;
-                }
-
-                mListener.onUpPrePriceEditted(mPricePer);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
+            public SparseArray<String> onCustomize(int sectionCount, @NonNull SparseArray<String> array) {
+                array.clear();
+                array.put(0, "0.5");
+                array.put(1, "1");
+                array.put(2, "3");
+                array.put(3, "5");
+                array.put(4, "10");
+                array.put(5, "15");
+                return array;
             }
         });
 
-        mEditTxt2 = (EditText) v.findViewById(R.id.editText2);
-        mEditTxt2.setText(mPricePerPre == DISABLED_VALUE ? getResources().getString(R.string.disable) : String.valueOf(mPricePerPre));
-        spinner2.setSelection(mPricePerPre == DISABLED_VALUE ? 0 : 5, false);
-
-        mEditTxt2.addTextChangedListener(new TextWatcher() {
+        seekBar.setOnProgressChangedListener(new BubbleSeekBar.OnProgressChangedListener() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+            public void onProgressChanged(BubbleSeekBar bubbleSeekBar, int progress, float progressFloat) {
+                float candle = array.get(progress);
+                textView.setText("분봉 : " + candle + " 분");
             }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() == 0) {
-                    return;
-                }
-                try {
-                    mPricePerPre = Float.valueOf(s.toString());
-                } catch (NumberFormatException e) {
-                    mPricePerPre = DISABLED_VALUE;
+            public void getProgressOnActionUp(BubbleSeekBar bubbleSeekBar, int progress, float progressFloat) {
+                float candle = array.get(progress) * 2;
+
+                switch (bubbleSeekBar.getId()) {
+                    case R.id.candle_seekbar:
+                        if (cardView.getId() == R.id.up_setting) {
+                            mListener.onUpCandleButtonClicked((int) candle);
+                        } else {
+                            mListener.onDownCandleButtonClicked((int) candle);
+                        }
+
+                        break;
                 }
 
-                mListener.onUpPrePrePriceEditted(mPricePerPre);
+                textView.setText("분봉 : " + candle / 2 + " 분");
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
+            public void getProgressOnFinally(BubbleSeekBar bubbleSeekBar, int progress, float progressFloat) {
+            }
+        });
+    }
+
+    private void initCardView(final View cardView, final TextView textView, final BubbleSeekBar seekBar, final int stringResId, final float value) {
+
+        String text = String.format(textView.getResources().getString(stringResId), value) + " %";
+        textView.setText(text);
+        seekBar.setProgress(value);
+        seekBar.setOnProgressChangedListener(new BubbleSeekBar.OnProgressChangedListener() {
+            @Override
+            public void onProgressChanged(BubbleSeekBar bubbleSeekBar, int progress, float progressFloat) {
+                String text = String.format(bubbleSeekBar.getResources().getString(stringResId), progressFloat) + " %";
+                textView.setText(text);
+            }
+
+            @Override
+            public void getProgressOnActionUp(BubbleSeekBar bubbleSeekBar, int progress, float progressFloat) {
+                switch (bubbleSeekBar.getId()) {
+                    case R.id.price1_seekbar:
+                        if (cardView.getId() == R.id.up_setting) {
+                            mListener.onUpPrePriceEditted(progressFloat);
+                        } else {
+                            mListener.onDownPrePriceEditted(progressFloat);
+                        }
+
+                        break;
+                    case R.id.price2_seekbar:
+                        if (cardView.getId() == R.id.up_setting) {
+                            mListener.onUpPrePrePriceEditted(progressFloat);
+                        } else {
+                            mListener.onDownPrePrePriceEditted(progressFloat);
+                        }
+                        break;
+                    case R.id.trade1_seekbar:
+                        if (cardView.getId() == R.id.up_setting) {
+                            mListener.onUpPreTradeEditted(progressFloat);
+                        } else {
+                            mListener.onDownPreTradeEditted(progressFloat);
+                        }
+                        break;
+                    case R.id.trade2_seekbar:
+                        if (cardView.getId() == R.id.up_setting) {
+                            mListener.onUpPrePreTradeEditted(progressFloat);
+                        } else {
+                            mListener.onDownPrePreTradeEditted(progressFloat);
+                        }
+                        break;
+                }
+            }
+
+            @Override
+            public void getProgressOnFinally(BubbleSeekBar bubbleSeekBar, int progress, float progressFloat) {
 
             }
         });
+    }
 
-        mEditTxt3 = (EditText) v.findViewById(R.id.editText3);
-        mEditTxt3.setText(mTradePer == DISABLED_VALUE ? getResources().getString(R.string.disable) : String.valueOf(mTradePer));
-        spinner3.setSelection(mTradePer == DISABLED_VALUE ? 0 : 5, false);
+    private void vibrationControl(View root) {
+//        final ViewGroup vibrationLayout = root.findViewById(R.id.vibrate_setting);
+//        disableEnableControls(vibrationLayout, mIsVibration != Const.VIBRATION_DISABLED);
 
-        mEditTxt3.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() == 0) {
-                    return;
-                }
-                try {
-                    mTradePer = Float.valueOf(s.toString());
-                } catch (NumberFormatException e) {
-                    mTradePer = DISABLED_VALUE;
-                }
-
-                mListener.onUpPreTradeEditted(mTradePer);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        mEditTxt4 = (EditText) v.findViewById(R.id.editText4);
-        mEditTxt4.setText(mTradePerPre == DISABLED_VALUE ? getResources().getString(R.string.disable) : String.valueOf(mTradePerPre));
-        spinner4.setSelection(mTradePerPre == DISABLED_VALUE ? 0 : 5, false);
-
-        mEditTxt4.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() == 0) {
-                    return;
-                }
-                try {
-                    mTradePerPre = Float.valueOf(s.toString());
-                } catch (NumberFormatException e) {
-                    mTradePerPre = DISABLED_VALUE;
-                }
-
-                mListener.onUpPrePreTradeEditted(mTradePerPre);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        mEditTxt5 = (EditText) v.findViewById(R.id.editText5);
-        mEditTxt5.setText(mTradePrice == DISABLED_VALUE ? getResources().getString(R.string.disable) : String.valueOf(mTradePrice));
-        spinner5.setSelection(mTradePrice == DISABLED_VALUE ? 0 : 5, false);
-
-        mEditTxt5.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() == 0) {
-                    return;
-                }
-                try {
-                    mTradePrice = Integer.valueOf(s.toString());
-                } catch (NumberFormatException e) {
-                    mTradePrice = DISABLED_VALUE;
-                }
-
-                mListener.onUpTradePriceEditted(mTradePrice);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        // 등락률
-        mEditTxt11 = (EditText) v.findViewById(R.id.editText11);
-        mEditTxt11.setText(mDownPricePer == DISABLED_VALUE ? getResources().getString(R.string.disable) : String.valueOf(mDownPricePer));
-        spinner11.setSelection(mDownPricePer == DISABLED_VALUE ? 0 : 5, false);
-
-        mEditTxt11.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() == 0) {
-                    return;
-                }
-                try {
-                    mDownPricePer = Float.valueOf(s.toString());
-                } catch (NumberFormatException e) {
-                    mDownPricePer = DISABLED_VALUE;
-                }
-
-                mListener.onDownPrePriceEditted(mDownPricePer);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        mEditTxt12 = (EditText) v.findViewById(R.id.editText12);
-        mEditTxt12.setText(mDownPricePerPre == DISABLED_VALUE ? getResources().getString(R.string.disable) : String.valueOf(mDownPricePerPre));
-        spinner12.setSelection(mDownPricePerPre == DISABLED_VALUE ? 0 : 5, false);
-
-        mEditTxt12.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() == 0) {
-                    return;
-                }
-                try {
-                    mDownPricePerPre = Float.valueOf(s.toString());
-                } catch (NumberFormatException e) {
-                    mDownPricePerPre = DISABLED_VALUE;
-                }
-
-                mListener.onDownPrePrePriceEditted(mDownPricePerPre);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        mEditTxt13 = (EditText) v.findViewById(R.id.editText13);
-        mEditTxt13.setText(mDownTradePer == DISABLED_VALUE ? getResources().getString(R.string.disable) : String.valueOf(mDownTradePer));
-        spinner13.setSelection(mDownTradePer == DISABLED_VALUE ? 0 : 5, false);
-
-        mEditTxt13.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() == 0) {
-                    return;
-                }
-                try {
-                    mDownTradePer = Float.valueOf(s.toString());
-                } catch (NumberFormatException e) {
-                    mDownTradePer = DISABLED_VALUE;
-                }
-
-                mListener.onDownPreTradeEditted(mDownTradePer);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        mEditTxt14 = (EditText) v.findViewById(R.id.editText14);
-        mEditTxt14.setText(mDownTradePerPre == DISABLED_VALUE ? getResources().getString(R.string.disable) : String.valueOf(mDownTradePerPre));
-        spinner14.setSelection(mDownTradePerPre == DISABLED_VALUE ? 0 : 5, false);
-        mEditTxt14.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() == 0) {
-                    return;
-                }
-                try {
-                    mDownTradePerPre = Float.valueOf(s.toString());
-                } catch (NumberFormatException e) {
-                    mDownTradePerPre = DISABLED_VALUE;
-                }
-
-                mListener.onDownPrePreTradeEditted(mDownTradePerPre);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        mEditTxt15 = (EditText) v.findViewById(R.id.editText15);
-        mEditTxt15.setText(mDownTradePrice == DISABLED_VALUE ? getResources().getString(R.string.disable) : String.valueOf(mDownTradePrice));
-        spinner15.setSelection(mDownTradePrice == DISABLED_VALUE ? 0 : 5, false);
-        mEditTxt15.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() == 0) {
-                    return;
-                }
-                try {
-                    mDownTradePrice = Integer.valueOf(s.toString());
-                } catch (NumberFormatException e) {
-                    mDownTradePrice = DISABLED_VALUE;
-                }
-
-                mListener.onDownTradePriceEditted(mDownTradePrice);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        final ViewGroup vibrationLayout = v.findViewById(R.id.vibrate_setting);
-        disableEnableControls(vibrationLayout, mIsVibration != Const.VIBRATION_DISABLED);
-
-        Switch vibrateSetting = v.findViewById(R.id.vibrate_setting_switch);
+        Switch vibrateSetting = root.findViewById(R.id.vibrate_setting_switch);
         vibrateSetting.setEnabled(true);
+
         vibrateSetting.setChecked(mIsVibration != Const.VIBRATION_DISABLED);
         vibrateSetting.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 mIsVibration = isChecked ? 0 : Const.VIBRATION_DISABLED;
-                disableEnableControls(vibrationLayout, isChecked);
+//                disableEnableControls(vibrationLayout, isChecked);
                 buttonView.setEnabled(true);
 
                 mListener.onVibrationSelected(mIsVibration);
             }
         });
+    }
 
-        final ViewGroup upSettingLayout = v.findViewById(R.id.up_setting);
-        disableEnableControls(upSettingLayout, mIsUpSetting);
-
-        Switch upSetting = v.findViewById(R.id.up_setting_switch);
+    private void settingLayoutControl(final ViewGroup cardView, boolean isSetting) {
+        disableEnableControls(cardView, isSetting);
+        Switch upSetting = cardView.findViewById(R.id.up_setting_switch);
         upSetting.setEnabled(true);
-        upSetting.setChecked(mIsUpSetting);
+        upSetting.setVisibility(View.VISIBLE);
+        upSetting.setChecked(isSetting);
         upSetting.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                mIsUpSetting = isChecked;
-                disableEnableControls(upSettingLayout, isChecked);
+                disableEnableControls(cardView, isChecked);
                 buttonView.setEnabled(true);
+                buttonView.setVisibility(View.VISIBLE);
 
-                mListener.onUpSettingEnabled(isChecked);
+                switch (cardView.getId()) {
+                    case R.id.up_setting:
+                        mListener.onUpSettingEnabled(isChecked);
+                        break;
+                    case R.id.down_setting:
+                        mListener.onDownSettingEnabled(isChecked);
+                        break;
+                }
             }
         });
-
-        final ViewGroup downSettingLayout = v.findViewById(R.id.down_setting);
-        disableEnableControls(downSettingLayout, mIsDownSetting);
-
-        Switch downSetting = v.findViewById(R.id.down_setting_switch);
-        downSetting.setEnabled(true);
-        downSetting.setChecked(mIsDownSetting);
-        downSetting.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                mIsDownSetting = isChecked;
-                disableEnableControls(downSettingLayout, isChecked);
-                buttonView.setEnabled(true);
-
-                mListener.onDownSettingEnabled(isChecked);
-            }
-        });
-        return v;
     }
 
     private void disableEnableControls(ViewGroup vg, boolean enable) {
@@ -533,6 +434,7 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
             if (child instanceof ViewGroup) {
                 disableEnableControls((ViewGroup) child, enable);
             }
+            child.setVisibility(enable ? View.VISIBLE : View.GONE);
         }
     }
 
@@ -548,109 +450,6 @@ public class SettingFragment extends Fragment implements RadioGroup.OnCheckedCha
     public void onDetach() {
         super.onDetach();
         mListener = null;
-    }
-
-    @Override
-    public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
-        switch (checkedId) {
-            case R.id.radio300:
-                mUpCandle = 1;
-                break;
-            case R.id.radio1:
-                mUpCandle = 2;
-                break;
-            case R.id.radio3:
-                mUpCandle = 6;
-                break;
-            case R.id.radio5:
-                mUpCandle = 10;
-                break;
-            case R.id.radio10:
-                mUpCandle = 20;
-                break;
-            case R.id.radio15:
-                mUpCandle = 30;
-                break;
-            case R.id.radio300_down:
-                mDownCandle = 1;
-                break;
-            case R.id.radio1_down:
-                mDownCandle = 2;
-                break;
-            case R.id.radio3_down:
-                mDownCandle = 6;
-                break;
-            case R.id.radio5_down:
-                mDownCandle = 10;
-                break;
-            case R.id.radio10_down:
-                mDownCandle = 20;
-                break;
-            case R.id.radio15_down:
-                mDownCandle = 30;
-                break;
-            default:
-                return;
-        }
-
-        radioGroup.findViewById(checkedId);
-        mListener.onUpCandleButtonClicked(mUpCandle);
-        mListener.onDownCandleButtonClicked(mDownCandle);
-    }
-
-    // 스피너가 초기화할 때, onItemSelected을 자동으로 불리는 것을 피하기 위해
-    private int mSpinnerCounting = 0;
-
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        Log.d("MY_LOG", "mSpinnerCounting : " + mSpinnerCounting + ", postion : " + position);
-
-        if (mSpinnerCounting++ < 10) {
-            return;
-        }
-
-        final String text = parent.getItemAtPosition(position).toString();
-        final int spinnerId = parent.getId();
-
-        switch (spinnerId) {
-            case R.id.up_pre_price_spinner:
-                mEditTxt.setText(text);
-                break;
-            case R.id.up_pre_pre_price_spinner:
-                mEditTxt2.setText(text);
-                break;
-            case R.id.up_pre_trade:
-                mEditTxt3.setText(text);
-                break;
-            case R.id.up_pre_pre_trade:
-                mEditTxt4.setText(text);
-                break;
-            case R.id.up_trade_price_spinner:
-                mEditTxt5.setText(text);
-                break;
-            case R.id.down_pre_price_spinner:
-                mEditTxt11.setText(text);
-                break;
-            case R.id.down_pre_pre_price_spinner:
-                mEditTxt12.setText(text);
-                break;
-            case R.id.down_pre_trade:
-                mEditTxt13.setText(text);
-                break;
-            case R.id.down_pre_pre_trade:
-                mEditTxt14.setText(text);
-                break;
-            case R.id.down_trade_price_spinner:
-                mEditTxt15.setText(text);
-                break;
-            default:
-                return;
-        }
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
-
     }
 
     public interface OnSettingFragment {

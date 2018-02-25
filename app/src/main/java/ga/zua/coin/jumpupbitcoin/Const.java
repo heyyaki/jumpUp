@@ -21,7 +21,7 @@ public class Const {
         sCoinNames.put(0, "비트코인");
         sCoinNames.put(1, "에이다");
         sCoinNames.put(2, "리플");
-        sCoinNames.put(3, "스테이터스네트워크토큰");
+        sCoinNames.put(3, "스테이터스\n네트워크토큰");
         sCoinNames.put(4, "퀀텀");
         sCoinNames.put(5, "이더리움");
         sCoinNames.put(6, "머큐리");
